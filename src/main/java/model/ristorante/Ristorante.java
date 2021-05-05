@@ -11,6 +11,7 @@ public class Ristorante {
     public Ristorante(){
         prodotti=new ArrayList<>();
         giorni=new ArrayList<>();
+        immagini=new ArrayList<>();
     }
 
     public int getCodice() {
@@ -109,10 +110,19 @@ public class Ristorante {
         this.giorni = giorni;
     }
 
+    public ArrayList<String> getImmagini() {
+        return immagini;
+    }
+
+    public void setImmagini(ArrayList<String> immagini) {
+        this.immagini = immagini;
+    }
+
     private int codice, civico;
     private String nome, provincia, citta, via, info;
     private float spesaMinima, tassoConsegna;
     private ArrayList<Prodotto> prodotti;
     private ArrayList<Giorno> giorni;
+    private ArrayList<String> immagini;
     private Tipologia tipologia;
 }
