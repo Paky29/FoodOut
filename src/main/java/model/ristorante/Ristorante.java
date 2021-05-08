@@ -86,11 +86,11 @@ public class Ristorante {
         this.tassoConsegna = tassoConsegna;
     }
 
-    public Tipologia getTipologia() {
+    public ArrayList<Tipologia> getTipologia() {
         return tipologia;
     }
 
-    public void setTipologia(Tipologia tipologia) {
+    public void setTipologia(ArrayList<Tipologia> tipologia) {
         this.tipologia = tipologia;
     }
 
@@ -124,5 +124,5 @@ public class Ristorante {
     private ArrayList<Prodotto> prodotti;
     private ArrayList<Giorno> giorni;
     private ArrayList<String> immagini;
-    private Tipologia tipologia;
+    private ArrayList<Tipologia> tipologia;
 }
