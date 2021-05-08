@@ -2,7 +2,7 @@ package model.ristorante;
 
 import model.giorno.Giorno;
 import model.prodotto.Prodotto;
-import model.tipologia.Tipologia;
+import model.tipologia.String;
 
 import java.util.ArrayList;
 
@@ -30,43 +30,43 @@ public class Ristorante {
         this.civico = civico;
     }
 
-    public String getNome() {
+    public java.lang.String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(java.lang.String nome) {
         this.nome = nome;
     }
 
-    public String getProvincia() {
+    public java.lang.String getProvincia() {
         return provincia;
     }
 
-    public void setProvincia(String provincia) {
+    public void setProvincia(java.lang.String provincia) {
         this.provincia = provincia;
     }
 
-    public String getCitta() {
+    public java.lang.String getCitta() {
         return citta;
     }
 
-    public void setCitta(String citta) {
+    public void setCitta(java.lang.String citta) {
         this.citta = citta;
     }
 
-    public String getVia() {
+    public java.lang.String getVia() {
         return via;
     }
 
-    public void setVia(String via) {
+    public void setVia(java.lang.String via) {
         this.via = via;
     }
 
-    public String getInfo() {
+    public java.lang.String getInfo() {
         return info;
     }
 
-    public void setInfo(String info) {
+    public void setInfo(java.lang.String info) {
         this.info = info;
     }
 
@@ -86,11 +86,11 @@ public class Ristorante {
         this.tassoConsegna = tassoConsegna;
     }
 
-    public ArrayList<Tipologia> getTipologia() {
+    public ArrayList<String> getTipologia() {
         return tipologia;
     }
 
-    public void setTipologia(ArrayList<Tipologia> tipologia) {
+    public void setTipologia(ArrayList<String> tipologia) {
         this.tipologia = tipologia;
     }
 
@@ -110,19 +110,19 @@ public class Ristorante {
         this.giorni = giorni;
     }
 
-    public ArrayList<String> getImmagini() {
+    public ArrayList<java.lang.String> getImmagini() {
         return immagini;
     }
 
-    public void setImmagini(ArrayList<String> immagini) {
+    public void setImmagini(ArrayList<java.lang.String> immagini) {
         this.immagini = immagini;
     }
 
     private int codice, civico;
-    private String nome, provincia, citta, via, info;
+    private java.lang.String nome, provincia, citta, via, info;
     private float spesaMinima, tassoConsegna;
     private ArrayList<Prodotto> prodotti;
     private ArrayList<Giorno> giorni;
-    private ArrayList<String> immagini;
-    private ArrayList<Tipologia> tipologia;
+    private ArrayList<java.lang.String> immagini;
+    private ArrayList<String> tipologia;
 }
