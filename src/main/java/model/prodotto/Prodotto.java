@@ -2,6 +2,7 @@ package model.prodotto;
 import model.menu.Menu;
 import model.ordine.OrdineItem;
 import model.ristorante.Ristorante;
+import model.tipologia.Tipologia;
 
 import java.util.ArrayList;
 
@@ -100,13 +101,11 @@ public class Prodotto implements OrdineItem {
         this.ristorante = ristorante;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public Tipologia getTipologia() {
+        return tipologia;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
+    public void setTipologia(Tipologia tipologia) { this.tipologia=tipologia;}
 
     private int codice, sconto;
     private boolean valido;
@@ -114,5 +113,5 @@ public class Prodotto implements OrdineItem {
     private float prezzo;
     private ArrayList<Menu> menus;
     private Ristorante ristorante;
-    private String categoria;
+    private Tipologia tipologia;
 }

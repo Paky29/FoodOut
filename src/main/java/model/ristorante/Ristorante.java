@@ -85,14 +85,6 @@ public class Ristorante {
         this.tassoConsegna = tassoConsegna;
     }
 
-    public ArrayList<String> getTipologia() {
-        return tipologia;
-    }
-
-    public void setTipologia(ArrayList<String> tipologia) {
-        this.tipologia = tipologia;
-    }
-
     public ArrayList<Prodotto> getProdotti() {
         return prodotti;
     }
@@ -123,5 +115,4 @@ public class Ristorante {
     private ArrayList<Prodotto> prodotti;
     private ArrayList<Giorno> giorni;
     private ArrayList<Immagine> immagini;
-    private ArrayList<String> tipologia;
 }
