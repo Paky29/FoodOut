@@ -1,5 +1,7 @@
 package model.ristorante;
 
+import model.immagine.Immagine;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

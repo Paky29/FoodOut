@@ -1,6 +1,7 @@
 package model.ristorante;
 
 import model.giorno.Giorno;
+import model.immagine.Immagine;
 import model.prodotto.Prodotto;
 import java.util.ArrayList;
 
@@ -108,11 +109,11 @@ public class Ristorante {
         this.giorni = giorni;
     }
 
-    public ArrayList<java.lang.String> getImmagini() {
+    public ArrayList<Immagine> getImmagini() {
         return immagini;
     }
 
-    public void setImmagini(ArrayList<java.lang.String> immagini) {
+    public void setImmagini(ArrayList<Immagine> immagini) {
         this.immagini = immagini;
     }
 
@@ -121,6 +122,6 @@ public class Ristorante {
     private float spesaMinima, tassoConsegna;
     private ArrayList<Prodotto> prodotti;
     private ArrayList<Giorno> giorni;
-    private ArrayList<java.lang.String> immagini;
+    private ArrayList<Immagine> immagini;
     private ArrayList<String> tipologia;
 }

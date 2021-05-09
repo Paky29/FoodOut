@@ -1,21 +1,39 @@
 package model.ristorante;
 
+import model.immagine.ImmagineExtractor;
 import model.utility.ConPool;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class RistoranteDAO {
     public RistoranteDAO(){}
 
-    public ArrayList<Ristorante> retrievebyTipologia(String nomeTipologia) throws SQLException{
+    public Ristorante doRetrieveById(int codice) throws SQLException {
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT id, nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna FROM Ristorante r WHERE codiceRistorante=?");
+            ps.setInt(1, codice);
+            ResultSet rs = ps.executeQuery();
+            Ristorante r = null;
+            if (rs.next()) {
+                r = RistoranteExtractor.extract(rs);
+            }
+            return r;
+        }
+    }
+
+    public ArrayList<Ristorante> doRetrieveByTipologia(String nomeTipologia) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT id, nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE art.tipologia_fk=?" );
+            PreparedStatement ps=conn.prepareStatement("SELECT id, nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna, url, principale FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Immagine i ON r.codiceRistorante=i.codRis_fk WHERE art.tipologia_fk=? AND i.principale=true" );
             ps.setString(1, nomeTipologia);
             ResultSet rs=ps.executeQuery();
             ArrayList<Ristorante> ristoranti=new ArrayList<>();
             while(rs.next()){
-                ristoranti.add(RistoranteExtractor.extract(rs));
+                Ristorante r=RistoranteExtractor.extract(rs);
+                r.getImmagini().add(ImmagineExtractor.extract(rs));
+                ristoranti.add(r);
+
             }
 
             if(ristoranti.isEmpty())
@@ -24,7 +42,7 @@ public class RistoranteDAO {
         }
     }
 
-    public ArrayList<Ristorante> retrievebyCitta(String citta) throws SQLException{
+    public ArrayList<Ristorante> doRetrieveByCitta(String citta) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT id, nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna FROM Ristorante WHERE citta=?" );
             ps.setString(1, citta);
@@ -41,9 +59,9 @@ public class RistoranteDAO {
     }
 
     // restituisce i ristoranti con un tasso di consegna inferiore o uguale a quello inserito
-    public ArrayList<Ristorante> retrievebyTassoConsegna(float tasso) throws SQLException{
+    public ArrayList<Ristorante> doRetrieveByTassoConsegna(float tasso) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT id, nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna FROM Ristorante WHERE tassoConsegne=?" );
+            PreparedStatement ps=conn.prepareStatement("SELECT id, nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna FROM Ristorante WHERE tassoConsegne<=?" );
             ps.setFloat(1, tasso);
             ResultSet rs=ps.executeQuery();
             ArrayList<Ristorante> ristoranti=new ArrayList<>();
@@ -57,7 +75,7 @@ public class RistoranteDAO {
         }
     }
 
-    public ArrayList<Ristorante> retrievebyNome_Citta(String citta, String nome) throws SQLException{
+    public ArrayList<Ristorante> doRetrieveByNome_Citta(String citta, String nome) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT id, nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna FROM Ristorante WHERE citta=? and nome=?" );
             ps.setString(1, citta);
@@ -74,7 +92,21 @@ public class RistoranteDAO {
         }
     }
 
-    public ArrayList<Ristorante> retrieveAll() throws SQLException{
+    //da vedere
+    /*
+    public Optional<Ristorante> fetchRistoranteWithProdotti(int codice) throws SQLException {
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT *  FROM Ristorante r INNER JOIN Prodotto p ON r.codiceRistorante=p.codRis_fk WHERE r.codiceRistorante=?" );
+            ps.setInt(1, codice);
+            ResultSet rs=ps.executeQuery();
+            Ristorante r=null;
+            if(rs.next()){
+                r=RistoranteExtractor.extract(rs);
+            }
+        }
+    }*/
+
+    public ArrayList<Ristorante> doRetrieveAll() throws SQLException{
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT id, nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna FROM Ristorante" );
             ResultSet rs=ps.executeQuery();
@@ -128,5 +160,18 @@ public class RistoranteDAO {
             else
                 return true;
         }
+    }
+
+    public boolean doDelete(int codice) throws SQLException{
+        try(Connection conn= ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("DELETE FROM Ristorante WHERE codiceRistorante=?");
+            ps.setInt(1, codice);
+            if(ps.executeUpdate()!=1)
+                return false;
+            else
+                return true;
+
+        }
+
     }
 }
