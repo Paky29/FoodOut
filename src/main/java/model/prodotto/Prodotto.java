@@ -1,6 +1,4 @@
 package model.prodotto;
-
-import model.categoria.Categoria;
 import model.menu.Menu;
 import model.ordine.OrdineItem;
 import model.ristorante.Ristorante;
@@ -102,11 +100,11 @@ public class Prodotto implements OrdineItem {
         this.ristorante = ristorante;
     }
 
-    public Categoria getCategoria() {
+    public String getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(Categoria categoria) {
+    public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
 
@@ -116,5 +114,5 @@ public class Prodotto implements OrdineItem {
     private float prezzo;
     private ArrayList<Menu> menus;
     private Ristorante ristorante;
-    private Categoria categoria;
+    private String categoria;
 }

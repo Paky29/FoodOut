@@ -2,8 +2,6 @@ package model.ristorante;
 
 import model.giorno.Giorno;
 import model.prodotto.Prodotto;
-import model.tipologia.String;
-
 import java.util.ArrayList;
 
 public class Ristorante {
