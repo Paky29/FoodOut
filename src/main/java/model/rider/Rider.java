@@ -1,6 +1,7 @@
 package model.rider;
 
-import model.giorno.Giorno;
+import model.disponibilita.Disponibilita;
+import model.lavororider.LavoroRider;
 import model.ordine.Ordine;
 
 import java.util.ArrayList;
@@ -60,16 +61,16 @@ public class Rider {
         this.ordini = ordini;
     }
 
-    public ArrayList<Giorno> getGiorni() {
+    public ArrayList<LavoroRider> getGiorni() {
         return giorni;
     }
 
-    public void setGiorni(ArrayList<Giorno> giorni) {
+    public void setGiorni(ArrayList<LavoroRider> giorni) {
         this.giorni = giorni;
     }
 
     private int codice;
     private String email, password, veicolo, citta;
     private ArrayList<Ordine> ordini;
-    private ArrayList<Giorno> giorni;
+    private ArrayList<LavoroRider> giorni;
 }

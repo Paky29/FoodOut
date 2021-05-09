@@ -1,7 +1,6 @@
 package model.ristorante;
 
-import model.giorno.Giorno;
-import model.immagine.Immagine;
+import model.disponibilita.Disponibilita;
 import model.prodotto.Prodotto;
 import java.util.ArrayList;
 
@@ -10,7 +9,6 @@ public class Ristorante {
     public Ristorante(){
         prodotti=new ArrayList<>();
         giorni=new ArrayList<>();
-        immagini=new ArrayList<>();
     }
 
     public int getCodice() {
@@ -93,26 +91,26 @@ public class Ristorante {
         this.prodotti = prodotti;
     }
 
-    public ArrayList<Giorno> getGiorni() {
+    public ArrayList<Disponibilita> getGiorni() {
         return giorni;
     }
 
-    public void setGiorni(ArrayList<Giorno> giorni) {
+    public void setGiorni(ArrayList<Disponibilita> giorni) {
         this.giorni = giorni;
     }
 
-    public ArrayList<Immagine> getImmagini() {
-        return immagini;
+    public String getUrlImmagine() {
+        return urlImmagine;
     }
 
-    public void setImmagini(ArrayList<Immagine> immagini) {
-        this.immagini = immagini;
+    public void setUrlImmagine(String urlImmagine) {
+        this.urlImmagine=urlImmagine;
     }
 
     private int codice, civico;
     private java.lang.String nome, provincia, citta, via, info;
     private float spesaMinima, tassoConsegna;
     private ArrayList<Prodotto> prodotti;
-    private ArrayList<Giorno> giorni;
-    private ArrayList<Immagine> immagini;
+    private ArrayList<Disponibilita> giorni;
+    private String urlImmagine;
 }

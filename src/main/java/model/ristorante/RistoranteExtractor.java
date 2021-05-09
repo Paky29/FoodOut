@@ -1,21 +1,19 @@
 package model.ristorante;
-
-import model.immagine.Immagine;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RistoranteExtractor {
     public static Ristorante extract(ResultSet rs) throws SQLException {
         Ristorante r=new Ristorante();
-        r.setCodice(rs.getInt(1));
-        r.setNome(rs.getString(2));
-        r.setProvincia(rs.getString(3));
-        r.setCitta(rs.getString(4));
-        r.setVia(rs.getString(5));
-        r.setCivico(rs.getInt(6));
-        r.setSpesaMinima(rs.getFloat(7));
-        r.setTassoConsegna(rs.getFloat(8));
+        r.setCodice(rs.getInt("r.codiceRistorante"));
+        r.setNome(rs.getString("r.nome"));
+        r.setProvincia(rs.getString("r.provincia"));
+        r.setCitta(rs.getString("r.citta"));
+        r.setVia(rs.getString("r.via"));
+        r.setCivico(rs.getInt("r.civico"));
+        r.setSpesaMinima(rs.getFloat("r.spesaMinima"));
+        r.setTassoConsegna(rs.getFloat("r.tassoConsegna"));
+        r.setUrlImmagine(rs.getString("r.urlImmagine"));
         return r;
     }
 }
