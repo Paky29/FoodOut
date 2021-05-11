@@ -2,6 +2,8 @@ package model.ristorante;
 
 import model.disponibilita.Disponibilita;
 import model.prodotto.Prodotto;
+import model.tipologia.Tipologia;
+
 import java.util.ArrayList;
 
 public class Ristorante {
@@ -27,15 +29,15 @@ public class Ristorante {
         this.civico = civico;
     }
 
-    public java.lang.String getNome() {
+    public String getNome() {
         return nome;
     }
 
-    public void setNome(java.lang.String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public java.lang.String getProvincia() {
+    public String getProvincia() {
         return provincia;
     }
 
@@ -43,27 +45,27 @@ public class Ristorante {
         this.provincia = provincia;
     }
 
-    public java.lang.String getCitta() {
+    public String getCitta() {
         return citta;
     }
 
-    public void setCitta(java.lang.String citta) {
+    public void setCitta(String citta) {
         this.citta = citta;
     }
 
-    public java.lang.String getVia() {
+    public String getVia() {
         return via;
     }
 
-    public void setVia(java.lang.String via) {
+    public void setVia(String via) {
         this.via = via;
     }
 
-    public java.lang.String getInfo() {
+    public String getInfo() {
         return info;
     }
 
-    public void setInfo(java.lang.String info) {
+    public void setInfo(String info) {
         this.info = info;
     }
 
@@ -99,6 +101,14 @@ public class Ristorante {
         this.giorni = giorni;
     }
 
+    public ArrayList<Tipologia> getTipologie() { return tipologie; }
+
+    public void setTipologie(ArrayList<Tipologia> tipologie) { this.tipologie = tipologie; }
+
+    public int getRating() { return rating; }
+
+    public void setRating(int rating) { this.rating = rating; }
+
     public String getUrlImmagine() {
         return urlImmagine;
     }
@@ -112,15 +122,7 @@ public class Ristorante {
     private float spesaMinima, tassoConsegna;
     private ArrayList<Prodotto> prodotti;
     private ArrayList<Disponibilita> giorni;
+    private ArrayList<Tipologia> tipologie;
     private int rating;
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
     private String urlImmagine;
 }

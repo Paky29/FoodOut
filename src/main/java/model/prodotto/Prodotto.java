@@ -76,7 +76,6 @@ public class Prodotto implements OrdineItem {
         this.immagine = immagine;
     }
 
-    @Override
     public float getPrezzo() {
         return prezzo;
     }

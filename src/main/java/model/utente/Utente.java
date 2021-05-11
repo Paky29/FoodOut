@@ -28,17 +28,13 @@ public class Utente {
         this.civico = civico;
     }
 
-    public String getNome() {
-        return nome;
-    }
+    public String getNome() { return nome; }
 
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public String getCognome() {
-        return cognome;
-    }
+    public String getCognome() { return cognome; }
 
     public void setCognome(String cognome) {
         this.cognome = cognome;
@@ -56,9 +52,7 @@ public class Utente {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setPassword(String password) { this.password = password; }
 
     public String getProvincia() {
         return provincia;
@@ -80,9 +74,7 @@ public class Utente {
         return via;
     }
 
-    public void setVia(String via) {
-        this.via = via;
-    }
+    public void setVia(String via) { this.via = via; }
 
     public String getInteresse() {
         return interesse;
@@ -108,9 +100,7 @@ public class Utente {
         return ordini;
     }
 
-    public void setOrdini(ArrayList<Ordine> ordini) {
-        this.ordini = ordini;
-    }
+    public void setOrdini(ArrayList<Ordine> ordini) { this.ordini = ordini; }
 
     public ArrayList<Ristorante> getRistorantiPref() {
         return ristorantiPref;

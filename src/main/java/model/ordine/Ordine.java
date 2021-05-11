@@ -73,9 +73,7 @@ public class Ordine {
         return giudizio;
     }
 
-    public void setGiudizio(String giudizio) {
-        this.giudizio = giudizio;
-    }
+    public void setGiudizio(String giudizio) { this.giudizio = giudizio; }
 
     public LocalTime getOraPartenza() {
         return oraPartenza;
