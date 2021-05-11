@@ -137,7 +137,7 @@ public class RistoranteDAO {
 
     public boolean doSave(Ristorante r) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("INSERT INTO Ristorante (nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna, urlImmagine) VALUES(?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps=conn.prepareStatement("INSERT INTO Ristorante (nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna, urlImmagine, rating) VALUES(?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1,r.getNome());
             ps.setString(2,r.getProvincia());
             ps.setString(3,r.getCitta());
@@ -147,6 +147,7 @@ public class RistoranteDAO {
             ps.setFloat(7,r.getSpesaMinima());
             ps.setFloat(8,r.getTassoConsegna());
             ps.setString(9,r.getUrlImmagine());
+            ps.setInt(10,r.getRating());
             if(ps.executeUpdate()!=1){
                return false;
             }

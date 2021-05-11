@@ -112,5 +112,15 @@ public class Ristorante {
     private float spesaMinima, tassoConsegna;
     private ArrayList<Prodotto> prodotti;
     private ArrayList<Disponibilita> giorni;
+    private int rating;
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
     private String urlImmagine;
 }

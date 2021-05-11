@@ -14,6 +14,7 @@ public class RistoranteExtractor {
         r.setSpesaMinima(rs.getFloat("r.spesaMinima"));
         r.setTassoConsegna(rs.getFloat("r.tassoConsegna"));
         r.setUrlImmagine(rs.getString("r.urlImmagine"));
+        r.setRating(rs.getInt("r.rating"));
         return r;
     }
 }
