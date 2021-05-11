@@ -1,4 +1,4 @@
-package model.Turno;
+package model.turno;
 
 import java.sql.Time;
 

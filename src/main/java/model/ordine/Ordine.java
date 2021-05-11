@@ -1,6 +1,7 @@
 package model.ordine;
 
 import model.rider.Rider;
+import model.ristorante.Ristorante;
 import model.utente.Utente;
 
 import java.time.LocalDate;
@@ -115,6 +116,10 @@ public class Ordine {
         this.utente = utente;
     }
 
+    public Ristorante getRistorante() { return ristorante; }
+
+    public void setRistorante(Ristorante ristorante) { this.ristorante = ristorante; }
+
     private int codice,voto;
     private LocalDate dataOrdine;
     private float totale;
@@ -124,4 +129,5 @@ public class Ordine {
     private Utente utente;
     private boolean consegnato;
     private ArrayList<OrdineItem> ordineItems;
+    private Ristorante ristorante;
 }
