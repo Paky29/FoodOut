@@ -100,6 +100,10 @@ public class Utente {
         this.saldo = saldo;
     }
 
+    public boolean isAmministratore() { return amministratore; }
+
+    public void setAmministratore(boolean amministratore) { this.amministratore = amministratore; }
+
     public ArrayList<Ordine> getOrdini() {
         return ordini;
     }
@@ -119,6 +123,7 @@ public class Utente {
     private int codice, civico;
     private String nome, cognome, email, password, provincia, citta, via, interesse;
     private float saldo;
+    private boolean amministratore;
     private ArrayList<Ordine> ordini;
     private ArrayList<Ristorante> ristorantiPref;
 }
