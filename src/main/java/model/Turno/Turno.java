@@ -1,9 +1,9 @@
-package model.lavororider;
+package model.Turno;
 
 import java.sql.Time;
 
-public class LavoroRider {
-    public LavoroRider(){}
+public class Turno {
+    public Turno(){}
 
     public String getGiorno() {
         return giorno;
