@@ -6,10 +6,7 @@ import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
 import model.utility.ConPool;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class UtenteDAO {
     public UtenteDAO(){}
@@ -41,6 +38,78 @@ public class UtenteDAO {
             return u;
 
         }
+    }
+
+    public boolean doSave(Utente u) throws SQLException{
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps=conn.prepareStatement("INSERT INTO Utente(nome, cognome, email, pw, saldo, provincia, citta, via, civico, interesse, amministratore) VALUES(?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, u.getNome());
+            ps.setString(2, u.getCognome());
+            ps.setString(3, u.getEmail());
+            ps.setString(4, u.getPassword());
+            ps.setFloat(5, u.getSaldo());
+            ps.setString(6, u.getProvincia());
+            ps.setString(7, u.getCitta());
+            ps.setString(8, u.getVia());
+            ps.setInt(9, u.getCivico());
+            ps.setString(10, u.getInteresse());
+            if(u.getEmail().contains("@foodout.com")) {
+                ps.setBoolean(11, true);
+                u.setAmministratore(true);
+            }
+            else {
+                ps.setBoolean(11, false);
+                u.setAmministratore(false);
+            }
+
+            if(ps.executeUpdate()!=1){
+                return false;
+            }
+            ResultSet rs=ps.getGeneratedKeys();
+            rs.next();
+            int id=rs.getInt(1);
+            u.setCodice(id);
+            return true;
+        }
+    }
+
+    public boolean doUpdate(Utente u) throws SQLException {
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("UPDATE Utente SET nome=?, cognome=?, email=?, pw=?, saldo=?, provincia=?, citta=?, via=?, civico=?, interesse=?, amministratore=?");
+            ps.setString(1, u.getNome());
+            ps.setString(2, u.getCognome());
+            ps.setString(3, u.getEmail());
+            ps.setString(4, u.getPassword());
+            ps.setFloat(5, u.getSaldo());
+            ps.setString(6, u.getProvincia());
+            ps.setString(7, u.getCitta());
+            ps.setString(8, u.getVia());
+            ps.setInt(9, u.getCivico());
+            ps.setString(10, u.getInteresse());
+            if (u.getEmail().contains("@foodout.com")) {
+                ps.setBoolean(11, true);
+                u.setAmministratore(true);
+            } else {
+                ps.setBoolean(11, false);
+                u.setAmministratore(false);
+            }
+
+            if (ps.executeUpdate() != 1)
+                return false;
+            else
+                return true;
+        }
+    }
+
+    public boolean doDelete (int codice) throws SQLException{
+            try(Connection conn=ConPool.getConnection()){
+                PreparedStatement ps=conn.prepareStatement("DELETE FROM Utente WHERE codiceUtente=?");
+                ps.setInt(1, codice);
+                if(ps.executeUpdate()!=1)
+                    return false;
+                else
+                    return true;
+            }
     }
 
 
