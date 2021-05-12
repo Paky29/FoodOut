@@ -13,19 +13,24 @@ import java.sql.SQLException;
 
 @WebServlet("/Tryservlet")
 public class TryServlet extends HttpServlet {
-    public void doget(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
         RistoranteDAO service=new RistoranteDAO();
         int id=1;
-        Ristorante r=service.doRetrieveById(id);
-        System.out.println(r.getCodice());
-        System.out.println(r.getNome());
-        System.out.println(r.getProvincia());
-        System.out.println(r.getCitta());
-        System.out.println(r.getCivico());
-        System.out.println(r.getSpesaMinima());
-        System.out.println(r.getTassoConsegna());
-        for(Tipologia t: r.getTipologie()){
-            System.out.println("Tipologia: " + t.getNome());
+        Ristorante r= null;
+        try {
+            r = service.doRetrieveById(id);
+            System.out.println(r.getCodice());
+            System.out.println(r.getNome());
+            System.out.println(r.getProvincia());
+            System.out.println(r.getCitta());
+            System.out.println(r.getCivico());
+            System.out.println(r.getSpesaMinima());
+            System.out.println(r.getTassoConsegna());
+            for(Tipologia t: r.getTipologie()){
+                System.out.println("Tipologia: " + t.getNome());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
     }

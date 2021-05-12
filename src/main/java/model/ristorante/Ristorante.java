@@ -11,6 +11,7 @@ public class Ristorante {
     public Ristorante(){
         prodotti=new ArrayList<>();
         giorni=new ArrayList<>();
+        tipologie=new ArrayList<>();
     }
 
     public int getCodice() {
