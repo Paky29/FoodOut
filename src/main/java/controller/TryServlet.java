@@ -1,0 +1,32 @@
+package controller;
+
+
+import model.ristorante.Ristorante;
+import model.ristorante.RistoranteDAO;
+import model.tipologia.Tipologia;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+
+@WebServlet("/Tryservlet")
+public class TryServlet extends HttpServlet {
+    public void doget(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+        RistoranteDAO service=new RistoranteDAO();
+        int id=1;
+        Ristorante r=service.doRetrieveById(id);
+        System.out.println(r.getCodice());
+        System.out.println(r.getNome());
+        System.out.println(r.getProvincia());
+        System.out.println(r.getCitta());
+        System.out.println(r.getCivico());
+        System.out.println(r.getSpesaMinima());
+        System.out.println(r.getTassoConsegna());
+        for(Tipologia t: r.getTipologie()){
+            System.out.println("Tipologia: " + t.getNome());
+        }
+
+    }
+}
