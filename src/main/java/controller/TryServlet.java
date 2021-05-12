@@ -28,6 +28,7 @@ public class TryServlet extends HttpServlet {
             System.out.println(r.getTassoConsegna());
             for(Tipologia t: r.getTipologie()){
                 System.out.println("Tipologia: " + t.getNome());
+                System.out.println("ciao");
             }
         } catch (SQLException e) {
             e.printStackTrace();
