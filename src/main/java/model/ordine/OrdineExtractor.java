@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class OrdineExtractor {
     public static Ordine extract(ResultSet rs) throws SQLException {
-        Ordine o=new Ordine();
+        Ordine o = new Ordine();
         o.setCodice(rs.getInt("o.codiceOrdine"));
         o.setDataOrdine(rs.getDate("o.dataOrdine"));
         o.setTotale(rs.getFloat("o.totale"));

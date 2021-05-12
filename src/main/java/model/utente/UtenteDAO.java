@@ -19,7 +19,7 @@ public class UtenteDAO {
             PreparedStatement ps=conn.prepareStatement("SELECT codiceUtente, nome, cognome, email, pw, saldo, provincia, citta, via, civico, interesse, amministratore, codiceOrdine, dataOrdine, totale, nota, oraPartenza, oraArrivo, metodoPagamento, giudizio, voto, consegnato FROM Utente u INNER JOIN Ordine o ON o.codUtente_fk=u.codiceUtente WHERE email=? AND pw=SHA1(?)");
             ps.setString(1, email);
             ps.setString(2, password);
-            ResultSet rs=ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
             Utente u=null;
             if(rs.next()){
                 u=UtenteExtractor.extract(rs);
