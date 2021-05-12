@@ -26,9 +26,9 @@ public class TryServlet extends HttpServlet {
             System.out.println(r.getCivico());
             System.out.println(r.getSpesaMinima());
             System.out.println(r.getTassoConsegna());
+            System.out.println(r.getGiorni().get(0).getGiorno()+" "+r.getGiorni().get(0).getOraApertura());
             for(Tipologia t: r.getTipologie()){
                 System.out.println("Tipologia: " + t.getNome());
-                System.out.println("ciao");
             }
         } catch (SQLException e) {
             e.printStackTrace();

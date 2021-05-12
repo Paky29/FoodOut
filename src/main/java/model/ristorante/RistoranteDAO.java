@@ -16,6 +16,7 @@ public class RistoranteDAO {
 
     public Ristorante doRetrieveById(int codice) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
+            System.out.println("ciao");
             PreparedStatement ps = conn.prepareStatement("SELECT codiceRistorante, r.nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna, urlImmagine, rating, art.nomeTip_fk FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE r.codiceRistorante=?");
             ps.setInt(1, codice);
             ResultSet rs = ps.executeQuery();
@@ -82,15 +83,15 @@ public class RistoranteDAO {
             ResultSet rs=ps.executeQuery();
             Map<Integer,Ristorante> ristoranti=new LinkedHashMap<>();
             while(rs.next()){
-                int ristoranteid=rs.getInt("codiceRistorante");
+                int ristoranteid=rs.getInt("r.codiceRistorante");
                 if(!ristoranti.containsKey(ristoranteid)) {
                     Ristorante r = RistoranteExtractor.extract(rs);
                     PreparedStatement calendario=conn.prepareStatement("SELECT giorno, oraApertura, oraChiusura FROM Disponibilita d WHERE d.codRis_fk=?");
                     calendario.setInt(1,ristoranteid);
-                    rs=calendario.executeQuery();
-                    while(rs.next())
+                    ResultSet set=calendario.executeQuery();
+                    while(set.next())
                     {
-                        Disponibilita d=DisponibilitaExtractor.extract(rs);
+                        Disponibilita d=DisponibilitaExtractor.extract(set);
                         r.getGiorni().add(d);
                     }
                     ristoranti.put(ristoranteid, r);
@@ -116,15 +117,15 @@ public class RistoranteDAO {
             ResultSet rs=ps.executeQuery();
             Map<Integer,Ristorante> ristoranti=new LinkedHashMap<>();
             while(rs.next()){
-                int ristoranteid=rs.getInt("codiceRistorante");
+                int ristoranteid=rs.getInt("r.codiceRistorante");
                 if(!ristoranti.containsKey(ristoranteid)) {
                     Ristorante r = RistoranteExtractor.extract(rs);
                     PreparedStatement calendario=conn.prepareStatement("SELECT giorno, oraApertura, oraChiusura FROM Disponibilita d WHERE d.codRis_fk=?");
                     calendario.setInt(1,ristoranteid);
-                    rs=calendario.executeQuery();
-                    while(rs.next())
+                    ResultSet set=calendario.executeQuery();
+                    while(set.next())
                     {
-                        Disponibilita d=DisponibilitaExtractor.extract(rs);
+                        Disponibilita d=DisponibilitaExtractor.extract(set);
                         r.getGiorni().add(d);
                     }
                     ristoranti.put(ristoranteid, r);
@@ -150,15 +151,15 @@ public class RistoranteDAO {
             ResultSet rs=ps.executeQuery();
             Map<Integer,Ristorante> ristoranti=new LinkedHashMap<>();
             while(rs.next()){
-                int ristoranteid=rs.getInt("codiceRistorante");
+                int ristoranteid=rs.getInt("r.codiceRistorante");
                 if(!ristoranti.containsKey(ristoranteid)) {
                     Ristorante r = RistoranteExtractor.extract(rs);
                     PreparedStatement calendario=conn.prepareStatement("SELECT giorno, oraApertura, oraChiusura FROM Disponibilita d WHERE d.codRis_fk=?");
                     calendario.setInt(1,ristoranteid);
-                    rs=calendario.executeQuery();
-                    while(rs.next())
+                    ResultSet set=calendario.executeQuery();
+                    while(set.next())
                     {
-                        Disponibilita d=DisponibilitaExtractor.extract(rs);
+                        Disponibilita d=DisponibilitaExtractor.extract(set);
                         r.getGiorni().add(d);
                     }
                     ristoranti.put(ristoranteid, r);
@@ -181,15 +182,15 @@ public class RistoranteDAO {
             ResultSet rs=ps.executeQuery();
             Map<Integer,Ristorante> ristoranti=new LinkedHashMap<>();
             while(rs.next()){
-                int ristoranteid=rs.getInt("codiceRistorante");
+                int ristoranteid=rs.getInt("r.codiceRistorante");
                 if(!ristoranti.containsKey(ristoranteid)) {
                     Ristorante r = RistoranteExtractor.extract(rs);
                     PreparedStatement calendario=conn.prepareStatement("SELECT giorno, oraApertura, oraChiusura FROM Disponibilita d WHERE d.codRis_fk=?");
                     calendario.setInt(1,ristoranteid);
-                    rs=calendario.executeQuery();
-                    while(rs.next())
+                    ResultSet set=calendario.executeQuery();
+                    while(set.next())
                     {
-                        Disponibilita d=DisponibilitaExtractor.extract(rs);
+                        Disponibilita d=DisponibilitaExtractor.extract(set);
                         r.getGiorni().add(d);
                     }
                     ristoranti.put(ristoranteid, r);
