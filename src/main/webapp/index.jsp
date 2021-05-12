@@ -5,6 +5,8 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
-
+<form action="Tryservlet">
+    <input type="submit">
+</form>
 </body>
 </html>

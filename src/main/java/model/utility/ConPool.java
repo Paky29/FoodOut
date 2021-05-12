@@ -42,7 +42,7 @@ public class ConPool {
 	public static Connection getConnection() throws SQLException {
 		if (datasource == null) {
 			PoolProperties p = new PoolProperties();
-			p.setUrl("jdbc:mysql://localhost/initCategorie?useLegacyDatetimeCode=false&serverTimezone=Europe/Rome");
+			p.setUrl("jdbc:mysql://localhost/Foodout?useLegacyDatetimeCode=false&serverTimezone=Europe/Rome");
 			p.setDriverClassName("com.mysql.cj.jdbc.Driver");
 			p.setUsername("root");
 			p.setPassword("Fisciano19");
