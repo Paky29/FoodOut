@@ -42,6 +42,23 @@ public class RistoranteDAO {
         }
     }
 
+//da visionare
+    public ArrayList<Integer> doRetrievebyScontoDisp(String citta, Paginator paginator) throws SQLException {
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT codiceRistorante FROM Ristorante r INNER JOIN Prodotto p ON p.codRis_fk=r.codiceRistorante WHERE r.citta=? AND p.sconto>0");
+            ps.setString(1,citta);
+            ResultSet rs=ps.executeQuery();
+            ArrayList<Integer> codRis=new ArrayList<>();
+            while(rs.next()){
+                codRis.add(rs.getInt("r.codiceRistorante"));
+            }
+            if(codRis.isEmpty())
+                return null;
+            else
+                return codRis;
+        }
+    }
+
     public ArrayList<Ristorante> doRetrieveByTipologiaCitta(String nomeTipologia, String citta, Paginator paginator) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT codiceRistorante, nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna, urlImmagine, rating, giorno, oraApertura, oraChiusura FROM Ristorante r INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE art.nomeTip_fk=? AND r.citta=? LIMIT ?,?");

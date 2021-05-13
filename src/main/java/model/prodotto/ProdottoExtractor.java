@@ -8,7 +8,6 @@ public class ProdottoExtractor {
         Prodotto p=new Prodotto();
         p.setCodice(rs.getInt("p.codiceProdotto"));
         p.setNome(rs.getString("p.nome"));
-        p.setGenere(rs.getString("p.genere"));
         p.setUrlImmagine(rs.getString("p.urlImmagine"));
         p.setSconto(rs.getInt("p.sconto"));
         p.setPrezzo(rs.getFloat("p.prezzo"));

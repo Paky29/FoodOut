@@ -52,14 +52,6 @@ public class Prodotto implements OrdineItem {
         this.ingredienti = ingredienti;
     }
 
-    public String getGenere() {
-        return genere;
-    }
-
-    public void setGenere(String genere) {
-        this.genere = genere;
-    }
-
     public String getInfo() {
         return info;
     }
@@ -92,9 +84,7 @@ public class Prodotto implements OrdineItem {
         this.menus = menus;
     }
 
-    public Ristorante getRistorante() {
-        return ristorante;
-    }
+    public Ristorante getRistorante() { return ristorante; }
 
     public void setRistorante(Ristorante ristorante) {
         this.ristorante = ristorante;
@@ -108,7 +98,7 @@ public class Prodotto implements OrdineItem {
 
     private int codice, sconto;
     private boolean valido;
-    private String nome, ingredienti, genere, info, urlImmagine;
+    private String nome, ingredienti, info, urlImmagine;
     private float prezzo;
     private ArrayList<Menu> menus;
     private Ristorante ristorante;

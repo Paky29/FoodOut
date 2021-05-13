@@ -33,7 +33,6 @@ public class UtenteDAO {
                     u.getOrdini().add(o);
                 }while(rs.next());
             }
-
             ps=conn.prepareStatement("SELECT codRis_fk FROM Preferenza pr WHERE pr.codUtente_fk=?");
             ps.setInt(1, u.getCodice());
             rs=ps.executeQuery();
@@ -189,6 +188,4 @@ public class UtenteDAO {
                     return true;
             }
     }
-
-
 }

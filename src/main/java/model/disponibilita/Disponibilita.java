@@ -2,6 +2,7 @@ package model.disponibilita;
 
 import java.sql.Time;
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class Disponibilita {
 
