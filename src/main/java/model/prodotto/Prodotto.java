@@ -68,12 +68,12 @@ public class Prodotto implements OrdineItem {
         this.info = info;
     }
 
-    public String getImmagine() {
-        return immagine;
+    public String getUrlImmagine() {
+        return urlImmagine;
     }
 
-    public void setImmagine(String immagine) {
-        this.immagine = immagine;
+    public void setUrlImmagine(String urlImmagine) {
+        this.urlImmagine = urlImmagine;
     }
 
     public float getPrezzo() {
@@ -108,7 +108,7 @@ public class Prodotto implements OrdineItem {
 
     private int codice, sconto;
     private boolean valido;
-    private String nome, ingredienti, genere, info, immagine;
+    private String nome, ingredienti, genere, info, urlImmagine;
     private float prezzo;
     private ArrayList<Menu> menus;
     private Ristorante ristorante;

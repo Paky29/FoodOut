@@ -8,10 +8,16 @@ public class Tipologia {
         return nome;
     }
 
+    public String getDescrizione() {
+        return descrizione;
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    private String nome;
+    public void setDescrizione(String descrizione) { this.descrizione=descrizione; }
+
+    private String nome, descrizione;
 
 }
