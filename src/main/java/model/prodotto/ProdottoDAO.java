@@ -34,7 +34,7 @@ public class ProdottoDAO {
 
     public ArrayList<Prodotto> doRetrieveByRistorante(int codiceRistorante) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceProdotto, nome, ingredienti, info, prezzo, sconto, valido, urlImmagine, nomeTip_fk WHERE codRis_fk=?");
+            PreparedStatement ps=conn.prepareStatement("SELECT codiceProdotto, nome, ingredienti, info, prezzo, sconto, valido, urlImmagine, nomeTip_fk FROM Prodotto p WHERE codRis_fk=?");
             ps.setInt(1,codiceRistorante);
             ResultSet rs=ps.executeQuery();
             ArrayList<Prodotto> prodotti=new ArrayList<>();
@@ -69,6 +69,12 @@ public class ProdottoDAO {
             rs.next();
             int id=rs.getInt(1);
             p.setCodice(id);
+
+            try {
+                ps = conn.prepareStatement("INSERT INTO AppartenenzaRT (codRis_fk,nomeTip_fk) VALUES (?,?)");
+                ps.setInt(1,p.getRistorante().getCodice());
+                ps.setString(2,p.getTipologia().getNome());
+            }catch(SQLException e){}
             return true;
         }
     }
