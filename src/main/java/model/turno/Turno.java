@@ -13,23 +13,23 @@ public class Turno {
         this.giorno = giorno;
     }
 
-    public Time getOraApertura() {
-        return oraApertura;
+    public Time getOraInizio() {
+        return oraInizio;
     }
 
-    public void setOraApertura(Time oraApertura) {
-        this.oraApertura = oraApertura;
+    public void setOraInizio(Time oraInizio) {
+        this.oraInizio = oraInizio;
     }
 
-    public Time getOraChiusura() {
-        return oraChiusura;
+    public Time getOraFine() {
+        return oraFine;
     }
 
-    public void setOraChiusura(Time oraChiusura) {
-        this.oraChiusura = oraChiusura;
+    public void setOraFine(Time oraFine) {
+        this.oraFine = oraFine;
     }
 
     private String giorno;
-    private Time oraApertura;
-    private Time oraChiusura;
+    private Time oraInizio;
+    private Time oraFine;
 }

@@ -9,7 +9,7 @@ public class Rider {
 
     public Rider(){
         ordini=new ArrayList<>();
-        giorni=new ArrayList<>();
+        turni =new ArrayList<>();
     }
 
     public int getCodice() {
@@ -60,16 +60,16 @@ public class Rider {
         this.ordini = ordini;
     }
 
-    public ArrayList<Turno> getGiorni() {
-        return giorni;
+    public ArrayList<Turno> getTurni() {
+        return turni;
     }
 
-    public void setGiorni(ArrayList<Turno> giorni) {
-        this.giorni = giorni;
+    public void setTurni(ArrayList<Turno> turni) {
+        this.turni = turni;
     }
 
     private int codice;
     private String email, password, veicolo, citta;
     private ArrayList<Ordine> ordini;
-    private ArrayList<Turno> giorni;
+    private ArrayList<Turno> turni;
 }

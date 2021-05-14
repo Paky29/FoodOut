@@ -16,7 +16,6 @@ public class RistoranteDAO {
 
     public Ristorante doRetrieveById(int codice) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            System.out.println("ciao");
             PreparedStatement ps = conn.prepareStatement("SELECT codiceRistorante, r.nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna, urlImmagine, rating, t.nome, t.descrizione FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE r.codiceRistorante=?");
             ps.setInt(1, codice);
             ResultSet rs = ps.executeQuery();
@@ -24,20 +23,21 @@ public class RistoranteDAO {
             if(rs.next()) {
                 r = RistoranteExtractor.extract(rs);
                 do {
-                    Tipologia t=new Tipologia();
+                    Tipologia t = new Tipologia();
                     t.setNome(rs.getString("t.nome"));
                     t.setDescrizione(rs.getString("t.descrizione"));
                     r.getTipologie().add(t);
-                }while(rs.next());
+                } while (rs.next());
+
+                PreparedStatement calendario = conn.prepareStatement("SELECT giorno, oraApertura, oraChiusura FROM Disponibilita d WHERE d.codRis_fk=?");
+                calendario.setInt(1, codice);
+                rs = calendario.executeQuery();
+                while (rs.next()) {
+                    Disponibilita d = DisponibilitaExtractor.extract(rs);
+                    r.getGiorni().add(d);
+                }
             }
-            PreparedStatement calendario=conn.prepareStatement("SELECT giorno, oraApertura, oraChiusura FROM Disponibilita d WHERE d.codRis_fk=?");
-            calendario.setInt(1,codice);
-            rs=calendario.executeQuery();
-            while(rs.next())
-            {
-                Disponibilita d=DisponibilitaExtractor.extract(rs);
-                r.getGiorni().add(d);
-            }
+
             return r;
         }
     }
