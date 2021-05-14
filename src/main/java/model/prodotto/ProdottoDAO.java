@@ -15,7 +15,7 @@ public class ProdottoDAO {
 
     public Prodotto doRetrievebyId(int codiceProdotto) throws SQLException{
         try(Connection conn=ConPool.getConnection()) {
-            PreparedStatement ps= conn.prepareStatement("SELECT codiceProdotto, nome, ingredienti, info, prezzo, sconto, valido, urlImmagine, codRis_fk, nomeTip_fk WHERE codiceProdotto=?");
+            PreparedStatement ps= conn.prepareStatement("SELECT codiceProdotto, nome, ingredienti, info, prezzo, sconto, valido, urlImmagine, codRis_fk, nomeTip_fk FROM Prodotto p WHERE codiceProdotto=?");
             ps.setInt(1, codiceProdotto);
             ResultSet rs=ps.executeQuery();
             Prodotto p=null;
@@ -25,7 +25,7 @@ public class ProdottoDAO {
                 Ristorante r = service1.doRetrieveById(rs.getInt("codRis_fk"));
                 p.setRistorante(r);
                 TipologiaDAO service2 = new TipologiaDAO();
-                Tipologia t = service2.doRetrieveByNome((rs.getString("nomTip_fk")));
+                Tipologia t = service2.doRetrieveByNome((rs.getString("nomeTip_fk")));
                 p.setTipologia(t);
             }
             return p;
@@ -41,7 +41,7 @@ public class ProdottoDAO {
             while(rs.next()) {
                 Prodotto p = ProdottoExtractor.extract(rs);
                 TipologiaDAO service = new TipologiaDAO();
-                Tipologia t = service.doRetrieveByNome((rs.getString("nomTip_fk")));
+                Tipologia t = service.doRetrieveByNome((rs.getString("nomeTip_fk")));
                 p.setTipologia(t);
                 prodotti.add(p);
             }
