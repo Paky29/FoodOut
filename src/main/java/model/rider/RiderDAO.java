@@ -7,10 +7,7 @@ import model.turno.TurnoExtractor;
 import model.utility.ConPool;
 import model.utility.Paginator;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -33,7 +30,6 @@ public class RiderDAO {
                 }while(rs.next());
 
                 }
-
             return r;
         }
     }
@@ -41,7 +37,7 @@ public class RiderDAO {
 
     public Rider doRetrievebyEmailAndPassword(String email, String password, Paginator paginator) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, citta, veicolo, giorno, oraInizio, oraFine FROM Rider r INNER JOIN Turno t ON r.codiceRider=t.codRider_fk WHERE email=? AND password=SHA1(?)");
+            PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, pw, citta, veicolo, giorno, oraInizio, oraFine FROM Rider r INNER JOIN Turno t ON r.codiceRider=t.codRider_fk WHERE email=? AND password=SHA1(?)");
             ps.setString(1, email);
             ps.setString(2, password);
             ResultSet rs=ps.executeQuery();
@@ -70,9 +66,7 @@ public class RiderDAO {
                     Ordine o= OrdineExtractor.extract(set2);
                     r.getOrdini().add(o);
                 }
-
             }
-
             return r;
         }
     }
@@ -185,6 +179,45 @@ public class RiderDAO {
                 return null;
             return new ArrayList<>(riders.values());
 
+        }
+    }
+
+    public boolean doSave(Rider r) throws SQLException{
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("INSERT INTO Rider (email,pw,veicolo,citta) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1,r.getEmail());
+            ps.setString(2,r.getPassword());
+            ps.setString(3,r.getVeicolo());
+            ps.setString(4,r.getCitta());
+            if(ps.executeUpdate()!=1)
+                return false;
+            ResultSet rs=ps.getGeneratedKeys();
+            rs.next();
+            int id=rs.getInt(1);
+            r.setCodice(id);
+            return true;
+        }
+    }
+
+    public boolean doUpdate(Rider r) throws SQLException{
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("UPDATE Rider SET email=?, pw=?, veicolo=?, citta=? WHERE codiceRider=?");
+            ps.setInt(1,r.getCodice());
+            if(ps.executeUpdate()!=1)
+                return false;
+            else
+                return true;
+        }
+    }
+
+    public boolean doDelete (int codice) throws SQLException{
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("DELETE FROM Rider WHERE codiceRider=?");
+            ps.setInt(1, codice);
+            if(ps.executeUpdate()!=1)
+                return false;
+            else
+                return true;
         }
     }
 }

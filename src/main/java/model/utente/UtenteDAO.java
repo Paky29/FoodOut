@@ -19,6 +19,31 @@ import java.util.Map;
 public class UtenteDAO {
     public UtenteDAO(){}
 
+    public Utente doRetrieveById(int codiceUtente) throws SQLException{
+        try(Connection conn= ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT codiceUtente, nome, cognome, email, pw, saldo, provincia, citta, via, civico, interesse, amministratore, codiceOrdine, dataOrdine, totale, nota, oraPartenza, oraArrivo, metodoPagamento, giudizio, voto, consegnato FROM Utente u INNER JOIN Ordine o ON o.codUtente_fk=u.codiceUtente WHERE u.codiceUtente=?");
+            ps.setInt(1, codiceUtente);
+            ResultSet rs = ps.executeQuery();
+            Utente u=null;
+            if(rs.next()){
+                u=UtenteExtractor.extract(rs);
+                do{
+                    Ordine o= OrdineExtractor.extract(rs);
+                    u.getOrdini().add(o);
+                }while(rs.next());
+            }
+            ps=conn.prepareStatement("SELECT codRis_fk FROM Preferenza pr WHERE pr.codUtente_fk=?");
+            ps.setInt(1, u.getCodice());
+            rs=ps.executeQuery();
+            RistoranteDAO service=new RistoranteDAO();
+            while(rs.next()){
+                Ristorante r=service.doRetrieveById(rs.getInt("codRis_fk"));
+                u.getRistorantiPref().add(r);
+            }
+            return u;
+        }
+    }
+
     public Utente doRetrieveByEmailAndPassword(String email, String password) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT codiceUtente, nome, cognome, email, pw, saldo, provincia, citta, via, civico, interesse, amministratore, codiceOrdine, dataOrdine, totale, nota, oraPartenza, oraArrivo, metodoPagamento, giudizio, voto, consegnato FROM Utente u INNER JOIN Ordine o ON o.codUtente_fk=u.codiceUtente WHERE email=? AND pw=SHA1(?)");
@@ -41,9 +66,7 @@ public class UtenteDAO {
                 Ristorante r=service.doRetrieveById(rs.getInt("codRis_fk"));
                 u.getRistorantiPref().add(r);
             }
-
             return u;
-
         }
     }
 
