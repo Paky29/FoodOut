@@ -1,12 +1,13 @@
 package model.menu;
 
+import model.ordine.Offerta;
 import model.ordine.OrdineItem;
 import model.prodotto.Prodotto;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Menu implements OrdineItem {
+public class Menu implements Offerta {
 
     public Menu(){
         prodotti=new ArrayList<>();

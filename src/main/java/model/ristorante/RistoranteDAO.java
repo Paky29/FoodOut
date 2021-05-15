@@ -283,4 +283,29 @@ public class RistoranteDAO {
                 return true;
         }
     }
+
+    public boolean savePreferenza(int codiceRistorante, int codiceUtente) throws SQLException{
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("INSERT INTO Preferenza (codUtente_fk, codRis_fk) VALUES(?,?)");
+            ps.setInt(1,codiceRistorante);
+            ps.setInt(2,codiceUtente);
+            if(ps.executeUpdate()!=1)
+                return false;
+            else
+                return true;
+        }
+    }
+
+    public boolean deletePreferenza(int codiceRistorante, int codiceUtente) throws SQLException{
+        try(Connection conn= ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("DELETE FROM Preferenza WHERE codRis_fk=? AND codUtente_fk=?");
+            ps.setInt(1, codiceRistorante);
+            ps.setInt(2, codiceUtente);
+            if(ps.executeUpdate()!=1)
+                return false;
+            else
+                return true;
+        }
+    }
+
 }
