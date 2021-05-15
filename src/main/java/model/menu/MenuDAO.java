@@ -117,12 +117,11 @@ public class MenuDAO {
 
     public boolean doUpdate(Menu m) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("UPDATE Menu SET nome=?, prezzo=?, sconto=?, valido=? WHERE codiceMenu=?");
+            PreparedStatement ps=conn.prepareStatement("UPDATE Menu SET nome=?, prezzo=?, sconto=? WHERE codiceMenu=?");
             ps.setString(1,m.getNome());
             ps.setFloat(2,m.getPrezzo());
             ps.setInt(3,m.getSconto());
-            ps.setBoolean(4,m.isValido());
-            ps.setInt(5,m.getCodice());
+            ps.setInt(4,m.getCodice());
             if(ps.executeUpdate()!=1)
                 return false;
             else
@@ -130,7 +129,6 @@ public class MenuDAO {
         }
     }
 
-    //utile?
     public boolean updateValidita(int codiceMenu, boolean valido) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("UPDATE Menu SET valido=? WHERE codiceMenu=?");

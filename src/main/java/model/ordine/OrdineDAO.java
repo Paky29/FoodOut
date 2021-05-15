@@ -52,4 +52,11 @@ public class OrdineDAO {
             }
         }
     }
+
+    public boolean doUpdate(Ordine o) throws SQLException {
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("")
+        }
+
+    }
 }

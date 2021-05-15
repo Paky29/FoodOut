@@ -97,17 +97,16 @@ public class ProdottoDAO {
 
     public boolean doUpdate(Prodotto p) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("UPDATE Prodotto p SET nome=?, ingredienti=?, info=?, prezzo=?, sconto=?, valido=?, urlImmagine=?, codRis_fk=?, nomeTip_fk=? WHERE codiceProdotto=?");
+            PreparedStatement ps = conn.prepareStatement("UPDATE Prodotto p SET nome=?, ingredienti=?, info=?, prezzo=?, sconto=?, urlImmagine=?, codRis_fk=?, nomeTip_fk=? WHERE codiceProdotto=?");
             ps.setString(1, p.getNome());
             ps.setString(2, p.getIngredienti());
             ps.setString(3, p.getInfo());
             ps.setFloat(4, p.getPrezzo());
             ps.setInt(5, p.getSconto());
-            ps.setBoolean(6, p.isValido());
-            ps.setString(7, p.getUrlImmagine());
-            ps.setInt(8, p.getRistorante().getCodice());
-            ps.setString(9, p.getTipologia().getNome());
-            ps.setInt(10, p.getCodice());
+            ps.setString(6, p.getUrlImmagine());
+            ps.setInt(7, p.getRistorante().getCodice());
+            ps.setString(8, p.getTipologia().getNome());
+            ps.setInt(9, p.getCodice());
 
             if (ps.executeUpdate() != 1)
                 return false;
@@ -116,17 +115,55 @@ public class ProdottoDAO {
         }
     }
 
-    //utile?
-    public boolean updateValidita(int codiceProdotto, boolean valido) throws SQLException {
+    public boolean updateValidita(Prodotto p, boolean valido) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
+            conn.setAutoCommit(false);
             PreparedStatement ps = conn.prepareStatement("UPDATE Prodotto SET valido=? WHERE codiceProdotto=?");
             ps.setBoolean(1, valido);
-            ps.setInt(2, codiceProdotto);
+            ps.setInt(2, p.getCodice());
 
-            if (ps.executeUpdate() != 1)
+            if (ps.executeUpdate() != 1) {
+                conn.setAutoCommit(true);
                 return false;
-            else
-                return true;
+            }
+            else {
+                ps = conn.prepareStatement("SELECT Count(*) FROM AppartenenzaRT art INNER JOIN Prodotto p ON (p.codRis_fk=art.codRis_fk AND p.nomeTip_fk=art.nomeTip_fk)  WHERE p.codRis_fk=? AND p.nomeTip_fk=? AND p.valido=true");
+                ps.setInt(1, p.getRistorante().getCodice());
+                ps.setString(2, p.getTipologia().getNome());
+                ResultSet rs=ps.executeQuery();
+                if(rs.next()){
+                    int count=rs.getInt(1);
+                    if(count==0){
+                        if(valido){
+                            ps=conn.prepareStatement("INSERT INTO AppartenenzaRT(codRis_fk, nomeTip_fk) VALUES(?,?)");
+                        }
+                        else{
+                            ps=conn.prepareStatement("DELETE FROM AppartenenzaRT WHERE codRis_fk=? AND nomeTip_fk=?");
+                        }
+
+                        ps.setInt(1, p.getRistorante().getCodice());
+                        ps.setString(2, p.getTipologia().getNome());
+                        if(ps.executeUpdate()!=1) {
+                            conn.rollback();
+                            conn.setAutoCommit(true);
+                            return false;
+                        }
+
+                        conn.commit();
+                        conn.setAutoCommit(true);
+                        return true;
+
+                    }
+
+                    conn.commit();
+                    conn.setAutoCommit(true);
+                    return true;
+
+                }
+                conn.rollback();
+                conn.setAutoCommit(true);
+                return false;
+            }
         }
     }
 
