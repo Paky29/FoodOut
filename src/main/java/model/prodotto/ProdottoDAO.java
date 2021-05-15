@@ -51,6 +51,7 @@ public class ProdottoDAO {
 
     public boolean doSave(Prodotto p) throws SQLException {
         try(Connection conn= ConPool.getConnection()) {
+            conn.setAutoCommit(false);
             PreparedStatement ps=conn.prepareStatement("INSERT INTO Prodotto(nome, ingredienti, info, prezzo, sconto, valido, urlImmagine, codRis_fk, nomeTip_fk) VALUES(?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, p.getNome());
             ps.setString(2, p.getIngredienti());
@@ -62,20 +63,35 @@ public class ProdottoDAO {
             ps.setInt(8, p.getRistorante().getCodice());
             ps.setString(9, p.getTipologia().getNome());
 
-            if(ps.executeUpdate()!=1){
+            int rows=ps.executeUpdate();
+            if(rows!=1)
+            {
+                conn.setAutoCommit(true);
                 return false;
             }
+
             ResultSet rs=ps.getGeneratedKeys();
             rs.next();
             int id=rs.getInt(1);
             p.setCodice(id);
 
-            try {
-                ps = conn.prepareStatement("INSERT INTO AppartenenzaRT (codRis_fk,nomeTip_fk) VALUES (?,?)");
-                ps.setInt(1,p.getRistorante().getCodice());
-                ps.setString(2,p.getTipologia().getNome());
-            }catch(SQLException e){}
-            return true;
+            ps = conn.prepareStatement("INSERT INTO AppartenenzaRT (codRis_fk,nomeTip_fk) VALUES (?,?)");
+            ps.setInt(1,p.getRistorante().getCodice());
+            ps.setString(2,p.getTipologia().getNome());
+            int total=ps.executeUpdate();
+
+            if (rows==total)
+            {
+                conn.commit();
+                conn.setAutoCommit(true);
+                return true;
+            }
+            else
+            {
+                conn.rollback();
+                conn.setAutoCommit(true);
+                return false;
+            }
         }
     }
 
@@ -100,6 +116,7 @@ public class ProdottoDAO {
         }
     }
 
+    //utile?
     public boolean updateValidita(int codiceProdotto, boolean valido) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("UPDATE Prodotto SET valido=? WHERE codiceProdotto=?");
