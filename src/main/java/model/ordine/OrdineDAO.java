@@ -57,7 +57,7 @@ public class OrdineDAO {
 
     public boolean doUpdate(Ordine o) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("UPDATE Ordine SET dataOrdine=?, totale=?, nota=?, oraArrivo=?, oraPartenza=?, voto=?, giudizio=?, metodoPagamento=?, consegnato=?, codUtente_fk=?, codRis_fk=? WHERE codiceOrdine=?");
+            PreparedStatement ps=conn.prepareStatement("UPDATE Ordine SET dataOrdine=?, totale=?, nota=?, oraPartenza=?, oraArrivo=?, voto=?, giudizio=?, metodoPagamento=?, consegnato=?, codUtente_fk=?, codRis_fk=? WHERE codiceOrdine=?");
             ps.setDate(1,Date.valueOf(o.getDataOrdine()));
             ps.setFloat(2, o.getTotale());
             ps.setString(3, o.getNota());
