@@ -94,10 +94,10 @@ public class TryServlet extends HttpServlet {
             u.setOrdini(ordini);
             service3.doSave(o);
             service3.doUpdate(o);
+            Utente unico=service4.doRetrieveByEmailAndPassword("ciao@foodout.com", "mico");
 
-            request.setAttribute("tipologie1", tips1);
-            request.setAttribute("tipologie2", tips2);
-            request.setAttribute("tipologie3", tips3);
+
+            request.setAttribute("utente", unico);
 
             RequestDispatcher dispatcher=request.getRequestDispatcher("/WEB-INF/presentation.jsp");
             dispatcher.forward(request, response);

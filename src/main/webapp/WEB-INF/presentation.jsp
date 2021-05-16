@@ -12,13 +12,7 @@
     <title>Restaurant</title>
 </head>
 <body>
-${tipologie1[0].nome}
-${tipologie1[1].nome}
-<br>
-${tipologie2[0].nome}
-${tipologie2[1].nome}
-<br>
-${tipologie3[0].nome}
-${tipologie3[1].nome}
+${utente.ordini[0].codice}
+${utente.ordini[0].dataOrdine}
 </body>
 </html>
