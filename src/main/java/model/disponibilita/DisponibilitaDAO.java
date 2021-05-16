@@ -14,8 +14,8 @@ public class DisponibilitaDAO {
             PreparedStatement ps=conn.prepareStatement("INSERT INTO Disponibilita (codRis_fk,nomeG_fk,oraApertura,oraChiusura) VALUES(?,?,?,?)");
             ps.setInt(1,codiceRistorante);
             ps.setString(2,d.getGiorno());
-            ps.setTime(3,d.getOraApertura());
-            ps.setTime(4,d.getOraChiusura());
+            ps.setTime(3,Time.valueOf(d.getOraApertura()));
+            ps.setTime(4,Time.valueOf(d.getOraChiusura()));
             if(ps.executeUpdate()!=1)
                 return false;
             else
@@ -27,8 +27,8 @@ public class DisponibilitaDAO {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("UPDATE Disponibilita SET giorno=?, oraApertura=?, oraChiusura=?) WHERE codRis_fk=?)");
             ps.setString(1,d.getGiorno());
-            ps.setTime(2,d.getOraApertura());
-            ps.setTime(3,d.getOraChiusura());
+            ps.setTime(2,Time.valueOf(d.getOraApertura()));
+            ps.setTime(3,Time.valueOf(d.getOraChiusura()));
             ps.setInt(4,codiceRistorante);
             if(ps.executeUpdate()!=1)
                 return false;

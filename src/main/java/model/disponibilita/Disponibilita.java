@@ -16,23 +16,23 @@ public class Disponibilita {
         this.giorno = giorno;
     }
 
-    public Time getOraApertura() {
+    public LocalTime getOraApertura() {
         return oraApertura;
     }
 
-    public void setOraApertura(Time oraApertura) {
+    public void setOraApertura(LocalTime oraApertura) {
         this.oraApertura = oraApertura;
     }
 
-    public Time getOraChiusura() {
+    public LocalTime getOraChiusura() {
         return oraChiusura;
     }
 
-    public void setOraChiusura(Time oraChiusura) {
+    public void setOraChiusura(LocalTime oraChiusura) {
         this.oraChiusura = oraChiusura;
     }
 
     private String giorno;
-    private Time oraApertura;
-    private Time oraChiusura;
+    private LocalTime oraApertura;
+    private LocalTime oraChiusura;
 }

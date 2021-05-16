@@ -1,6 +1,7 @@
 package model.turno;
 
 import java.sql.Time;
+import java.time.LocalTime;
 
 public class Turno {
     public Turno(){}
@@ -13,23 +14,23 @@ public class Turno {
         this.giorno = giorno;
     }
 
-    public Time getOraInizio() {
+    public LocalTime getOraInizio() {
         return oraInizio;
     }
 
-    public void setOraInizio(Time oraInizio) {
+    public void setOraInizio(LocalTime oraInizio) {
         this.oraInizio = oraInizio;
     }
 
-    public Time getOraFine() {
+    public LocalTime getOraFine() {
         return oraFine;
     }
 
-    public void setOraFine(Time oraFine) {
+    public void setOraFine(LocalTime oraFine) {
         this.oraFine = oraFine;
     }
 
     private String giorno;
-    private Time oraInizio;
-    private Time oraFine;
+    private LocalTime oraInizio;
+    private LocalTime oraFine;
 }

@@ -10,8 +10,8 @@ public class TurnoDAO {
             PreparedStatement ps=conn.prepareStatement("INSERT INTO LavoroRider (codRider_fk,nomeG_fk,oraApertura,oraChiusura) VALUES(?,?,?,?)");
             ps.setInt(1,codiceRider);
             ps.setString(2,t.getGiorno());
-            ps.setTime(3,t.getOraInizio());
-            ps.setTime(4,t.getOraFine());
+            ps.setTime(3,Time.valueOf(t.getOraInizio()));
+            ps.setTime(4,Time.valueOf(t.getOraFine()));
             if(ps.executeUpdate()!=1)
                 return false;
             else
@@ -23,8 +23,8 @@ public class TurnoDAO {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("UPDATE LavoroRider SET giorno=?, oraApertura=?, oraChiusura=?) WHERE codRider_fk=?)");
             ps.setString(1,t.getGiorno());
-            ps.setTime(2,t.getOraInizio());
-            ps.setTime(3,t.getOraFine());
+            ps.setTime(2,Time.valueOf(t.getOraInizio()));
+            ps.setTime(3,Time.valueOf(t.getOraFine()));
             ps.setInt(4,codiceRider);
             if(ps.executeUpdate()!=1)
                 return false;
