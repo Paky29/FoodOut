@@ -5,6 +5,8 @@ import model.ristorante.Ristorante;
 import model.utente.Utente;
 
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.sql.Date;
 
@@ -38,11 +40,11 @@ public class Ordine {
         this.voto = voto;
     }
 
-    public Date getDataOrdine() {
+    public LocalDate getDataOrdine() {
         return dataOrdine;
     }
 
-    public void setDataOrdine(Date dataOrdine) {
+    public void setDataOrdine(LocalDate dataOrdine) {
         this.dataOrdine = dataOrdine;
     }
 
@@ -76,19 +78,19 @@ public class Ordine {
 
     public void setGiudizio(String giudizio) { this.giudizio = giudizio; }
 
-    public Time getOraPartenza() {
+    public LocalTime getOraPartenza() {
         return oraPartenza;
     }
 
-    public void setOraPartenza(Time oraPartenza) {
+    public void setOraPartenza(LocalTime oraPartenza) {
         this.oraPartenza = oraPartenza;
     }
 
-    public Time getOraArrivo() {
+    public LocalTime getOraArrivo() {
         return oraArrivo;
     }
 
-    public void setOraArrivo(Time oraArrivo) {
+    public void setOraArrivo(LocalTime oraArrivo) {
         this.oraArrivo = oraArrivo;
     }
 
@@ -121,10 +123,10 @@ public class Ordine {
     public void setRistorante(Ristorante ristorante) { this.ristorante = ristorante; }
 
     private int codice,voto;
-    private Date dataOrdine;
+    private LocalDate dataOrdine;
     private float totale;
     private String nota,metodoPagamento,giudizio;
-    private Time oraPartenza, oraArrivo;
+    private LocalTime oraPartenza, oraArrivo;
     private Rider rider;
     private Utente utente;
     private boolean consegnato;

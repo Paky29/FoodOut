@@ -3,13 +3,14 @@ package model.ordine;
 import model.utility.ConPool;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 public class OrdineDAO {
     public boolean doSave(Ordine o) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             conn.setAutoCommit(false);
             PreparedStatement ps=conn.prepareStatement("INSERT INTO Ordine (dataOrdine, totale, nota, metodoPagamento, consegnato, codUtente_fk, codRis_fk) VALUES(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setDate(1,o.getDataOrdine());
+            ps.setDate(1, Date.valueOf(o.getDataOrdine()));
             ps.setFloat(2,o.getTotale());
             ps.setString(3,o.getNota());
             ps.setString(4,o.getMetodoPagamento());
@@ -56,18 +57,17 @@ public class OrdineDAO {
 
     public boolean doUpdate(Ordine o) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("UPDATE Ordine SET dataOrdine=?, totale=?, nota=?, oraArrivo=?, oraPartenza=?, voto=?, giudizio=?, metodoPagamento=?, consegnato=?, codUtente_fk=?, codRider_fk=?, codRis_fk=? WHERE codiceOrdine=?");
-            ps.setDate(1,o.getDataOrdine());
+            PreparedStatement ps=conn.prepareStatement("UPDATE Ordine SET dataOrdine=?, totale=?, nota=?, oraArrivo=?, oraPartenza=?, voto=?, giudizio=?, metodoPagamento=?, consegnato=?, codUtente_fk=?, codRis_fk=? WHERE codiceOrdine=?");
+            ps.setDate(1,Date.valueOf(o.getDataOrdine()));
             ps.setFloat(2, o.getTotale());
             ps.setString(3, o.getNota());
-            ps.setTime(4, o.getOraPartenza());
-            ps.setTime(5, o.getOraArrivo());
+            ps.setTime(4, Time.valueOf(o.getOraPartenza()));
+            ps.setTime(5, Time.valueOf(o.getOraArrivo()));
             ps.setInt(6, o.getVoto());
             ps.setString(7, o.getGiudizio());
             ps.setString(8, o.getMetodoPagamento());
             ps.setBoolean(9, o.isConsegnato());
             ps.setInt(10, o.getUtente().getCodice());
-            ps.setInt(11, o.getRider().getCodice());
             ps.setInt(12, o.getRistorante().getCodice());
             ps.setInt(13, o.getCodice());
 
