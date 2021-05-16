@@ -1,51 +1,110 @@
-package controller;
+package com.example.tentativo;
 
 
-import model.menu.Menu;
-import model.menu.MenuDAO;
+import model.disponibilita.Disponibilita;
+import model.ordine.Ordine;
+import model.ordine.OrdineDAO;
 import model.prodotto.Prodotto;
 import model.prodotto.ProdottoDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
 import model.tipologia.Tipologia;
+import model.utente.Utente;
+import model.utente.UtenteDAO;
+import model.utility.Paginator;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 @WebServlet("/Tryservlet")
 public class TryServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        RistoranteDAO service=new RistoranteDAO();
-        int id=3;
-        Ristorante r= null;
+
         try {
-            r = service.doRetrieveById(id);
-            ProdottoDAO service1=new ProdottoDAO();
-            r.setProdotti(service1.doRetrieveByRistorante(id));
-            System.out.println(r.getCodice());
-            System.out.println(r.getNome());
-            System.out.println(r.getProvincia());
-            System.out.println(r.getCitta());
-            System.out.println(r.getCivico());
-            System.out.println(r.getSpesaMinima());
-            System.out.println(r.getTassoConsegna());
-            System.out.println(r.getProdotti().get(0).getNome()+" "+r.getProdotti().get(0).getTipologia().getNome());
-            System.out.println(r.getProdotti().get(1).getNome()+" "+r.getProdotti().get(1).getTipologia().getNome());
-            for(Tipologia t: r.getTipologie()){
-                System.out.println("Tipologia: " + t.getNome());
-            }
-            MenuDAO service2=new MenuDAO();
-            ArrayList<Menu> menus=service2.doRetrieveByRistorante(3);
-            System.out.println(menus.get(0).getNome());
-            for(Prodotto p: menus.get(0).getProdotti()){
-                System.out.println("Prodotto: " + p.getNome());
-            }
-        } catch (SQLException e) {
+            /*
+            int id=1;
+            ArrayList<Ristorante> r= null;
+            System.out.println("ciao");
+            r = service.doRetrieveByCitta("Milano", new Paginator(1,10));
+            for(Ristorante ris: r){
+                System.out.println(ris.getNome());
+                System.out.println(ris.getTassoConsegna());
+                for(Tipologia t: ris.getTipologie())
+                    System.out.println(t.getNome());
+                for(Disponibilita d: ris.getGiorni()){
+                    System.out.println(d.getGiorno());
+                    System.out.println(d.getOraApertura());
+                    System.out.println(d.getOraChiusura());
+                }
+            }*/
+
+            RistoranteDAO service=new RistoranteDAO();
+
+            ProdottoDAO service2=new ProdottoDAO();
+            Prodotto p= service2.doRetrievebyId( 5);
+            Ristorante r1=service.doRetrieveById(3);
+            service2.updateValidita(p, false);
+            Ristorante r2=service.doRetrieveById(3);
+            ArrayList<Tipologia> tips1=r1.getTipologie();
+            ArrayList<Tipologia> tips2=r2.getTipologie();
+            service2.updateValidita(p, true);
+            Ristorante r3=service.doRetrieveById(3);
+            ArrayList<Tipologia> tips3=r3.getTipologie();
+
+            UtenteDAO service4=new UtenteDAO();
+            Utente u=new Utente();
+            u.setEmail("ciao@foodout.com");
+            u.setPassword("mico");
+            u.setSaldo(1000);
+            u.setNome("Mario");
+            u.setCognome("Rossi");
+            u.setCitta("Napoli");
+            u.setProvincia("NA");
+            u.setVia("Merg");
+            u.setCivico(3);
+
+            OrdineDAO service3=new OrdineDAO();
+            Ordine o=new Ordine();
+            o.setDataOrdine(LocalDate.of(2000,10,19));
+            o.setNota("ciao");
+            o.setTotale(50);
+            o.setGiudizio("Buono");
+            o.setVoto(5);
+            o.setOraPartenza(LocalTime.of(10,30,30));
+            o.setOraArrivo(LocalTime.of(11,30,30));
+            o.setMetodoPagamento("cash");
+            o.setRistorante(service.doRetrieveById(2));
+            o.setConsegnato(false);
+            service4.doSave(u);
+            o.setUtente(service4.doRetrieveByEmailAndPassword("ciao@foodout.com", "mico"));
+            ArrayList<Ordine> ordini=new ArrayList<>();
+            ordini.add(o);
+            u.setOrdini(ordini);
+            service3.doSave(o);
+            service3.doUpdate(o);
+
+            request.setAttribute("tipologie1", tips1);
+            request.setAttribute("tipologie2", tips2);
+            request.setAttribute("tipologie3", tips3);
+
+            RequestDispatcher dispatcher=request.getRequestDispatcher("/WEB-INF/presentation.jsp");
+            dispatcher.forward(request, response);
+        } catch (SQLException | IOException | ServletException e) {
             e.printStackTrace();
         }
+
+
     }
 }

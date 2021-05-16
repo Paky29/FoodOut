@@ -22,16 +22,19 @@ public class UtenteDAO {
 
     public Utente doRetrieveById(int codiceUtente) throws SQLException{
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceUtente, nome, cognome, email, pw, saldo, provincia, citta, via, civico, interesse, amministratore, codiceOrdine, dataOrdine, totale, nota, oraPartenza, oraArrivo, metodoPagamento, giudizio, voto, consegnato FROM Utente u INNER JOIN Ordine o ON o.codUtente_fk=u.codiceUtente WHERE u.codiceUtente=?");
+            PreparedStatement ps=conn.prepareStatement("SELECT codiceUtente, nome, cognome, email, pw, saldo, provincia, citta, via, civico, interesse, amministratore FROM Utente u WHERE codiceUtente=?");
             ps.setInt(1, codiceUtente);
             ResultSet rs = ps.executeQuery();
             Utente u=null;
             if(rs.next()){
                 u=UtenteExtractor.extract(rs);
-                do{
+                ps=conn.prepareStatement("SELECT codiceOrdine, dataOrdine, totale, nota, oraPartenza, oraArrivo, metodoPagamento, giudizio, voto, consegnato FROM Ordine o WHERE o.codUtente_fk=? ");
+                ps.setInt(1, u.getCodice());
+                rs=ps.executeQuery();
+                while(rs.next()){
                     Ordine o= OrdineExtractor.extract(rs);
                     u.getOrdini().add(o);
-                }while(rs.next());
+                }
             }
             ps=conn.prepareStatement("SELECT codRis_fk FROM Preferenza pr WHERE pr.codUtente_fk=?");
             ps.setInt(1, u.getCodice());
@@ -85,9 +88,17 @@ public class UtenteDAO {
                 int utenteid=rs.getInt("u.codiceUtente");
                 if(!utenti.containsKey(utenteid)) {
                     Utente u = UtenteExtractor.extract(rs);
+                    PreparedStatement ordini=conn.prepareStatement("SELECT codiceOrdine, dataOrdine, totale, nota, oraPartenza, oraArrivo, metodoPagamento, giudizio, voto, consegnato FROM Ordine o WHERE o.codUtente_fk=? ");
+                    ps.setInt(1, utenteid);
+                    ResultSet set=ordini.executeQuery();
+                    while(set.next())
+                    {
+                        Ordine o=OrdineExtractor.extract(set);
+                        u.getOrdini().add(o);
+                    }
                     PreparedStatement preferenze=conn.prepareStatement("SELECT codRis_fk FROM Preferenza pr WHERE pr.codUtente_fk=?");
                     preferenze.setInt(1,utenteid);
-                    ResultSet set=preferenze.executeQuery();
+                    set=preferenze.executeQuery();
                     RistoranteDAO service=new RistoranteDAO();
                     while(set.next())
                     {
