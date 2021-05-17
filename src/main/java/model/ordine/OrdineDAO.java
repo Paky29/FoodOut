@@ -54,13 +54,12 @@ public class OrdineDAO {
 
     public ArrayList<Ordine> doRetrieveByUtente(Utente u, Paginator paginator) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, rd.codiceRider, rd.email, rd.pw, rd.citta, rd.veicolo, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o LEFT JOIN Rider rd On o.codOrd_fk=r.codiceRider INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.nomeTip_fk INNER JOIN Tipologia ON art.nomeTip_fk=t.nome WHERE o.codUtente_fk=? LIMIT ?,?");
+            PreparedStatement ps=conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, rd.codiceRider, rd.email, rd.pw, rd.citta, rd.veicolo, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o LEFT JOIN Rider rd On o.codOrd_fk=rd.codiceRider INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.nomeTip_fk INNER JOIN Tipologia ON art.nomeTip_fk=t.nome WHERE o.codUtente_fk=? LIMIT ?,?");
             ps.setInt(1,u.getCodice());
             ps.setInt(2,paginator.getOffset());
             ps.setInt(3,paginator.getLimit());
             ResultSet rs=ps.executeQuery();
             Map<Integer, Ordine> ordini=new LinkedHashMap<>();
-            PreparedStatement ordiniRider=conn.prepareStatement("SELECT codiceRider, email, pw, citta, veicolo, giorno, oraInizio, oraFine FROM Ordine o INNER JOIN Rider r ON o.codRider_fk=r.codiceRider INNER JOIN Turno t ON r.codiceRider=t.codRider_fk WHERE");
             while(rs.next()){
                 int codiceOrdine=rs.getInt("o.codiceOrdine");
                 if(ordini.containsKey(codiceOrdine)) {
