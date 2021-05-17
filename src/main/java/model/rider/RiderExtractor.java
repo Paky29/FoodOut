@@ -8,11 +8,11 @@ public class RiderExtractor {
 
     public static Rider extract(ResultSet rs) throws SQLException {
         Rider r=new Rider();
-        r.setCodice(rs.getInt("r.codiceRider"));
-        r.setEmail(rs.getString("r.email"));
-        r.setPassword(rs.getString("r.pw"));
-        r.setCitta(rs.getString("r.citta"));
-        r.setVeicolo(rs.getString("r.veicolo"));
+        r.setCodice(rs.getInt("rd.codiceRider"));
+        r.setEmail(rs.getString("rd.email"));
+        r.setPassword(rs.getString("rd.pw"));
+        r.setCitta(rs.getString("rd.citta"));
+        r.setVeicolo(rs.getString("rd.veicolo"));
         return r;
     }
 }

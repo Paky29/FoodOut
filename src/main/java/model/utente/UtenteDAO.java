@@ -28,6 +28,7 @@ public class UtenteDAO {
             Utente u=null;
             if(rs.next()){
                 u=UtenteExtractor.extract(rs);
+                //togliere?
                 ps=conn.prepareStatement("SELECT codiceOrdine, dataOrdine, totale, nota, oraPartenza, oraArrivo, metodoPagamento, giudizio, voto, consegnato FROM Ordine o WHERE o.codUtente_fk=? ");
                 ps.setInt(1, u.getCodice());
                 rs=ps.executeQuery();

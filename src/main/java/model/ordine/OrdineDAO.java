@@ -6,6 +6,7 @@ import model.prodotto.Prodotto;
 import model.prodotto.ProdottoExtractor;
 import model.rider.Rider;
 import model.rider.RiderDAO;
+import model.rider.RiderExtractor;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
 import model.ristorante.RistoranteExtractor;
@@ -26,12 +27,14 @@ public class OrdineDAO {
 
     public Ordine doRetrieveById(int codiceOrdine) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider, u.codiceUtente, u.nome, u.cognome, u.email, u.pw, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.nomeTip_fk INNER JOIN Tipologia ON art.nomeTip_fk=t.nome WHERE o.codiceOrdine=?");
+            PreparedStatement ps=conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, rd.codiceRider, rd.email, rd.pw, rd.citta, rd.veicolo, u.codiceUtente, u.nome, u.cognome, u.email, u.pw, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o LEFT JOIN Rider rd ON o.codRider_fk= rd.codiceRider INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.nomeTip_fk INNER JOIN Tipologia ON art.nomeTip_fk=t.nome WHERE o.codiceOrdine=?");
             ps.setInt(1,codiceOrdine);
             ResultSet rs=ps.executeQuery();
             Ordine o=null;
             if(rs.next()){
                 o=OrdineExtractor.extract(rs);
+                Rider rd=RiderExtractor.extract(rs);
+                o.setRider(rd);
                 Utente u= UtenteExtractor.extract(rs);
                 o.setUtente(u);
                 Ristorante r= RistoranteExtractor.extract(rs);
@@ -42,57 +45,8 @@ public class OrdineDAO {
                     r.getTipologie().add(t);
                 }while(rs.next());
                 o.setRistorante(r);
-                RiderDAO service1=new RiderDAO();
-                o.setRider(service1.doRetrievebyId(rs.getInt("o.codRider_fk")));
-
-                PreparedStatement prodotti=conn.prepareStatement("SELECT p.codiceProdotto, p.nome, p.ingredienti, p.info, p.prezzo, p.sconto, p.valido, p.urlImmagine, cop.quantita, t.nome, t.descrizione FROM ComposizioneOP cop INNER JOIN Prodotto p ON cop.codProd_fk=p.codiceProdotto INNER JOIN Tipologia t ON p.nomeTip_fk=t.nome WHERE cop.codOrd_fk=?");
-                prodotti.setInt(1, codiceOrdine);
-                rs= prodotti.executeQuery();
-                while(rs.next()){
-                    Prodotto p= ProdottoExtractor.extract(rs);
-                    Tipologia t=new Tipologia();
-                    t.setNome(rs.getString("t.nome"));
-                    t.setDescrizione(rs.getString("t.descrizione"));
-                    p.setTipologia(t);
-                    p.setRistorante(r);
-                    OrdineItem oi=new OrdineItem();
-                    oi.setQuantita(rs.getInt("cop.quantita"));
-                    oi.setOff(p);
-                    o.getOrdineItems().add(oi);
-                }
-
-                PreparedStatement menu=conn.prepareStatement("SELECT m.codiceMenu, m.none, m.prezzo, m.sconto, m.valido, com.quantita,  p.codiceProdotto, p.nome, p.ingredienti, p.info, p.prezzo, p.sconto, p.valido, p.urlImmagine, t.nome, t.descrizione FROM ComposizioneOM com INNER JOIN Menu m ON com.codProd_fk=m.codiceMenu INNER JOIN AppartenenzaPM apm ON m.codiceMenu=apm.codMenu_fk INNER JOIN Prodotto p ON apm.codProd_fk=p.codiceProdotto INNER JOIN Tipologia t ON p.nomeTip_fk=t.nome WHERE com.codOrd_fk=?");
-                menu.setInt(1, codiceOrdine);
-                rs= menu.executeQuery();
-                Map<Integer, Menu> menus=new LinkedHashMap<>();
-                ArrayList<Integer> quantita =new ArrayList<>();
-                while(rs.next()){
-                    int codiceMenu=rs.getInt("m.codiceMenu");
-                    if(!menus.containsKey(codiceMenu)){
-                        Menu m= MenuExtractor.extract(rs);
-                        quantita.add(rs.getInt("com.quantita"));
-                        menus.put(codiceMenu, m);
-
-                    }
-                    Prodotto p= ProdottoExtractor.extract(rs);
-                    Tipologia t=new Tipologia();
-                    t.setNome(rs.getString("t.nome"));
-                    t.setDescrizione(rs.getString("t.descrizione"));
-                    p.setTipologia(t);
-                    p.setRistorante(r);
-                    menus.get(codiceMenu).getProdotti().add(p);
-                }
-
-                ArrayList<Menu> menusArray= new ArrayList<>(menus.values());
-                int i=0;
-                for(Menu m : menusArray){
-                    OrdineItem oi=new OrdineItem();
-                    int q=quantita.get(i);
-                    oi.setOff(m);
-                    oi.setQuantita(q);
-                    o.getOrdineItems().add(oi);
-                    i++;
-                }
+                if(!OrdineDAO.composizioneOrdine(conn,o))
+                    return null;
             }
             return o;
         }
@@ -100,24 +54,34 @@ public class OrdineDAO {
 
     public ArrayList<Ordine> doRetrieveByUtente(Utente u, Paginator paginator) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceOrdine, dataOrdine, totale, nota, oraPartenza, oraArrivo, metodoPagamento, giudizio, voto, consegnato, codRider_fk, codRis_fk, codUtente_fk FROM Ordine o WHERE o.codUtente_fk=? LIMIT ?,?");
+            PreparedStatement ps=conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, rd.codiceRider, rd.email, rd.pw, rd.citta, rd.veicolo, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o LEFT JOIN Rider rd On o.codOrd_fk=r.codiceRider INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.nomeTip_fk INNER JOIN Tipologia ON art.nomeTip_fk=t.nome WHERE o.codUtente_fk=? LIMIT ?,?");
             ps.setInt(1,u.getCodice());
             ps.setInt(2,paginator.getOffset());
             ps.setInt(3,paginator.getLimit());
             ResultSet rs=ps.executeQuery();
-            ArrayList<Ordine> ordini=new ArrayList<>();
+            Map<Integer, Ordine> ordini=new LinkedHashMap<>();
+            PreparedStatement ordiniRider=conn.prepareStatement("SELECT codiceRider, email, pw, citta, veicolo, giorno, oraInizio, oraFine FROM Ordine o INNER JOIN Rider r ON o.codRider_fk=r.codiceRider INNER JOIN Turno t ON r.codiceRider=t.codRider_fk WHERE");
             while(rs.next()){
-                Ordine o=OrdineExtractor.extract(rs);
-                RiderDAO service1=new RiderDAO();
-                o.setRider(service1.doRetrievebyId(rs.getInt("o.codRider_fk")));
-                RistoranteDAO service2=new RistoranteDAO();
-                o.setRistorante(service2.doRetrieveById(rs.getInt("o.codRis_fk")));
-                o.setUtente(u);
-                ordini.add(o);
+                int codiceOrdine=rs.getInt("o.codiceOrdine");
+                if(ordini.containsKey(codiceOrdine)) {
+                    Ordine o = OrdineExtractor.extract(rs);
+                    o.setUtente(u);
+                    Ristorante r = RistoranteExtractor.extract(rs);
+                    o.setRistorante(r);
+                    Rider rd= RiderExtractor.extract(rs);
+                    o.setRider(rd);
+                    if(!OrdineDAO.composizioneOrdine(conn,o))
+                        return null;
+                    ordini.put(codiceOrdine, o);
+                }
+                Tipologia t=new Tipologia();
+                t.setNome(rs.getString("t.nome"));
+                t.setDescrizione(rs.getString("t.descrizione"));
+                ordini.get(codiceOrdine).getRistorante().getTipologie().add(t);
             }
             if(ordini.isEmpty())
                 return null;
-            return ordini;
+            return new ArrayList<>(ordini.values());
         }
     }
 
@@ -366,7 +330,61 @@ public class OrdineDAO {
                 }
 
             }
-
         }
+    }
+
+    private static boolean composizioneOrdine(Connection conn, Ordine o) throws SQLException {
+        PreparedStatement prodotti=conn.prepareStatement("SELECT p.codiceProdotto, p.nome, p.ingredienti, p.info, p.prezzo, p.sconto, p.valido, p.urlImmagine, cop.quantita, t.nome, t.descrizione FROM ComposizioneOP cop INNER JOIN Prodotto p ON cop.codProd_fk=p.codiceProdotto INNER JOIN Tipologia t ON p.nomeTip_fk=t.nome WHERE cop.codOrd_fk=?");
+        prodotti.setInt(1, o.getCodice());
+        ResultSet rs= prodotti.executeQuery();
+        while(rs.next()){
+            Prodotto p= ProdottoExtractor.extract(rs);
+            Tipologia t=new Tipologia();
+            t.setNome(rs.getString("t.nome"));
+            t.setDescrizione(rs.getString("t.descrizione"));
+            p.setTipologia(t);
+            p.setRistorante(o.getRistorante());
+            OrdineItem oi=new OrdineItem();
+            oi.setQuantita(rs.getInt("cop.quantita"));
+            oi.setOff(p);
+            o.getOrdineItems().add(oi);
+        }
+
+        PreparedStatement menu=conn.prepareStatement("SELECT m.codiceMenu, m.none, m.prezzo, m.sconto, m.valido, com.quantita,  p.codiceProdotto, p.nome, p.ingredienti, p.info, p.prezzo, p.sconto, p.valido, p.urlImmagine, t.nome, t.descrizione FROM ComposizioneOM com INNER JOIN Menu m ON com.codProd_fk=m.codiceMenu INNER JOIN AppartenenzaPM apm ON m.codiceMenu=apm.codMenu_fk INNER JOIN Prodotto p ON apm.codProd_fk=p.codiceProdotto INNER JOIN Tipologia t ON p.nomeTip_fk=t.nome WHERE com.codOrd_fk=?");
+        menu.setInt(1, o.getCodice());
+        rs= menu.executeQuery();
+        Map<Integer, Menu> menus=new LinkedHashMap<>();
+        ArrayList<Integer> quantita =new ArrayList<>();
+        while(rs.next()){
+            int codiceMenu=rs.getInt("m.codiceMenu");
+            if(!menus.containsKey(codiceMenu)){
+                Menu m= MenuExtractor.extract(rs);
+                quantita.add(rs.getInt("com.quantita"));
+                menus.put(codiceMenu, m);
+            }
+            Prodotto p= ProdottoExtractor.extract(rs);
+            Tipologia t=new Tipologia();
+            t.setNome(rs.getString("t.nome"));
+            t.setDescrizione(rs.getString("t.descrizione"));
+            p.setTipologia(t);
+            p.setRistorante(o.getRistorante());
+            menus.get(codiceMenu).getProdotti().add(p);
+        }
+
+        ArrayList<Menu> menusArray= new ArrayList<>(menus.values());
+        int i=0;
+        for(Menu m : menusArray){
+            OrdineItem oi=new OrdineItem();
+            int q=quantita.get(i);
+            oi.setOff(m);
+            oi.setQuantita(q);
+            o.getOrdineItems().add(oi);
+            i++;
+        }
+
+        if(o.getOrdineItems().isEmpty())
+            return false;
+        else
+             return true;
     }
 }
