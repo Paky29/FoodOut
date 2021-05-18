@@ -32,6 +32,13 @@ public class Disponibilita {
         this.oraChiusura = oraChiusura;
     }
 
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Disponibilita that = (Disponibilita) o;
+        return Objects.equals(giorno, that.giorno) && Objects.equals(oraApertura, that.oraApertura) && Objects.equals(oraChiusura, that.oraChiusura);
+    }
+
     private String giorno;
     private LocalTime oraApertura;
     private LocalTime oraChiusura;

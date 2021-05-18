@@ -45,16 +45,34 @@ public class RistoranteDAO {
 //da visionare
     public ArrayList<Ristorante> doRetrievebyScontoDisp(String citta, Paginator paginator) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ristorante r INNER JOIN Prodotto p ON p.codRis_fk=r.codiceRistorante INNER JOIN Tipologia t ON p.nomeTip_fk=t.nome LEFT JOIN AppartenenzaPM apm ON p.codiceProdotto=apm.codProd_fk INNER JOIN Menu m ON apm.codMenu_fk=m.codiceMenu WHERE r.citta=? AND (p.sconto>0 OR m.sconto>0) LIMIT ?,?");
+            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ristorante r INNER JOIN Prodotto p ON p.codRis_fk=r.codiceRistorante INNER JOIN Tipologia t ON p.nomeTip_fk=t.nome LEFT JOIN AppartenenzaPM apm ON p.codiceProdotto=apm.codProd_fk LEFT JOIN Menu m ON apm.codMenu_fk=m.codiceMenu WHERE r.citta=? AND (p.sconto>0 OR m.sconto>0) LIMIT ?,?");
             ps.setString(1,citta);
             ps.setInt(2,paginator.getOffset());
             ps.setInt(3,paginator.getLimit());
+
             Map<Integer, Ristorante> ristoranti=new LinkedHashMap<>();
             ResultSet rs=ps.executeQuery();
+
+            PreparedStatement disp=conn.prepareStatement("SELECT d.codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d INNER JOIN RIstorante r ON d.codRis_fk=r.codiceRistorante INNER JOIN Prodotto p ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaPM apm ON p.codiceProdotto=apm.codProd_fk LEFT JOIN Menu m ON apm.codMenu_fk=m.codiceMenu WHERE r.citta=? AND (p.sconto>0 OR m.sconto>0)");
+            disp.setString(1,citta);
+            ResultSet set=disp.executeQuery();
+            Map<Integer,ArrayList<Disponibilita>> dispRis=new LinkedHashMap<>();
+            while(set.next()){
+                int codiceRistorante=set.getInt("d.codRis_fk");
+                Disponibilita d=DisponibilitaExtractor.extract(set);
+                if(!dispRis.containsKey(codiceRistorante)){
+                    ArrayList<Disponibilita>disponibilita=new ArrayList<>();
+                    dispRis.put(codiceRistorante, disponibilita);
+                }
+                if(!dispRis.get(codiceRistorante).contains(d))
+                    dispRis.get(codiceRistorante).add(DisponibilitaExtractor.extract(set));
+            }
+
             while(rs.next()){
                 int codiceRistorante=rs.getInt("r.codiceRistorante");
                 if(!ristoranti.containsKey(codiceRistorante)){
                     Ristorante r=RistoranteExtractor.extract(rs);
+                    r.setGiorni(dispRis.get(codiceRistorante));
                     ristoranti.put(codiceRistorante, r);
                 }
                 Tipologia t=new Tipologia();
