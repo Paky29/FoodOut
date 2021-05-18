@@ -1,9 +1,6 @@
 package model.disponibilita;
 
-import model.ristorante.Ristorante;
 import model.utility.ConPool;
-
-import javax.swing.*;
 import java.sql.*;
 
 public class DisponibilitaDAO {

@@ -1,11 +1,6 @@
 package model.utente;
 
-import model.disponibilita.Disponibilita;
-import model.disponibilita.DisponibilitaExtractor;
-import model.ordine.Ordine;
-import model.ordine.OrdineExtractor;
 import model.ristorante.Ristorante;
-import model.ristorante.RistoranteDAO;
 import model.ristorante.RistoranteExtractor;
 import model.tipologia.Tipologia;
 import model.utility.ConPool;

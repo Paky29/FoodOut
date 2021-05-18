@@ -1,7 +1,6 @@
 package model.tipologia;
 
 import model.utility.ConPool;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

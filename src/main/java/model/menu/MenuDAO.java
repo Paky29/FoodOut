@@ -1,9 +1,7 @@
 package model.menu;
 
 import model.prodotto.Prodotto;
-import model.prodotto.ProdottoDAO;
 import model.utility.ConPool;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

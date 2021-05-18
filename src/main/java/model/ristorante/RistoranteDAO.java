@@ -5,7 +5,6 @@ import model.disponibilita.DisponibilitaExtractor;
 import model.tipologia.Tipologia;
 import model.utility.ConPool;
 import model.utility.Paginator;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

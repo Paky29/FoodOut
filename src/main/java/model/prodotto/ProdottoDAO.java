@@ -1,13 +1,9 @@
 package model.prodotto;
 
 import model.ristorante.Ristorante;
-import model.ristorante.RistoranteDAO;
 import model.ristorante.RistoranteExtractor;
 import model.tipologia.Tipologia;
-import model.tipologia.TipologiaDAO;
 import model.utility.ConPool;
-
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 

@@ -5,18 +5,14 @@ import model.menu.MenuExtractor;
 import model.prodotto.Prodotto;
 import model.prodotto.ProdottoExtractor;
 import model.rider.Rider;
-import model.rider.RiderDAO;
 import model.rider.RiderExtractor;
 import model.ristorante.Ristorante;
-import model.ristorante.RistoranteDAO;
 import model.ristorante.RistoranteExtractor;
 import model.tipologia.Tipologia;
 import model.utente.Utente;
-import model.utente.UtenteDAO;
 import model.utente.UtenteExtractor;
 import model.utility.ConPool;
 import model.utility.Paginator;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;

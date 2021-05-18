@@ -1,7 +1,5 @@
 package model.rider;
 
-import model.ordine.Ordine;
-import model.ordine.OrdineExtractor;
 import model.turno.Turno;
 import model.turno.TurnoExtractor;
 import model.utility.ConPool;
@@ -9,7 +7,6 @@ import model.utility.Paginator;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
