@@ -43,19 +43,33 @@ public class RistoranteDAO {
     }
 
 //da visionare
-    public ArrayList<Integer> doRetrievebyScontoDisp(String citta, Paginator paginator) throws SQLException {
+    public ArrayList<Ristorante> doRetrievebyScontoDisp(String citta, Paginator paginator) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceRistorante FROM Ristorante r INNER JOIN Prodotto p ON p.codRis_fk=r.codiceRistorante WHERE r.citta=? AND p.sconto>0");
+            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ristorante r INNER JOIN Prodotto p ON p.codRis_fk=r.codiceRistorante INNER JOIN Tipologia t ON p.nomeTip_fk=t.nome LEFT JOIN AppartenenzaPM apm ON p.codiceProdotto=apm.codProd_fk INNER JOIN Menu m ON apm.codMenu_fk=m.codiceMenu WHERE r.citta=? AND (p.sconto>0 OR m.sconto>0) LIMIT ?,?");
             ps.setString(1,citta);
+            ps.setInt(2,paginator.getOffset());
+            ps.setInt(3,paginator.getLimit());
+            Map<Integer, Ristorante> ristoranti=new LinkedHashMap<>();
             ResultSet rs=ps.executeQuery();
-            ArrayList<Integer> codRis=new ArrayList<>();
             while(rs.next()){
-                codRis.add(rs.getInt("r.codiceRistorante"));
+                int codiceRistorante=rs.getInt("r.codiceRistorante");
+                if(!ristoranti.containsKey(codiceRistorante)){
+                    Ristorante r=RistoranteExtractor.extract(rs);
+                    ristoranti.put(codiceRistorante, r);
+                }
+                Tipologia t=new Tipologia();
+                t.setNome(rs.getString("t.nome"));
+                t.setDescrizione(rs.getString("t.descrizione"));
+                Ristorante ris_tip=ristoranti.get(codiceRistorante);
+                if(!ris_tip.getTipologie().contains(t))
+                    ris_tip.getTipologie().add(t);
             }
-            if(codRis.isEmpty())
+
+            if(ristoranti.isEmpty())
                 return null;
             else
-                return codRis;
+                return new ArrayList<Ristorante>(ristoranti.values());
+
         }
     }
 
