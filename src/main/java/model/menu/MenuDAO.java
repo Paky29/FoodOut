@@ -30,6 +30,7 @@ public class MenuDAO {
         }
     }
 
+    //da utilizzare per suggerimenti di menu
     public ArrayList<Menu> doRetrieveByProdotto(int codiceProdotto) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT codiceMenu, nome, prezzo, sconto, valido FROM Menu m INNER JOIN AppartenenzaPM apm ON m.codiceMenu=apm.codMenu_fk WHERE apm.codProd_fk=?");

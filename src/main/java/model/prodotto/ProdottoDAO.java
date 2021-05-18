@@ -2,6 +2,7 @@ package model.prodotto;
 
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
+import model.ristorante.RistoranteExtractor;
 import model.tipologia.Tipologia;
 import model.tipologia.TipologiaDAO;
 import model.utility.ConPool;
@@ -15,18 +16,24 @@ public class ProdottoDAO {
 
     public Prodotto doRetrievebyId(int codiceProdotto) throws SQLException{
         try(Connection conn=ConPool.getConnection()) {
-            PreparedStatement ps= conn.prepareStatement("SELECT codiceProdotto, nome, ingredienti, info, prezzo, sconto, valido, urlImmagine, codRis_fk, nomeTip_fk FROM Prodotto p WHERE codiceProdotto=?");
+            PreparedStatement ps= conn.prepareStatement("SELECT p.codiceProdotto, p.nome, p.ingredienti, p.info, p.prezzo, p.sconto, p.valido, p.urlImmagine, p.codRis_fk, p.nomeTip_fk, t1.nome, t1.descrizione,  r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t2.nome, t2.descrizione FROM Prodotto p INNER JOIN Tipologia t1 ON p.nomeTip_fk=t1.nome INNER JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t2 ON art.nomeTip_fk=t2.nome WHERE codiceProdotto=?");
             ps.setInt(1, codiceProdotto);
             ResultSet rs=ps.executeQuery();
             Prodotto p=null;
             if(rs.next()) {
                 p = ProdottoExtractor.extract(rs);
-                RistoranteDAO service1 = new RistoranteDAO();
-                Ristorante r = service1.doRetrieveById(rs.getInt("codRis_fk"));
-                p.setRistorante(r);
-                TipologiaDAO service2 = new TipologiaDAO();
-                Tipologia t = service2.doRetrieveByNome((rs.getString("nomeTip_fk")));
+                Tipologia t=new Tipologia();
+                t.setNome(rs.getString("t1.nome"));
+                t.setDescrizione(rs.getString("t1.descrizione"));
                 p.setTipologia(t);
+                Ristorante r= RistoranteExtractor.extract(rs);
+                do{
+                    Tipologia t_ris=new Tipologia();
+                    t_ris.setNome(rs.getString("t2.nome"));
+                    t_ris.setDescrizione(rs.getString("t2.descrizione"));
+                    r.getTipologie().add(t);
+                }while(rs.next());
+                p.setRistorante(r);
             }
             return p;
         }
@@ -34,14 +41,15 @@ public class ProdottoDAO {
 
     public ArrayList<Prodotto> doRetrieveByRistorante(int codiceRistorante) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceProdotto, nome, ingredienti, info, prezzo, sconto, valido, urlImmagine, nomeTip_fk FROM Prodotto p WHERE codRis_fk=?");
+            PreparedStatement ps=conn.prepareStatement("SELECT p.codiceProdotto, p.nome, p.ingredienti, p.info, p.prezzo, p.sconto, p.valido, p.urlImmagine, p.nomeTip_fk, t.nome, t.descrizione FROM Prodotto p INNER JOIN Tipologia t ON p.nomeTip_fk=t.nome WHERE codRis_fk=?");
             ps.setInt(1,codiceRistorante);
             ResultSet rs=ps.executeQuery();
             ArrayList<Prodotto> prodotti=new ArrayList<>();
             while(rs.next()) {
                 Prodotto p = ProdottoExtractor.extract(rs);
-                TipologiaDAO service = new TipologiaDAO();
-                Tipologia t = service.doRetrieveByNome((rs.getString("nomeTip_fk")));
+                Tipologia t=new Tipologia();
+                t.setNome(rs.getString("t.nome"));
+                t.setDescrizione(rs.getString("t.descrizione"));
                 p.setTipologia(t);
                 prodotti.add(p);
             }

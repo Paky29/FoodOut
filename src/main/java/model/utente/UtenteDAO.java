@@ -22,104 +22,86 @@ public class UtenteDAO {
 
     public Utente doRetrieveById(int codiceUtente) throws SQLException{
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceUtente, nome, cognome, email, pw, saldo, provincia, citta, via, civico, interesse, amministratore FROM Utente u WHERE codiceUtente=?");
+            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.pw, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating,t.nome, t.descrizione FROM Utente u LEFT JOIN Preferenza p ON u.codiceUtente=p.codUtente_fk LEFT JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE u.codiceUtente=?");
             ps.setInt(1, codiceUtente);
             ResultSet rs = ps.executeQuery();
             Utente u=null;
+            Map<Integer, Ristorante> ristoranti=new LinkedHashMap<>();
             if(rs.next()){
                 u=UtenteExtractor.extract(rs);
-                //togliere?
-                ps=conn.prepareStatement("SELECT codiceOrdine, dataOrdine, totale, nota, oraPartenza, oraArrivo, metodoPagamento, giudizio, voto, consegnato FROM Ordine o WHERE o.codUtente_fk=? ");
-                ps.setInt(1, u.getCodice());
-                rs=ps.executeQuery();
-                while(rs.next()){
-                    Ordine o= OrdineExtractor.extract(rs);
-                    u.getOrdini().add(o);
-                }
+                do{
+                    int codiceRistorante=rs.getInt("r.codiceRistorante");
+                    if(!ristoranti.containsKey(codiceRistorante)){
+                        Ristorante r=RistoranteExtractor.extract(rs);
+                        ristoranti.put(codiceRistorante, r);
+                    }
+
+                    Tipologia t = new Tipologia();
+                    t.setNome(rs.getString("t.nome"));
+                    t.setDescrizione(rs.getString("t.descrizione"));
+                    ristoranti.get(codiceRistorante).getTipologie().add(t);
+                }while(rs.next());
+
+                if(!ristoranti.isEmpty())
+                    u.setRistorantiPref(new ArrayList<>(ristoranti.values()));
             }
-            ps=conn.prepareStatement("SELECT codRis_fk FROM Preferenza pr WHERE pr.codUtente_fk=?");
-            ps.setInt(1, u.getCodice());
-            rs=ps.executeQuery();
-            RistoranteDAO service=new RistoranteDAO();
-            while(rs.next()){
-                Ristorante r=service.doRetrieveById(rs.getInt("codRis_fk"));
-                u.getRistorantiPref().add(r);
-            }
+
             return u;
         }
     }
 
     public Utente doRetrieveByEmailAndPassword(String email, String password) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceUtente, nome, cognome, email, pw, saldo, provincia, citta, via, civico, interesse, amministratore FROM Utente u WHERE email=? AND pw=SHA1(?)");
+            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.pw, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating,t.nome, t.descrizione FROM Utente u LEFT JOIN Preferenza p ON u.codiceUtente=p.codUtente_fk LEFT JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE u.email=? AND u.pw=?");
             ps.setString(1, email);
             ps.setString(2, password);
+
             ResultSet rs = ps.executeQuery();
             Utente u=null;
+            Map<Integer, Ristorante> ristoranti=new LinkedHashMap<>();
             if(rs.next()){
                 u=UtenteExtractor.extract(rs);
-                ps=conn.prepareStatement("SELECT codiceOrdine, dataOrdine, totale, nota, oraPartenza, oraArrivo, metodoPagamento, giudizio, voto, consegnato FROM Ordine o WHERE o.codUtente_fk=? ");
-                ps.setInt(1, u.getCodice());
-                rs=ps.executeQuery();
-                while(rs.next()){
-                    Ordine o= OrdineExtractor.extract(rs);
-                    u.getOrdini().add(o);
-                }
+                do{
+                    int codiceRistorante=rs.getInt("r.codiceRistorante");
+                    if(!ristoranti.containsKey(codiceRistorante)){
+                        Ristorante r=RistoranteExtractor.extract(rs);
+                        ristoranti.put(codiceRistorante, r);
+                    }
+
+                    Tipologia t = new Tipologia();
+                    t.setNome(rs.getString("t.nome"));
+                    t.setDescrizione(rs.getString("t.descrizione"));
+                    ristoranti.get(codiceRistorante).getTipologie().add(t);
+                }while(rs.next());
+
+                if(!ristoranti.isEmpty())
+                    u.setRistorantiPref(new ArrayList<>(ristoranti.values()));
             }
-            ps=conn.prepareStatement("SELECT codRis_fk FROM Preferenza pr WHERE pr.codUtente_fk=?");
-            ps.setInt(1, u.getCodice());
-            rs=ps.executeQuery();
-            RistoranteDAO service=new RistoranteDAO();
-            while(rs.next()){
-                Ristorante r=service.doRetrieveById(rs.getInt("codRis_fk"));
-                u.getRistorantiPref().add(r);
-            }
+
             return u;
         }
     }
 
     public ArrayList<Utente> doRetrieveAll(Paginator paginator) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceUtente, nome, cognome, email, saldo, provincia, citta, via, civico, interesse, amministratore, codiceOrdine, dataOrdine, totale, nota, oraPartenza, oraArrivo, metodoPagamento, giudizio, voto, consegnato FROM Utente u INNER JOIN Ordine o ON o.codUtente_fk=u.codiceUtente LIMIT ?,?");
+            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.pw, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore FROM Utente u LIMIT ?,?");
             ps.setInt(1,paginator.getOffset());
             ps.setInt(2,paginator.getLimit());
             ResultSet rs=ps.executeQuery();
-            Map<Integer,Utente> utenti=new LinkedHashMap<>();
+            ArrayList utenti=new ArrayList();
             while(rs.next()){
-                int utenteid=rs.getInt("u.codiceUtente");
-                if(!utenti.containsKey(utenteid)) {
                     Utente u = UtenteExtractor.extract(rs);
-                    PreparedStatement ordini=conn.prepareStatement("SELECT codiceOrdine, dataOrdine, totale, nota, oraPartenza, oraArrivo, metodoPagamento, giudizio, voto, consegnato FROM Ordine o WHERE o.codUtente_fk=? ");
-                    ps.setInt(1, utenteid);
-                    ResultSet set=ordini.executeQuery();
-                    while(set.next())
-                    {
-                        Ordine o=OrdineExtractor.extract(set);
-                        u.getOrdini().add(o);
-                    }
-                    PreparedStatement preferenze=conn.prepareStatement("SELECT codRis_fk FROM Preferenza pr WHERE pr.codUtente_fk=?");
-                    preferenze.setInt(1,utenteid);
-                    set=preferenze.executeQuery();
-                    RistoranteDAO service=new RistoranteDAO();
-                    while(set.next())
-                    {
-                        Ristorante r= service.doRetrieveById(set.getInt("codRis_fk"));
-                        u.getRistorantiPref().add(r);
-                    }
-                    utenti.put(utenteid, u);
-                }
-                Ordine o=OrdineExtractor.extract(rs);
-                utenti.get(utenteid).getOrdini().add(o);
+                    utenti.add(u);
             }
             if(utenti.isEmpty())
                 return null;
-            return new ArrayList<>(utenti.values());
+            return utenti;
         }
     }
 
     public ArrayList<Utente> doRetrievebyPref(int codiceRistorante, Paginator paginator) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceUtente, nome, cognome, email, saldo, provincia, citta, via, civico, interesse, amministratore FROM Utente u INNER JOIN Preferenza o ON p.codUtente_fk=u.codiceUtente WHERE p.codRis_fk=? LIMIT ?,?");
+            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore FROM Utente u INNER JOIN Preferenza o ON p.codUtente_fk=u.codiceUtente WHERE p.codRis_fk=? LIMIT ?,?");
             ps.setInt(1, codiceRistorante);
             ps.setInt(2, paginator.getOffset());
             ps.setInt(3, paginator.getLimit());
