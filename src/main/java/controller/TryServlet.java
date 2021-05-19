@@ -35,7 +35,7 @@ public class TryServlet extends HttpServlet {
         try {
             RistoranteDAO service1=new RistoranteDAO();
             ArrayList<Ristorante> r= null;
-            r = service1.doRetrievebyScontoDisp("Milano", new Paginator(1,10));
+            r = service1.doRetrieveByScontoDisp("Milano", new Paginator(1,10));
             for(Ristorante ris: r){
                 System.out.println(ris.getNome());
                 System.out.println(ris.getTassoConsegna());
