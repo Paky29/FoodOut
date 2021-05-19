@@ -1,5 +1,7 @@
 package model.utente;
 
+import model.ordine.Ordine;
+import model.ordine.OrdineDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteExtractor;
 import model.tipologia.Tipologia;
@@ -17,11 +19,12 @@ public class UtenteDAO {
 
     public Utente doRetrieveById(int codiceUtente) throws SQLException{
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.pw, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating,t.nome, t.descrizione FROM Utente u LEFT JOIN Preferenza p ON u.codiceUtente=p.codUtente_fk LEFT JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE u.codiceUtente=?");
+            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating,t.nome, t.descrizione FROM Utente u LEFT JOIN Preferenza p ON u.codiceUtente=p.codUtente_fk LEFT JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE u.codiceUtente=?");
             ps.setInt(1, codiceUtente);
             ResultSet rs = ps.executeQuery();
             Utente u=null;
             Map<Integer, Ristorante> ristoranti=new LinkedHashMap<>();
+            OrdineDAO service=new OrdineDAO();
             if(rs.next()){
                 u=UtenteExtractor.extract(rs);
                 do{
@@ -39,6 +42,10 @@ public class UtenteDAO {
 
                 if(!ristoranti.isEmpty())
                     u.setRistorantiPref(new ArrayList<>(ristoranti.values()));
+
+                ArrayList<Ordine> ordini=service.doRetrieveByUtente(u);
+                u.setOrdini(ordini);
+
             }
 
             return u;
@@ -54,6 +61,7 @@ public class UtenteDAO {
             ResultSet rs = ps.executeQuery();
             Utente u=null;
             Map<Integer, Ristorante> ristoranti=new LinkedHashMap<>();
+            OrdineDAO service=new OrdineDAO();
             if(rs.next()){
                 u=UtenteExtractor.extract(rs);
                 do{
@@ -71,6 +79,9 @@ public class UtenteDAO {
 
                 if(!ristoranti.isEmpty())
                     u.setRistorantiPref(new ArrayList<>(ristoranti.values()));
+
+                ArrayList<Ordine> ordini=service.doRetrieveByUtente(u);
+                u.setOrdini(ordini);
             }
 
             return u;

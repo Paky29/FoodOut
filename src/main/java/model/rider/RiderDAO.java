@@ -1,5 +1,7 @@
 package model.rider;
 
+import model.ordine.Ordine;
+import model.ordine.OrdineDAO;
 import model.turno.Turno;
 import model.turno.TurnoExtractor;
 import model.utility.ConPool;
@@ -18,16 +20,19 @@ public class RiderDAO {
             PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, citta, veicolo, giorno, oraInizio, oraFine FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk WHERE codiceRider=? AND password=SHA1(?)");
             ps.setInt(1, codiceRider);
             ResultSet rs=ps.executeQuery();
-            Rider r=null;
+            OrdineDAO service=new OrdineDAO();
+            Rider rd=null;
             if(rs.next()){
-                r = RiderExtractor.extract(rs);
+                rd = RiderExtractor.extract(rs);
                 do{
                     Turno t= TurnoExtractor.extract(rs);
-                    r.getTurni().add(t);
+                    rd.getTurni().add(t);
                 }while(rs.next());
 
+                ArrayList<Ordine> ordini=service.doRetrieveByRider(rd);
+                rd.setOrdini(ordini);
                 }
-            return r;
+            return rd;
         }
     }
 
@@ -38,15 +43,19 @@ public class RiderDAO {
             ps.setString(1, email);
             ps.setString(2, password);
             ResultSet rs=ps.executeQuery();
-            Rider r=null;
+            OrdineDAO service=new OrdineDAO();
+            Rider rd=null;
             if(rs.next()){
-                r = RiderExtractor.extract(rs);
+                rd = RiderExtractor.extract(rs);
                 do{
                     Turno t= TurnoExtractor.extract(rs);
-                    r.getTurni().add(t);
+                    rd.getTurni().add(t);
                 }while(rs.next());
+
+                ArrayList<Ordine> ordini=service.doRetrieveByRider(rd);
+                rd.setOrdini(ordini);
             }
-            return r;
+            return rd;
         }
     }
 
