@@ -47,7 +47,7 @@ public class UtenteDAO {
 
     public Utente doRetrieveByEmailAndPassword(String email, String password) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.pw, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating,t.nome, t.descrizione FROM Utente u LEFT JOIN Preferenza p ON u.codiceUtente=p.codUtente_fk LEFT JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE u.email=? AND u.pw=?");
+            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.pw, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating,t.nome, t.descrizione FROM Utente u LEFT JOIN Preferenza p ON u.codiceUtente=p.codUtente_fk LEFT JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE u.email=? AND u.pw=SHA1(?)");
             ps.setString(1, email);
             ps.setString(2, password);
 
@@ -79,7 +79,7 @@ public class UtenteDAO {
 
     public ArrayList<Utente> doRetrieveAll(Paginator paginator) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.pw, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore FROM Utente u LIMIT ?,?");
+            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore FROM Utente u LIMIT ?,?");
             ps.setInt(1,paginator.getOffset());
             ps.setInt(2,paginator.getLimit());
             ResultSet rs=ps.executeQuery();

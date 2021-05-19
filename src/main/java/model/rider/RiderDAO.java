@@ -64,12 +64,9 @@ public class RiderDAO {
                     Rider r=RiderExtractor.extract(rs);
                     riders.put(codiceRider, r);
                 }
-
                 Turno t=TurnoExtractor.extract(rs);
                 riders.get(codiceRider).getTurni().add(t);
-
             }
-
             if(riders.isEmpty())
                 return null;
             return new ArrayList<>(riders.values());
