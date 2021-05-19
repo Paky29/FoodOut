@@ -438,7 +438,7 @@ public class OrdineDAO {
         }
     }
 
-    private static boolean composizioneOrdine(Connection conn, Ordine o) throws SQLException {
+    private static boolean composizioneOrdine(Connection conn, Ordine o)  throws SQLException {
         PreparedStatement prodotti=conn.prepareStatement("SELECT p.codiceProdotto, p.nome, p.ingredienti, p.info, p.prezzo, p.sconto, p.valido, p.urlImmagine, cop.quantita, t.nome, t.descrizione FROM ComposizioneOP cop INNER JOIN Prodotto p ON cop.codProd_fk=p.codiceProdotto INNER JOIN Tipologia t ON p.nomeTip_fk=t.nome WHERE cop.codOrd_fk=?");
         prodotti.setInt(1, o.getCodice());
         ResultSet rs= prodotti.executeQuery();
