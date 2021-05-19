@@ -18,7 +18,7 @@ public class UtenteDAO {
     public UtenteDAO(){}
 
     public Utente doRetrieveById(int codiceUtente) throws SQLException{
-        try(Connection conn= ConPool.getConnection()){
+        try(Connection conn = ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating,t.nome, t.descrizione FROM Utente u LEFT JOIN Preferenza p ON u.codiceUtente=p.codUtente_fk LEFT JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE u.codiceUtente=?");
             ps.setInt(1, codiceUtente);
             ResultSet rs = ps.executeQuery();

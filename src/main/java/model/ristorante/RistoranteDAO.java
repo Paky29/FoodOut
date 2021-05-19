@@ -44,7 +44,6 @@ public class RistoranteDAO {
         }
     }
 
-//da visionare
     public ArrayList<Ristorante> doRetrieveByScontoDisp(String citta, Paginator paginator) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ristorante r INNER JOIN Prodotto p ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaPM apm ON p.codiceProdotto=apm.codProd_fk LEFT JOIN Menu m ON apm.codMenu_fk=m.codiceMenu WHERE r.citta=? AND (p.sconto>0 OR m.sconto>0) LIMIT ?,?");
@@ -115,7 +114,7 @@ public class RistoranteDAO {
                     ristoranti.put(codiceRistorante, r);
                 }
 
-                Disponibilita d=DisponibilitaExtractor.extract(rs);
+                Disponibilita d =DisponibilitaExtractor.extract(rs);
                 ristoranti.get(codiceRistorante).getGiorni().add(d);
             }
 

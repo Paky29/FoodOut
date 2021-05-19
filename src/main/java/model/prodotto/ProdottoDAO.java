@@ -18,7 +18,7 @@ public class ProdottoDAO {
             Prodotto p=null;
             if(rs.next()) {
                 p = ProdottoExtractor.extract(rs);
-                Tipologia t=new Tipologia();
+                Tipologia t =new Tipologia();
                 t.setNome(rs.getString("t1.nome"));
                 t.setDescrizione(rs.getString("t1.descrizione"));
                 p.setTipologia(t);

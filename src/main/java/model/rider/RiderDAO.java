@@ -16,7 +16,7 @@ public class RiderDAO {
     public RiderDAO(){}
 
     public Rider doRetrievebyId(int codiceRider) throws SQLException{
-        try(Connection conn= ConPool.getConnection()){
+        try(Connection conn = ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, citta, veicolo, giorno, oraInizio, oraFine FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk WHERE codiceRider=? AND password=SHA1(?)");
             ps.setInt(1, codiceRider);
             ResultSet rs=ps.executeQuery();

@@ -169,7 +169,7 @@ public class OrdineDAO {
     }
 
     public ArrayList<Ordine> doRetrieveByRider(Rider rd) throws SQLException {
-        try(Connection conn=ConPool.getConnection()){
+        try(Connection conn =ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, u.codiceUtente, u.nome, u.cognome, u.email, u.pw, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o LEFT JOIN Rider rd On o.codOrd_fk=rd.codiceRider INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.nomeTip_fk INNER JOIN Tipologia ON art.nomeTip_fk=t.nome WHERE o.codRider_fk=?");
             ps.setInt(1,rd.getCodice());
             ResultSet rs=ps.executeQuery();
