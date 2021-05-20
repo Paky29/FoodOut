@@ -14,10 +14,9 @@ import model.utente.UtenteExtractor;
 import model.utility.ConPool;
 import model.utility.Paginator;
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class OrdineDAO {
 
@@ -491,5 +490,64 @@ public class OrdineDAO {
             return false;
         else
              return true;
+    }
+
+    private static Map<Integer,Map<Integer, OrdineItem>> composizioneOM(Connection conn, StringJoiner sj) throws SQLException {
+
+        PreparedStatement menu=conn.prepareStatement("SELECT m.codiceMenu, m.none, m.prezzo, m.sconto, m.valido, com.codOrd_fk, com.quantita,  p.codiceProdotto, p.nome, p.ingredienti, p.info, p.prezzo, p.sconto, p.valido, p.urlImmagine, t.nome, t.descrizione FROM ComposizioneOM com INNER JOIN Menu m ON com.codProd_fk=m.codiceMenu INNER JOIN AppartenenzaPM apm ON m.codiceMenu=apm.codMenu_fk INNER JOIN Prodotto p ON apm.codProd_fk=p.codiceProdotto INNER JOIN Tipologia t ON p.nomeTip_fk=t.nome WHERE com.codOrd_fk IN " + sj.toString());
+        ResultSet rs=menu.executeQuery();
+        Map<Integer, Map<Integer, OrdineItem>> ordineItems=new LinkedHashMap<>();
+
+        while(rs.next()){
+            int codiceOrdine=rs.getInt("com.codOrd_fk");
+            if(!ordineItems.containsKey(codiceOrdine)){
+                Map<Integer, OrdineItem> menus=new LinkedHashMap<>();
+                ordineItems.put(codiceOrdine, menus);
+            }
+            int codiceMenu=rs.getInt("m.codiceMenu");
+            if(!ordineItems.get(codiceOrdine).containsKey(codiceMenu)){
+                Menu m=MenuExtractor.extract(rs);
+                int quantita=rs.getInt("com.quantita");
+                OrdineItem oi=new OrdineItem();
+                oi.setOff(m);
+                oi.setQuantita(quantita);
+                ordineItems.get(codiceOrdine).put(codiceMenu, oi);
+            }
+
+            Prodotto p=ProdottoExtractor.extract(rs);
+            Tipologia t=new Tipologia();
+            t.setNome("t.nome");
+            t.setDescrizione("t.descrizione");
+            p.setTipologia(t);
+            Menu m= (Menu) ordineItems.get(codiceOrdine).get(codiceMenu).getOff();
+            m.getProdotti().add(p);
+        }
+
+        return ordineItems;
+    }
+
+    private static Map<Integer,ArrayList<OrdineItem>> composizioneOP(Connection conn, StringJoiner sj) throws SQLException {
+        PreparedStatement prodotti=conn.prepareStatement("SELECT p.codiceProdotto, p.nome, p.ingredienti, p.info, p.prezzo, p.sconto, p.valido, p.urlImmagine, cop.codOrd_fk, cop.quantita, t.nome, t.descrizione FROM ComposizioneOP cop INNER JOIN Prodotto p ON cop.codProd_fk=p.codiceProdotto INNER JOIN Tipologia t ON p.nomeTip_fk=t.nome WHERE cop.codOrd_fk IN " + sj.toString());
+        ResultSet rs=prodotti.executeQuery();
+        Map<Integer, ArrayList<OrdineItem>> ordineItems=new LinkedHashMap<>();
+        while(rs.next()){
+            int codiceOrdine=rs.getInt("cod.codOrd_fk");
+            if(!ordineItems.containsKey(codiceOrdine)){
+                ArrayList<OrdineItem> ois = new ArrayList<>();
+                ordineItems.put(codiceOrdine, ois);
+            }
+            Prodotto p=ProdottoExtractor.extract(rs);
+            Tipologia t=new Tipologia();
+            t.setNome("t.nome");
+            t.setDescrizione("t.descrizione");
+            p.setTipologia(t);
+            int quantita=rs.getInt("cop.quantita");
+            OrdineItem oi=new OrdineItem();
+            oi.setOff(p);
+            oi.setQuantita(quantita);
+            ordineItems.get(codiceOrdine).add(oi);
+        }
+
+        return ordineItems;
     }
 }
