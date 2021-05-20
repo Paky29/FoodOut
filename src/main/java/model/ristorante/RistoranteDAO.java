@@ -12,6 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 
 public class RistoranteDAO {
     public RistoranteDAO(){}
@@ -60,7 +61,14 @@ public class RistoranteDAO {
                     ristoranti.put(codiceRistorante, r);
                 }
             }
-            ArrayList<Integer> chiavi= new ArrayList<>(ristoranti.keySet());
+            StringJoiner sj=new StringJoiner(",","(", ")");
+            for(int key: ristoranti.keySet()){
+                sj.add(Integer.toString(key));
+            }
+
+
+            PreparedStatement disp=conn.prepareStatement("SELECT d.codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN " + sj.toString());
+            /*ArrayList<Integer> chiavi= new ArrayList<>(ristoranti.keySet());
             String strChiavi=new String();
             for(Integer c:chiavi)
                 strChiavi+=c+",";
@@ -69,8 +77,9 @@ public class RistoranteDAO {
             Array a=conn.createArrayOf("int",chiaviInt);
             disp.setArray(1, a);*/
 
-            PreparedStatement disp=conn.prepareStatement("SELECT d.codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN ("+strChiavi+")");
+            //PreparedStatement disp=conn.prepareStatement("SELECT d.codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN ("+strChiavi+")");
             ResultSet setDisp=disp.executeQuery();
+
 
             while(setDisp.next()){
                 int codiceRistorante=setDisp.getInt("d.codRis_fk");
@@ -78,7 +87,7 @@ public class RistoranteDAO {
                 ristoranti.get(codiceRistorante).getGiorni().add(d);
             }
 
-            PreparedStatement tip=conn.prepareStatement("SELECT art.codRis_fk, t.nome, t.descrizione FROM AppartenenzaRT art INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE art.codRis_fk IN("+strChiavi+")");
+            PreparedStatement tip=conn.prepareStatement("SELECT art.codRis_fk, t.nome, t.descrizione FROM AppartenenzaRT art INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE art.codRis_fk IN " + sj.toString());
             ResultSet setTip=tip.executeQuery();
 
             while(setTip.next()){
