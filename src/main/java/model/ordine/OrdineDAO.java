@@ -50,7 +50,7 @@ public class OrdineDAO {
 
             o.getOrdineItems().addAll(menus.get(codiceOrdine).values());
 
-            return o;
+            return o ;
         }
     }
 
@@ -116,8 +116,6 @@ public class OrdineDAO {
                     o.setRistorante(r);
                     Rider rd = RiderExtractor.extract(rs);
                     o.setRider(rd);
-                    if (!OrdineDAO.composizioneOrdine(conn, o))
-                        return null;
                     ordini.put(codiceOrdine, o);
                 }
                 Tipologia t = new Tipologia();
@@ -125,6 +123,22 @@ public class OrdineDAO {
                 t.setDescrizione(rs.getString("t.descrizione"));
                 ordini.get(codiceOrdine).getRistorante().getTipologie().add(t);
             }
+
+            StringJoiner sj=new StringJoiner(",", "(", ")");
+            for(int key: ordini.keySet()){
+                sj.add(Integer.toString(key));
+            }
+
+            Map<Integer, Map<Integer, OrdineItem>> menus = OrdineDAO.composizioneOM(conn, sj);
+            Map<Integer, ArrayList<OrdineItem>> prodotti = OrdineDAO.composizioneOP(conn, sj);
+
+            for(int key: prodotti.keySet())
+                ordini.get(key).setOrdineItems(prodotti.get(key));
+
+            for(int key: menus.keySet()){
+                ordini.get(key).getOrdineItems().addAll(menus.get(key).values());
+            }
+
             if (ordini.isEmpty())
                 return null;
             return new ArrayList<>(ordini.values());
@@ -148,8 +162,6 @@ public class OrdineDAO {
                     o.setRistorante(r);
                     Rider rd = RiderExtractor.extract(rs);
                     o.setRider(rd);
-                    if (!OrdineDAO.composizioneOrdine(conn, o))
-                        return null;
                     ordini.put(codiceOrdine, o);
                 }
                 Tipologia t = new Tipologia();
@@ -157,6 +169,22 @@ public class OrdineDAO {
                 t.setDescrizione(rs.getString("t.descrizione"));
                 ordini.get(codiceOrdine).getRistorante().getTipologie().add(t);
             }
+
+            StringJoiner sj=new StringJoiner(",", "(", ")");
+            for(int key: ordini.keySet()){
+                sj.add(Integer.toString(key));
+            }
+
+            Map<Integer, Map<Integer, OrdineItem>> menus = OrdineDAO.composizioneOM(conn, sj);
+            Map<Integer, ArrayList<OrdineItem>> prodotti = OrdineDAO.composizioneOP(conn, sj);
+
+            for(int key: prodotti.keySet())
+                ordini.get(key).setOrdineItems(prodotti.get(key));
+
+            for(int key: menus.keySet()){
+                ordini.get(key).getOrdineItems().addAll(menus.get(key).values());
+            }
+
             if (ordini.isEmpty())
                 return null;
             return new ArrayList<>(ordini.values());
@@ -178,9 +206,23 @@ public class OrdineDAO {
                 o.setUtente(u);
                 Rider rd = RiderExtractor.extract(rs);
                 o.setRider(rd);
-                if (!OrdineDAO.composizioneOrdine(conn, o))
-                    return null;
+
                 ordini.add(o);
+            }
+
+            StringJoiner sj=new StringJoiner(",", "(", ")");
+            for(Ordine o: ordini){
+                sj.add(Integer.toString(o.getCodice()));
+            }
+
+            Map<Integer, Map<Integer, OrdineItem>> menus = OrdineDAO.composizioneOM(conn, sj);
+            Map<Integer, ArrayList<OrdineItem>> prodotti = OrdineDAO.composizioneOP(conn, sj);
+
+            for(int key: prodotti.keySet())
+                ordini.get(key).setOrdineItems(prodotti.get(key));
+
+            for(int key: menus.keySet()){
+                ordini.get(key).getOrdineItems().addAll(menus.get(key).values());
             }
 
             if (ordini.isEmpty())
@@ -204,8 +246,6 @@ public class OrdineDAO {
                     o.setRistorante(r);
                     Utente u = UtenteExtractor.extract(rs);
                     o.setUtente(u);
-                    if (!OrdineDAO.composizioneOrdine(conn, o))
-                        return null;
                     ordini.put(codiceOrdine, o);
                 }
                 Tipologia t = new Tipologia();
@@ -213,6 +253,22 @@ public class OrdineDAO {
                 t.setDescrizione(rs.getString("t.descrizione"));
                 ordini.get(codiceOrdine).getRistorante().getTipologie().add(t);
             }
+
+            StringJoiner sj=new StringJoiner(",", "(", ")");
+            for(int key: ordini.keySet()){
+                sj.add(Integer.toString(key));
+            }
+
+            Map<Integer, Map<Integer, OrdineItem>> menus = OrdineDAO.composizioneOM(conn, sj);
+            Map<Integer, ArrayList<OrdineItem>> prodotti = OrdineDAO.composizioneOP(conn, sj);
+
+            for(int key: prodotti.keySet())
+                ordini.get(key).setOrdineItems(prodotti.get(key));
+
+            for(int key: menus.keySet()){
+                ordini.get(key).getOrdineItems().addAll(menus.get(key).values());
+            }
+
             if (ordini.isEmpty())
                 return null;
             return new ArrayList<>(ordini.values());
@@ -237,8 +293,6 @@ public class OrdineDAO {
                     o.setRistorante(r);
                     Utente u = UtenteExtractor.extract(rs);
                     o.setUtente(u);
-                    if (!OrdineDAO.composizioneOrdine(conn, o))
-                        return null;
                     ordini.put(codiceOrdine, o);
                 }
                 Tipologia t = new Tipologia();
@@ -246,6 +300,22 @@ public class OrdineDAO {
                 t.setDescrizione(rs.getString("t.descrizione"));
                 ordini.get(codiceOrdine).getRistorante().getTipologie().add(t);
             }
+
+            StringJoiner sj=new StringJoiner(",", "(", ")");
+            for(int key: ordini.keySet()){
+                sj.add(Integer.toString(key));
+            }
+
+            Map<Integer, Map<Integer, OrdineItem>> menus = OrdineDAO.composizioneOM(conn, sj);
+            Map<Integer, ArrayList<OrdineItem>> prodotti = OrdineDAO.composizioneOP(conn, sj);
+
+            for(int key: prodotti.keySet())
+                ordini.get(key).setOrdineItems(prodotti.get(key));
+
+            for(int key: menus.keySet()){
+                ordini.get(key).getOrdineItems().addAll(menus.get(key).values());
+            }
+
             if (ordini.isEmpty())
                 return null;
             return new ArrayList<>(ordini.values());
@@ -271,8 +341,6 @@ public class OrdineDAO {
                     o.setRistorante(r);
                     Rider rd = RiderExtractor.extract(rs);
                     o.setRider(rd);
-                    if (!OrdineDAO.composizioneOrdine(conn, o))
-                        return null;
                     ordini.put(codiceOrdine, o);
                 }
                 Tipologia t = new Tipologia();
@@ -280,6 +348,22 @@ public class OrdineDAO {
                 t.setDescrizione(rs.getString("t.descrizione"));
                 ordini.get(codiceOrdine).getRistorante().getTipologie().add(t);
             }
+
+            StringJoiner sj=new StringJoiner(",", "(", ")");
+            for(int key: ordini.keySet()){
+                sj.add(Integer.toString(key));
+            }
+
+            Map<Integer, Map<Integer, OrdineItem>> menus = OrdineDAO.composizioneOM(conn, sj);
+            Map<Integer, ArrayList<OrdineItem>> prodotti = OrdineDAO.composizioneOP(conn, sj);
+
+            for(int key: prodotti.keySet())
+                ordini.get(key).setOrdineItems(prodotti.get(key));
+
+            for(int key: menus.keySet()){
+                ordini.get(key).getOrdineItems().addAll(menus.get(key).values());
+            }
+
             if (ordini.isEmpty())
                 return null;
             return new ArrayList<>(ordini.values());
@@ -320,8 +404,6 @@ public class OrdineDAO {
                     o.setRistorante(r);
                     Rider rd = RiderExtractor.extract(rs);
                     o.setRider(rd);
-                    if (!OrdineDAO.composizioneOrdine(conn, o))
-                        return null;
                     ordini.put(codiceOrdine, o);
                 }
                 Tipologia t = new Tipologia();
@@ -329,6 +411,22 @@ public class OrdineDAO {
                 t.setDescrizione(rs.getString("t.descrizione"));
                 ordini.get(codiceOrdine).getRistorante().getTipologie().add(t);
             }
+
+            StringJoiner sj=new StringJoiner(",", "(", ")");
+            for(int key: ordini.keySet()){
+                sj.add(Integer.toString(key));
+            }
+
+            Map<Integer, Map<Integer, OrdineItem>> menus = OrdineDAO.composizioneOM(conn, sj);
+            Map<Integer, ArrayList<OrdineItem>> prodotti = OrdineDAO.composizioneOP(conn, sj);
+
+            for(int key: prodotti.keySet())
+                ordini.get(key).setOrdineItems(prodotti.get(key));
+
+            for(int key: menus.keySet()){
+                ordini.get(key).getOrdineItems().addAll(menus.get(key).values());
+            }
+
             if (ordini.isEmpty())
                 return null;
             return new ArrayList<>(ordini.values());
@@ -355,8 +453,6 @@ public class OrdineDAO {
                     o.setRistorante(r);
                     Rider rd = RiderExtractor.extract(rs);
                     o.setRider(rd);
-                    if (!OrdineDAO.composizioneOrdine(conn, o))
-                        return null;
                     ordini.put(codiceOrdine, o);
                 }
                 Tipologia t = new Tipologia();
@@ -364,6 +460,22 @@ public class OrdineDAO {
                 t.setDescrizione(rs.getString("t.descrizione"));
                 ordini.get(codiceOrdine).getRistorante().getTipologie().add(t);
             }
+
+            StringJoiner sj=new StringJoiner(",", "(", ")");
+            for(int key: ordini.keySet()){
+                sj.add(Integer.toString(key));
+            }
+
+            Map<Integer, Map<Integer, OrdineItem>> menus = OrdineDAO.composizioneOM(conn, sj);
+            Map<Integer, ArrayList<OrdineItem>> prodotti = OrdineDAO.composizioneOP(conn, sj);
+
+            for(int key: prodotti.keySet())
+                ordini.get(key).setOrdineItems(prodotti.get(key));
+
+            for(int key: menus.keySet()){
+                ordini.get(key).getOrdineItems().addAll(menus.get(key).values());
+            }
+
             if (ordini.isEmpty())
                 return null;
             return new ArrayList<>(ordini.values());
