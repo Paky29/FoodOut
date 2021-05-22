@@ -80,8 +80,8 @@ public class UtenteDAO {
                 if(!ristoranti.isEmpty())
                     u.setRistorantiPref(new ArrayList<>(ristoranti.values()));
 
-                ArrayList<Ordine> ordini=service.doRetrieveByUtente(u);
-                u.setOrdini(ordini);
+               /* ArrayList<Ordine> ordini=service.doRetrieveByUtente(u);
+                u.setOrdini(ordini);*/
             }
 
             return u;

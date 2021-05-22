@@ -2,8 +2,11 @@ package controller;
 
 
 import model.disponibilita.Disponibilita;
+import model.menu.Menu;
+import model.menu.MenuDAO;
 import model.ordine.Ordine;
 import model.ordine.OrdineDAO;
+import model.ordine.OrdineItem;
 import model.prodotto.Prodotto;
 import model.prodotto.ProdottoDAO;
 import model.ristorante.Ristorante;
@@ -33,34 +36,9 @@ public class TryServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         try {
-            RistoranteDAO service1=new RistoranteDAO();
-            ArrayList<Ristorante> r = null;
-            r = service1.doRetrieveByScontoDisp("Milano", new Paginator(1,10));
-            for(Ristorante ris: r){
-                System.out.println(ris.getNome());
-                System.out.println(ris.getTassoConsegna());
-                for(Tipologia t: ris.getTipologie())
-                    System.out.println(t.getNome());
-                for(Disponibilita d: ris.getGiorni()){
-                    System.out.println(d.getGiorno());
-                    System.out.println(d.getOraApertura());
-                    System.out.println(d.getOraChiusura());
-                }
-            }
 
             RistoranteDAO service=new RistoranteDAO();
-
             ProdottoDAO service2=new ProdottoDAO();
-            Prodotto p= service2.doRetrievebyId( 5);
-            Ristorante r1=service.doRetrieveById(3);
-            service2.updateValidita(p, false);
-            Ristorante r2=service.doRetrieveById(3);
-            ArrayList<Tipologia> tips1=r1.getTipologie();
-            ArrayList<Tipologia> tips2=r2.getTipologie();
-            service2.updateValidita(p, true);
-            Ristorante r3=service.doRetrieveById(3);
-            ArrayList<Tipologia> tips3=r3.getTipologie();
-
             UtenteDAO service4=new UtenteDAO();
             Utente u=new Utente();
             u.setEmail("ciao@foodout.com");
@@ -74,6 +52,11 @@ public class TryServlet extends HttpServlet {
             u.setCivico(3);
 
             OrdineDAO service3=new OrdineDAO();
+            Prodotto p1=service2.doRetrievebyId(1);
+            Prodotto p2=service2.doRetrievebyId(2);
+            MenuDAO service5=new MenuDAO();
+            Menu m1=service5.doRetrieveById(1);
+            Menu m2=service5.doRetrieveById(2);
             Ordine o=new Ordine();
             o.setDataOrdine(LocalDate.of(2000,10,19));
             o.setNota("ciao");
@@ -85,21 +68,46 @@ public class TryServlet extends HttpServlet {
             o.setMetodoPagamento("cash");
             o.setRistorante(service.doRetrieveById(2));
             o.setConsegnato(false);
+            OrdineItem oi1=new OrdineItem();
+            oi1.setOff(p1);
+            oi1.setQuantita(2);
+            OrdineItem oi2=new OrdineItem();
+            oi2.setOff(p2);
+            oi2.setQuantita(1);
+            OrdineItem oi3=new OrdineItem();
+            oi3.setOff(m1);
+            oi3.setQuantita(3);
+            OrdineItem oi4=new OrdineItem();
+            oi4.setOff(m2);
+            oi4.setQuantita(1);
+            o.getOrdineItems().add(oi1);
+            o.getOrdineItems().add(oi2);
+            o.getOrdineItems().add(oi3);
+            o.getOrdineItems().add(oi4);
             service4.doSave(u);
             o.setUtente(service4.doRetrieveByEmailAndPassword("ciao@foodout.com", "mico"));
             ArrayList<Ordine> ordini=new ArrayList<>();
-            ordini.add(o);
-            u.setOrdini(ordini);
             service3.doSave(o);
-            service3.doUpdate(o);
+
             Utente unico=service4.doRetrieveByEmailAndPassword("ciao@foodout.com", "mico");
-
-
+            unico.getOrdini().add(service3.doRetrieveById(1));
+            System.out.println(unico.getOrdini().get(0).getOrdineItems().get(0).getOff().getNome() +" "+unico.getOrdini().get(0).getOrdineItems().get(0).getQuantita());
+            System.out.println(unico.getOrdini().get(0).getOrdineItems().get(1).getOff().getNome());
+            System.out.println(unico.getOrdini().get(0).getOrdineItems().get(2).getOff().getNome());
+            System.out.println(unico.getOrdini().get(0).getOrdineItems().get(3).getOff().getNome());
+            Menu m= (Menu) unico.getOrdini().get(0).getOrdineItems().get(3).getOff();
+            System.out.println(m.getProdotti().get(0).getNome());
+            System.out.println(m.getProdotti().get(1).getNome());
             request.setAttribute("utente", unico);
 
             RequestDispatcher dispatcher=request.getRequestDispatcher("/WEB-INF/presentation.jsp");
             dispatcher.forward(request, response);
-        } catch (SQLException | IOException | ServletException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("ok");
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
