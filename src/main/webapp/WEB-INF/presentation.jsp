@@ -12,10 +12,5 @@
     <title>Restaurant</title>
 </head>
 <body>
-${utente.ordini[0].codice}
-${utente.ordini[0].dataOrdine}
-${utente.ordini[0].ordineItem[0].nome}
-${utente.ordini[0].ordineItem[1].nome}
-${utente.ordini[0].ordineItem[2].nome}
 </body>
 </html>
