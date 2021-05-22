@@ -40,9 +40,16 @@ public class OrdineDAO {
                     r.getTipologie().add(t);
                 }while(rs.next());
                 o.setRistorante(r);
-                if(!OrdineDAO.composizioneOrdine(conn,o))
-                    return null;
             }
+            StringJoiner sj=new StringJoiner(",", "(", ")");
+            sj.add(Integer.toString(codiceOrdine));
+            Map<Integer,Map<Integer, OrdineItem>> menus=OrdineDAO.composizioneOM(conn, sj);
+            Map<Integer,ArrayList<OrdineItem>> prodotti=OrdineDAO.composizioneOP(conn, sj);
+
+            o.setOrdineItems(prodotti.get(codiceOrdine));
+
+            o.getOrdineItems().addAll(menus.get(codiceOrdine).values());
+
             return o;
         }
     }
