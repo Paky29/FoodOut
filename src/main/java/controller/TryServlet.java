@@ -97,7 +97,8 @@ public class TryServlet extends HttpServlet {
             o.setOraPartenza(LocalTime.of(10,30,30));
             o.setOraArrivo(LocalTime.of(11,30,30));
             o.setMetodoPagamento("cash");
-            o.setRistorante(service.doRetrieveById(2));
+            Ristorante r= service.doRetrieveById(2);
+            o.setRistorante(r);
             o.setConsegnato(false);
             o.getOrdineItems().add(oi1);
             o.getOrdineItems().add(oi2);
@@ -119,11 +120,13 @@ public class TryServlet extends HttpServlet {
             System.out.println(o.getOrdineItems().get(3).getOff().getNome());
             System.out.println("----------------------------");
             Utente unico=service4.doRetrieveByEmailAndPassword("ciao@foodout.com", "mico");
-            unico.setOrdini(service3.doRetrieveAll(new Paginator(1,100)));
+            unico.setOrdini(service3.doRetrieveByData(LocalDate.of(2000,10,19), new Paginator(1,100),0));
+            System.out.println(unico.getOrdini().size());
             System.out.println(unico.getOrdini().get(0).getOrdineItems().get(0).getOff().getNome() +" "+unico.getOrdini().get(0).getOrdineItems().get(0).getQuantita());
             System.out.println(unico.getOrdini().get(0).getOrdineItems().get(1).getOff().getNome());
             System.out.println(unico.getOrdini().get(0).getOrdineItems().get(2).getOff().getNome());
             System.out.println(unico.getOrdini().get(0).getOrdineItems().get(3).getOff().getNome());
+
             System.out.println(unico.getOrdini().get(1).getOrdineItems().get(0).getOff().getNome());
             System.out.println(unico.getOrdini().get(1).getOrdineItems().get(1).getOff().getNome());
             System.out.println(unico.getOrdini().get(1).getOrdineItems().get(2).getOff().getNome());
