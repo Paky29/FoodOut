@@ -11,6 +11,7 @@ public class RistoranteExtractor {
         r.setCitta(rs.getString("r.citta"));
         r.setVia(rs.getString("r.via"));
         r.setCivico(rs.getInt("r.civico"));
+        r.setInfo(rs.getString("r.info"));
         r.setSpesaMinima(rs.getFloat("r.spesaMinima"));
         r.setTassoConsegna(rs.getFloat("r.tassoConsegna"));
         r.setUrlImmagine(rs.getString("r.urlImmagine"));

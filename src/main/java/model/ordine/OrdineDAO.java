@@ -7,6 +7,7 @@ import model.prodotto.ProdottoExtractor;
 import model.rider.Rider;
 import model.rider.RiderExtractor;
 import model.ristorante.Ristorante;
+import model.ristorante.RistoranteDAO;
 import model.ristorante.RistoranteExtractor;
 import model.tipologia.Tipologia;
 import model.utente.Utente;
@@ -544,24 +545,60 @@ public class OrdineDAO {
 
     public boolean doUpdate(Ordine o) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("UPDATE Ordine SET dataOrdine=?, totale=?, nota=?, oraPartenza=?, oraArrivo=?, voto=?, giudizio=?, metodoPagamento=?, consegnato=?, codUtente_fk=?, codRis_fk=? WHERE codiceOrdine=?");
+            PreparedStatement ps=conn.prepareStatement("UPDATE Ordine SET dataOrdine=?, totale=?, nota=?, oraPartenza=?, oraArrivo=?, metodoPagamento=?, consegnato=?, codUtente_fk=?, codRis_fk=? WHERE codiceOrdine=?");
             ps.setDate(1,Date.valueOf(o.getDataOrdine()));
             ps.setFloat(2, o.getTotale());
             ps.setString(3, o.getNota());
             ps.setTime(4, Time.valueOf(o.getOraPartenza()));
             ps.setTime(5, Time.valueOf(o.getOraArrivo()));
-            ps.setInt(6, o.getVoto());
-            ps.setString(7, o.getGiudizio());
-            ps.setString(8, o.getMetodoPagamento());
-            ps.setBoolean(9, o.isConsegnato());
-            ps.setInt(10, o.getUtente().getCodice());
-            ps.setInt(11, o.getRistorante().getCodice());
-            ps.setInt(12, o.getCodice());
+            ps.setString(6, o.getMetodoPagamento());
+            ps.setBoolean(7, o.isConsegnato());
+            ps.setInt(8, o.getUtente().getCodice());
+            ps.setInt(9, o.getRistorante().getCodice());
+            ps.setInt(10, o.getCodice());
 
             if(ps.executeUpdate()!=1)
                 return false;
             else
                 return true;
+        }
+    }
+
+    public boolean updateVG(Ordine o) throws SQLException {
+        try(Connection conn=ConPool.getConnection()){
+            conn.setAutoCommit(false);
+            PreparedStatement ps=conn.prepareStatement("UPDATE Ordine SET voto=?, giudizio=? WHERE codiceOrdine=?");
+            ps.setInt(1,o.getVoto());
+            ps.setString(2,o.getGiudizio());
+            ps.setInt(3,o.getCodice());
+            if(ps.executeUpdate()==1){
+                ps=conn.prepareStatement("SELECT AVG(o.voto) as rating FROM Ordine o WHERE o.codRis_fk=?");
+                ps.setInt(1,o.getRistorante().getCodice());
+                ResultSet rs=ps.executeQuery();
+                if(rs.next())
+                {
+                    o.getRistorante().setRating(rs.getInt("rating"));
+                    RistoranteDAO service=new RistoranteDAO();
+                    if(!service.doUpdate(o.getRistorante()))
+                    {
+                        conn.rollback();
+                        conn.setAutoCommit(true);
+                        return false;
+                    }
+                    conn.commit();
+                    conn.setAutoCommit(true);
+                    return true;
+                }
+                else{
+                    conn.rollback();
+                    conn.setAutoCommit(true);
+                    return false;
+                }
+            }
+            else {
+                conn.setAutoCommit(true);
+                return false;
+            }
         }
     }
 

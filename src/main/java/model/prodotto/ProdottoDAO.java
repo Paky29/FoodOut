@@ -79,22 +79,34 @@ public class ProdottoDAO {
             int id=rs.getInt(1);
             p.setCodice(id);
 
-            ps = conn.prepareStatement("INSERT INTO AppartenenzaRT (codRis_fk,nomeTip_fk) VALUES (?,?)");
-            ps.setInt(1,p.getRistorante().getCodice());
+            ps=conn.prepareStatement("SELECT art.codRis_fk FROM AppartenenzaRT art INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE art.codRis_fk=? AND t.nome=?");
+            ps.setInt(1, p.getRistorante().getCodice());
             ps.setString(2,p.getTipologia().getNome());
-            int total=ps.executeUpdate();
+            rs=ps.executeQuery();
+            if(!rs.next()){
+                ps = conn.prepareStatement("INSERT INTO AppartenenzaRT (codRis_fk,nomeTip_fk) VALUES (?,?)");
+                ps.setInt(1,p.getRistorante().getCodice());
+                ps.setString(2,p.getTipologia().getNome());
+                int total=ps.executeUpdate();
 
-            if (rows==total)
+                if (rows==total)
+                {
+                    conn.commit();
+                    conn.setAutoCommit(true);
+                    return true;
+                }
+                else
+                {
+                    conn.rollback();
+                    conn.setAutoCommit(true);
+                    return false;
+                }
+            }
+            else
             {
                 conn.commit();
                 conn.setAutoCommit(true);
                 return true;
-            }
-            else
-            {
-                conn.rollback();
-                conn.setAutoCommit(true);
-                return false;
             }
         }
     }
