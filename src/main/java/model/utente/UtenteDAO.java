@@ -1,5 +1,7 @@
 package model.utente;
 
+import model.disponibilita.Disponibilita;
+import model.disponibilita.DisponibilitaExtractor;
 import model.ordine.Ordine;
 import model.ordine.OrdineDAO;
 import model.ristorante.Ristorante;
@@ -12,6 +14,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 
 //cambiare i do retrieve dividendo la query utente-ordini
 public class UtenteDAO {
@@ -64,6 +67,7 @@ public class UtenteDAO {
             OrdineDAO service=new OrdineDAO();
             if(rs.next()){
                 u=UtenteExtractor.extract(rs);
+                u.setPassword(rs.getString("u.pw"));
                 do{
                     int codiceRistorante=rs.getInt("r.codiceRistorante");
                     if(!ristoranti.containsKey(codiceRistorante)){
@@ -107,7 +111,7 @@ public class UtenteDAO {
 
     public ArrayList<Utente> doRetrievebyPref(int codiceRistorante, Paginator paginator) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore FROM Utente u INNER JOIN Preferenza o ON p.codUtente_fk=u.codiceUtente WHERE p.codRis_fk=? LIMIT ?,?");
+            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore FROM Utente u INNER JOIN Preferenza p ON p.codUtente_fk=u.codiceUtente WHERE p.codRis_fk=? LIMIT ?,?");
             ps.setInt(1, codiceRistorante);
             ps.setInt(2, paginator.getOffset());
             ps.setInt(3, paginator.getLimit());
@@ -121,7 +125,52 @@ public class UtenteDAO {
                 return null;
             return utenti;
         }
+    }
 
+    public ArrayList<Ristorante> doRetrievebyUtentePref(int codiceUtente, Paginator paginator) throws SQLException{
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, d.giorno, d.oraApertura, d.oraChiusura FROM Preferenza p INNER JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante WHERE p.codUtente_fk= ? LIMIT ?,?");
+            ps.setInt(1,codiceUtente);
+            ps.setInt(2,paginator.getOffset());
+            ps.setInt(3,paginator.getLimit());
+            Map<Integer, Ristorante> ristoranti=new LinkedHashMap<>();
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+                int codiceRistorante=rs.getInt("r.codiceRistorante");
+                if(!ristoranti.containsKey(codiceRistorante)){
+                    Ristorante r=RistoranteExtractor.extract(rs);
+                    ristoranti.put(codiceRistorante, r);
+                }
+
+                Disponibilita d= DisponibilitaExtractor.extract(rs);
+                ristoranti.get(codiceRistorante).getGiorni().add(d);
+            }
+
+            if(ristoranti.isEmpty())
+                return null;
+
+            StringJoiner sj=new StringJoiner(",","(", ")");
+            for(int key: ristoranti.keySet()){
+                sj.add(Integer.toString(key));
+            }
+
+            PreparedStatement tip=conn.prepareStatement("SELECT art.codRis_fk, t.nome, t.descrizione FROM AppartenenzaRT art INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE art.codRis_fk IN" + sj.toString());
+            ResultSet setTip=tip.executeQuery();
+
+            while(setTip.next()){
+                int codiceRistorante=setTip.getInt("art.codRis_fk");
+                Tipologia t=new Tipologia();
+                t.setNome(setTip.getString("t.nome"));
+                t.setDescrizione(setTip.getString("t.descrizione"));
+                ristoranti.get(codiceRistorante).getTipologie().add(t);
+            }
+
+            if(ristoranti.isEmpty())
+                return null;
+            else
+                return new ArrayList<Ristorante>(ristoranti.values());
+        }
     }
 
     public ArrayList<Utente> doRetrievebyCitta(String citta, Paginator paginator) throws SQLException{

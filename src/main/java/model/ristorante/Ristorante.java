@@ -119,7 +119,7 @@ public class Ristorante {
     }
 
     private int codice, civico;
-    private java.lang.String nome, provincia, citta, via, info;
+    private String nome, provincia, citta, via, info;
     private float spesaMinima, tassoConsegna;
     private ArrayList<Prodotto> prodotti;
     private ArrayList<Disponibilita> giorni;

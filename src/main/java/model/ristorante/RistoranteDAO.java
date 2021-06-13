@@ -4,6 +4,8 @@ import com.mysql.cj.util.StringUtils;
 import model.disponibilita.Disponibilita;
 import model.disponibilita.DisponibilitaExtractor;
 import model.tipologia.Tipologia;
+import model.utente.Utente;
+import model.utente.UtenteExtractor;
 import model.utility.ConPool;
 import model.utility.Paginator;
 
@@ -61,15 +63,17 @@ public class RistoranteDAO {
                     ristoranti.put(codiceRistorante, r);
                 }
             }
+
+            if(ristoranti.isEmpty())
+                return null;
+
             StringJoiner sj=new StringJoiner(",","(", ")");
             for(int key: ristoranti.keySet()){
                 sj.add(Integer.toString(key));
             }
 
-
             PreparedStatement disp=conn.prepareStatement("SELECT d.codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN " + sj.toString());
             ResultSet setDisp=disp.executeQuery();
-
 
             while(setDisp.next()){
                 int codiceRistorante=setDisp.getInt("d.codRis_fk");
@@ -117,6 +121,9 @@ public class RistoranteDAO {
                 ristoranti.get(codiceRistorante).getGiorni().add(d);
             }
 
+            if(ristoranti.isEmpty())
+                return null;
+
             StringJoiner sj=new StringJoiner(",","(", ")");
             for(int key: ristoranti.keySet()){
                 sj.add(Integer.toString(key));
@@ -142,7 +149,7 @@ public class RistoranteDAO {
 
     public ArrayList<Ristorante> doRetrieveByCitta(String citta, Paginator paginator) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, d.giorno, d.oraApertura, d.oraChiusura FROM Ristorante r INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE r.citta=? LIMIT ?,?");
+            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, d.giorno, d.oraApertura, d.oraChiusura FROM Ristorante r INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante WHERE r.citta=? LIMIT ?,?");
             ps.setString(1,citta);
             ps.setInt(2,paginator.getOffset());
             ps.setInt(3,paginator.getLimit());
@@ -159,6 +166,9 @@ public class RistoranteDAO {
                 Disponibilita d=DisponibilitaExtractor.extract(rs);
                 ristoranti.get(codiceRistorante).getGiorni().add(d);
             }
+
+            if(ristoranti.isEmpty())
+                return null;
 
             StringJoiner sj=new StringJoiner(",","(", ")");
             for(int key: ristoranti.keySet()){
@@ -186,7 +196,7 @@ public class RistoranteDAO {
     // restituisce i ristoranti con un tasso di consegna inferiore o uguale a quello inserito
     public ArrayList<Ristorante> doRetrieveByTassoConsegna(float tasso, String citta, Paginator paginator) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, d.giorno, d.oraApertura, d.oraChiusura FROM Ristorante r INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE tassoConsegna<=? AND r.citta=? LIMIT ?,?");
+            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, d.giorno, d.oraApertura, d.oraChiusura FROM Ristorante r INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante WHERE tassoConsegna<=? AND r.citta=? LIMIT ?,?");
             ps.setFloat(1, tasso);
             ps.setString(2,citta);
             ps.setInt(3,paginator.getOffset());
@@ -204,6 +214,9 @@ public class RistoranteDAO {
                 Disponibilita d=DisponibilitaExtractor.extract(rs);
                 ristoranti.get(codiceRistorante).getGiorni().add(d);
             }
+
+            if(ristoranti.isEmpty())
+                return null;
 
             StringJoiner sj=new StringJoiner(",","(", ")");
             for(int key: ristoranti.keySet()){
@@ -231,8 +244,8 @@ public class RistoranteDAO {
     //in base alla città dell'utente e al nome del ristorante inserito
     public ArrayList<Ristorante> doRetrieveByNomeAndCitta(String citta, String nome, Paginator paginator) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, d.giorno, d.oraApertura, d.oraChiusura FROM Ristorante r INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE r.nome=? AND r.citta=? LIMIT ?,?");
-            ps.setString(1, nome);
+            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, d.giorno, d.oraApertura, d.oraChiusura FROM Ristorante r INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante WHERE r.nome LIKE ? AND r.citta=? LIMIT ?,?");
+            ps.setString(1, "%"+nome+"%");
             ps.setString(2,citta);
             ps.setInt(3,paginator.getOffset());
             ps.setInt(4,paginator.getLimit());
@@ -249,6 +262,9 @@ public class RistoranteDAO {
                 Disponibilita d=DisponibilitaExtractor.extract(rs);
                 ristoranti.get(codiceRistorante).getGiorni().add(d);
             }
+
+            if(ristoranti.isEmpty())
+                return null;
 
             StringJoiner sj=new StringJoiner(",","(", ")");
             for(int key: ristoranti.keySet()){
@@ -275,8 +291,8 @@ public class RistoranteDAO {
 
     public ArrayList<Ristorante> doRetrieveByNome(String nome, Paginator paginator) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, d.giorno, d.oraApertura, d.oraChiusura FROM Ristorante r INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE r.nome=? LIMIT ?,?");
-            ps.setString(1, nome);
+            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, d.giorno, d.oraApertura, d.oraChiusura FROM Ristorante r INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante WHERE r.nome LIKE ? LIMIT ?,?");
+            ps.setString(1, "%"+nome+"%");
             ps.setInt(2,paginator.getOffset());
             ps.setInt(3,paginator.getLimit());
             Map<Integer, Ristorante> ristoranti=new LinkedHashMap<>();
@@ -292,6 +308,9 @@ public class RistoranteDAO {
                 Disponibilita d=DisponibilitaExtractor.extract(rs);
                 ristoranti.get(codiceRistorante).getGiorni().add(d);
             }
+
+            if(ristoranti.isEmpty())
+                return null;
 
             StringJoiner sj=new StringJoiner(",","(", ")");
             for(int key: ristoranti.keySet()){
@@ -316,9 +335,27 @@ public class RistoranteDAO {
         }
     }
 
+    public ArrayList<Utente> doRetrievebyPref(int codiceRistorante, Paginator paginator) throws SQLException{
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore FROM Utente u INNER JOIN Preferenza p ON p.codUtente_fk=u.codiceUtente WHERE p.codRis_fk=? LIMIT ?,?");
+            ps.setInt(1, codiceRistorante);
+            ps.setInt(2, paginator.getOffset());
+            ps.setInt(3, paginator.getLimit());
+            ResultSet rs=ps.executeQuery();
+            ArrayList<Utente> utenti=new ArrayList<>();
+            while(rs.next()){
+                Utente u= UtenteExtractor.extract(rs);
+                utenti.add(u);
+            }
+            if(utenti.isEmpty())
+                return null;
+            return utenti;
+        }
+    }
+
     public ArrayList<Ristorante> doRetrieveAll(Paginator paginator) throws SQLException{
             try(Connection conn=ConPool.getConnection()){
-                PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, d.giorno, d.oraApertura, d.oraChiusura FROM Ristorante r INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LIMIT ?,?");
+                PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, d.giorno, d.oraApertura, d.oraChiusura FROM Ristorante r INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante LIMIT ?,?");
                 ps.setInt(1,paginator.getOffset());
                 ps.setInt(2,paginator.getLimit());
                 Map<Integer, Ristorante> ristoranti=new LinkedHashMap<>();
@@ -334,6 +371,9 @@ public class RistoranteDAO {
                     Disponibilita d=DisponibilitaExtractor.extract(rs);
                     ristoranti.get(codiceRistorante).getGiorni().add(d);
                 }
+
+                if(ristoranti.isEmpty())
+                    return null;
 
                 StringJoiner sj=new StringJoiner(",","(", ")");
                 for(int key: ristoranti.keySet()){

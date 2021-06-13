@@ -11,7 +11,6 @@ public class UtenteExtractor {
         u.setCognome(set.getString("u.cognome"));
         u.setSaldo(set.getFloat("u.saldo"));
         u.setEmail(set.getString("u.email"));
-        u.setPassword(set.getString("u.pw"));
         u.setProvincia(set.getString("u.provincia"));
         u.setCitta(set.getString("u.citta"));
         u.setVia(set.getString("u.via"));
