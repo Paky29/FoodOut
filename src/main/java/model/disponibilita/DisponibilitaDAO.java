@@ -8,7 +8,7 @@ public class DisponibilitaDAO {
 
     public boolean doSave(Disponibilita d, int codiceRistorante) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("INSERT INTO Disponibilita (codRis_fk,nomeG_fk,oraApertura,oraChiusura) VALUES(?,?,?,?)");
+            PreparedStatement ps=conn.prepareStatement("INSERT INTO Disponibilita (codRis_fk,giorno,oraApertura,oraChiusura) VALUES(?,?,?,?)");
             ps.setInt(1,codiceRistorante);
             ps.setString(2,d.getGiorno());
             ps.setTime(3,Time.valueOf(d.getOraApertura()));
@@ -22,11 +22,11 @@ public class DisponibilitaDAO {
 
     public boolean doUpdate(Disponibilita d, int codiceRistorante) throws SQLException{
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("UPDATE Disponibilita SET giorno=?, oraApertura=?, oraChiusura=?) WHERE codRis_fk=?)");
-            ps.setString(1,d.getGiorno());
-            ps.setTime(2,Time.valueOf(d.getOraApertura()));
-            ps.setTime(3,Time.valueOf(d.getOraChiusura()));
-            ps.setInt(4,codiceRistorante);
+            PreparedStatement ps=conn.prepareStatement("UPDATE Disponibilita SET oraApertura=?, oraChiusura=?) WHERE codRis_fk=? AND giorno=?)");
+            ps.setTime(1,Time.valueOf(d.getOraApertura()));
+            ps.setTime(2,Time.valueOf(d.getOraChiusura()));
+            ps.setInt(3,codiceRistorante);
+            ps.setString(4, d.getGiorno());
             if(ps.executeUpdate()!=1)
                 return false;
             else

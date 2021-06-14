@@ -7,7 +7,7 @@ public class TurnoDAO {
 
     public boolean doSave(Turno t, int codiceRider) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("INSERT INTO LavoroRider (codRider_fk,nomeG_fk,oraApertura,oraChiusura) VALUES(?,?,?,?)");
+            PreparedStatement ps=conn.prepareStatement("INSERT INTO Turno (codRider_fk,nomeG_fk,oraInizio,oraFine) VALUES(?,?,?,?)");
             ps.setInt(1,codiceRider);
             ps.setString(2,t.getGiorno());
             ps.setTime(3,Time.valueOf(t.getOraInizio()));
@@ -21,7 +21,7 @@ public class TurnoDAO {
 
     public boolean doUpdate(Turno t, int codiceRider) throws SQLException{
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("UPDATE LavoroRider SET giorno=?, oraApertura=?, oraChiusura=?) WHERE codRider_fk=?)");
+            PreparedStatement ps=conn.prepareStatement("UPDATE Turno SET giorno=?, oraInizio=?, oraFine=?) WHERE codRider_fk=?)");
             ps.setString(1,t.getGiorno());
             ps.setTime(2,Time.valueOf(t.getOraInizio()));
             ps.setTime(3,Time.valueOf(t.getOraFine()));
@@ -35,7 +35,7 @@ public class TurnoDAO {
 
     public boolean doDelete(String giorno, int codiceRider) throws SQLException{
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("DELETE FROM LavoroRider WHERE codRider_fk=? AND giorno=?");
+            PreparedStatement ps=conn.prepareStatement("DELETE FROM Turno WHERE codRider_fk=? AND giorno=?");
             ps.setInt(1, codiceRider);
             ps.setString(2,giorno);
             if(ps.executeUpdate()!=1)

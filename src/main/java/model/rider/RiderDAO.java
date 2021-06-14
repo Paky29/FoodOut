@@ -17,7 +17,7 @@ public class RiderDAO {
 
     public Rider doRetrievebyId(int codiceRider) throws SQLException{
         try(Connection conn = ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, citta, veicolo, giorno, oraInizio, oraFine FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk WHERE codiceRider=? AND password=SHA1(?)");
+            PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, citta, veicolo, giorno, oraInizio, oraFine FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk WHERE codiceRider=?");
             ps.setInt(1, codiceRider);
             ResultSet rs=ps.executeQuery();
             OrdineDAO service=new OrdineDAO();
@@ -37,9 +37,9 @@ public class RiderDAO {
     }
 
 
-    public Rider doRetrievebyEmailAndPassword(String email, String password, Paginator paginator) throws SQLException {
+    public Rider doRetrievebyEmailAndPassword(String email, String password) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, pw, citta, veicolo, giorno, oraInizio, oraFine FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk WHERE email=? AND password=SHA1(?)");
+            PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, pw, citta, veicolo, giorno, oraInizio, oraFine FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk WHERE email=? AND pw=SHA1(?)");
             ps.setString(1, email);
             ps.setString(2, password);
             ResultSet rs=ps.executeQuery();
@@ -47,6 +47,7 @@ public class RiderDAO {
             Rider rd=null;
             if(rs.next()){
                 rd = RiderExtractor.extract(rs);
+                rd.setPassword(rs.getString("rd.pw"));
                 do{
                     Turno t= TurnoExtractor.extract(rs);
                     rd.getTurni().add(t);
@@ -63,15 +64,15 @@ public class RiderDAO {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, citta, veicolo, giorno, oraInizio, oraFine FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk LIMIT ?,?");
             ps.setInt(1, paginator.getOffset());
-            ps.setInt(1, paginator.getLimit());
+            ps.setInt(2, paginator.getLimit());
 
             ResultSet rs=ps.executeQuery();
             Map<Integer, Rider> riders= new LinkedHashMap<>();
             while(rs.next()){
                 int codiceRider=rs.getInt("rd.codiceRider");
                 if(!riders.containsKey(codiceRider)){
-                    Rider r=RiderExtractor.extract(rs);
-                    riders.put(codiceRider, r);
+                    Rider rd=RiderExtractor.extract(rs);
+                    riders.put(codiceRider, rd);
                 }
                 Turno t=TurnoExtractor.extract(rs);
                 riders.get(codiceRider).getTurni().add(t);
@@ -94,8 +95,8 @@ public class RiderDAO {
             while(rs.next()){
                 int codiceRider=rs.getInt("rd.codiceRider");
                 if(!riders.containsKey(codiceRider)){
-                    Rider r=RiderExtractor.extract(rs);
-                    riders.put(codiceRider, r);
+                    Rider rd=RiderExtractor.extract(rs);
+                    riders.put(codiceRider, rd);
                 }
 
                 Turno t=TurnoExtractor.extract(rs);
@@ -122,8 +123,8 @@ public class RiderDAO {
             while(rs.next()){
                 int codiceRider=rs.getInt("rd.codiceRider");
                 if(!riders.containsKey(codiceRider)){
-                    Rider r=RiderExtractor.extract(rs);
-                    riders.put(codiceRider, r);
+                    Rider rd=RiderExtractor.extract(rs);
+                    riders.put(codiceRider, rd);
                 }
 
                 Turno t=TurnoExtractor.extract(rs);
@@ -167,27 +168,31 @@ public class RiderDAO {
         }
     }
 
-    public boolean doSave(Rider r) throws SQLException{
+    public boolean doSave(Rider rd) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("INSERT INTO Rider (email,pw,veicolo,citta) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,r.getEmail());
-            ps.setString(2,r.getPassword());
-            ps.setString(3,r.getVeicolo());
-            ps.setString(4,r.getCitta());
+            ps.setString(1,rd.getEmail());
+            ps.setString(2,rd.getPassword());
+            ps.setString(3,rd.getVeicolo());
+            ps.setString(4,rd.getCitta());
             if(ps.executeUpdate()!=1)
                 return false;
             ResultSet rs=ps.getGeneratedKeys();
             rs.next();
             int id=rs.getInt(1);
-            r.setCodice(id);
+            rd.setCodice(id);
             return true;
         }
     }
 
-    public boolean doUpdate(Rider r) throws SQLException{
+    public boolean doUpdate(Rider rd) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("UPDATE Rider SET email=?, pw=?, veicolo=?, citta=? WHERE codiceRider=?");
-            ps.setInt(1,r.getCodice());
+            ps.setString(1,rd.getEmail());
+            ps.setString(2,rd.getPassword());
+            ps.setString(3,rd.getVeicolo());
+            ps.setString(4,rd.getCitta());
+            ps.setInt(1,rd.getCodice());
             if(ps.executeUpdate()!=1)
                 return false;
             else

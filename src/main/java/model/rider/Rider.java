@@ -3,6 +3,10 @@ package model.rider;
 import model.turno.Turno;
 import model.ordine.Ordine;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class Rider {
@@ -33,7 +37,14 @@ public class Rider {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        try{
+            MessageDigest digest=MessageDigest.getInstance("SHA-1");
+            digest.reset();
+            digest.update(password.getBytes(StandardCharsets.UTF_8));
+            this.password = String.format("%040x",new BigInteger(1,digest.digest()));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getVeicolo() {

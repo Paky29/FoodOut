@@ -22,6 +22,7 @@ public class MenuDAO {
                     Prodotto p=new Prodotto();
                     p.setCodice(rs.getInt("p.codiceProdotto"));
                     p.setNome(rs.getString("p.nome"));
+                    m.getProdotti().add(p);
                 }while(rs.next());
             }
             return m;
@@ -93,7 +94,7 @@ public class MenuDAO {
 
             int total=0;
             for(Prodotto p:m.getProdotti()){
-                ps=conn.prepareStatement("INSERT INTO AppartenenzaPM (conMenu_fk, codProd_fk) VALUES (?,?) ");
+                ps=conn.prepareStatement("INSERT INTO AppartenenzaPM (codMenu_fk, codProd_fk) VALUES (?,?) ");
                 ps.setInt(1,id);
                 ps.setInt(2,p.getCodice());
                 total+=ps.executeUpdate();
