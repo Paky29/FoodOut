@@ -294,8 +294,8 @@ public class TryServlet extends HttpServlet {
             OrdineItem oi5=new OrdineItem();
             oi5.setOff(p3);
             oi5.setQuantita(1);
-            //ordine1.getOrdineItems().add(oi1);
-          //  ordine1.getOrdineItems().add(oi2);
+            ordine1.getOrdineItems().add(oi1);
+            ordine1.getOrdineItems().add(oi2);
             ordine1.getOrdineItems().add(oi3);
             ordine1.setUtente(u);
 
@@ -318,23 +318,23 @@ public class TryServlet extends HttpServlet {
             ordineDAO.doSave(ordine1);
             Ordine ordine2=ordineDAO.doRetrieveById(1);
             ordine2.setUtente(u1);
+            System.out.println(ordine2.getRistorante().getNome());
             ordineDAO.doSave(ordine2);
-            ArrayList<Ordine> ordine3=ordineDAO.doRetrieveByUtente(u1);
+            ArrayList<Ordine> ordine3=ordineDAO.doRetrieveByRistorante(ristoranteDAO.doRetrieveById(1), new Paginator(1,100));
 
-            for(OrdineItem oi:ordine3.get(0).getOrdineItems()){
-                if(oi.getOff().getClass().getName().contains("Prodotto"))
-                {
-                    Prodotto p= (Prodotto)oi.getOff();
-                    System.out.println(p.getNome());
-                    System.out.println(p.getIngredienti());
-                }
-                else
-                {
-                    Menu m=(Menu) oi.getOff();
-                    System.out.println(m.getNome());
-                    System.out.println(m.getPrezzo());
-                    for(Prodotto p:m.getProdotti())
+            for(int i=0;i<2;++i) {
+                System.out.println("-----------------------");
+                for (OrdineItem oi : ordine3.get(i).getOrdineItems()) {
+                    System.out.println(ordine3.get(0).getRistorante().getNome());
+                    if (oi.getOff().getClass().getName().contains("Prodotto")) {
+                        Prodotto p = (Prodotto) oi.getOff();
                         System.out.println(p.getNome());
+                        System.out.println(p.getIngredienti());
+                    } else {
+                        Menu m = (Menu) oi.getOff();
+                        System.out.println(m.getNome());
+                        System.out.println(m.getPrezzo());
+                    }
                 }
             }
             ordineDAO.updateRider(1,1);

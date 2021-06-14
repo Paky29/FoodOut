@@ -669,6 +669,7 @@ public class OrdineDAO {
         }
     }
 
+    //i menu e i prodotti degli ordini non hanno il ristorante perchè è lo stesso dell'ordine, un ordine viene effettuato presso un solo ristorante
     private static Map<Integer,Map<Integer, OrdineItem>> composizioneOM(Connection conn, StringJoiner sj) throws SQLException {
         PreparedStatement menu=conn.prepareStatement("SELECT m.codiceMenu, m.nome, m.prezzo, m.sconto, m.valido, com.codOrd_fk, com.quantita,  p.codiceProdotto, p.nome, p.ingredienti, p.info, p.prezzo, p.sconto, p.valido, p.urlImmagine, t.nome, t.descrizione FROM ComposizioneOM com INNER JOIN Menu m ON com.codMenu_fk=m.codiceMenu INNER JOIN AppartenenzaPM apm ON m.codiceMenu=apm.codMenu_fk INNER JOIN Prodotto p ON apm.codProd_fk=p.codiceProdotto INNER JOIN Tipologia t ON p.nomeTip_fk=t.nome WHERE com.codOrd_fk IN " + sj.toString());
         ResultSet rs=menu.executeQuery();
