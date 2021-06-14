@@ -170,6 +170,8 @@ public class RiderDAO {
 
     public boolean doSave(Rider rd) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
+            if(!rd.getEmail().contains("foodout.rider.com"))
+                return false;
             PreparedStatement ps=conn.prepareStatement("INSERT INTO Rider (email,pw,veicolo,citta) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1,rd.getEmail());
             ps.setString(2,rd.getPassword());
@@ -187,6 +189,8 @@ public class RiderDAO {
 
     public boolean doUpdate(Rider rd) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
+            if(!rd.getEmail().contains("foodout.rider.com"))
+                return false;
             PreparedStatement ps=conn.prepareStatement("UPDATE Rider SET email=?, pw=?, veicolo=?, citta=? WHERE codiceRider=?");
             ps.setString(1,rd.getEmail());
             ps.setString(2,rd.getPassword());
