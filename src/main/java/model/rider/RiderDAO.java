@@ -192,7 +192,7 @@ public class RiderDAO {
             ps.setString(2,rd.getPassword());
             ps.setString(3,rd.getVeicolo());
             ps.setString(4,rd.getCitta());
-            ps.setInt(1,rd.getCodice());
+            ps.setInt(5,rd.getCodice());
             if(ps.executeUpdate()!=1)
                 return false;
             else

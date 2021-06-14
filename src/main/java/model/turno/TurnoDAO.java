@@ -7,7 +7,7 @@ public class TurnoDAO {
 
     public boolean doSave(Turno t, int codiceRider) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("INSERT INTO Turno (codRider_fk,nomeG_fk,oraInizio,oraFine) VALUES(?,?,?,?)");
+            PreparedStatement ps=conn.prepareStatement("INSERT INTO Turno (codRider_fk,giorno,oraInizio,oraFine) VALUES(?,?,?,?)");
             ps.setInt(1,codiceRider);
             ps.setString(2,t.getGiorno());
             ps.setTime(3,Time.valueOf(t.getOraInizio()));
