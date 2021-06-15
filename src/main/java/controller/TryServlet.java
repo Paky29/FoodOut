@@ -1,25 +1,9 @@
 package controller;
 
-import model.disponibilita.Disponibilita;
-import model.disponibilita.DisponibilitaDAO;
-import model.menu.Menu;
+
 import model.menu.MenuDAO;
-import model.ordine.Ordine;
-import model.ordine.OrdineDAO;
-import model.ordine.OrdineItem;
 import model.prodotto.Prodotto;
 import model.prodotto.ProdottoDAO;
-import model.rider.Rider;
-import model.rider.RiderDAO;
-import model.ristorante.Ristorante;
-import model.ristorante.RistoranteDAO;
-import model.tipologia.Tipologia;
-import model.tipologia.TipologiaDAO;
-import model.turno.Turno;
-import model.turno.TurnoDAO;
-import model.utente.Utente;
-import model.utente.UtenteDAO;
-import model.utility.Paginator;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -27,11 +11,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 @WebServlet("/Tryservlet")
@@ -236,7 +217,7 @@ public class TryServlet extends HttpServlet {
 
             }*/
 
-            RistoranteDAO ristoranteDAO=new RistoranteDAO();
+            /*RistoranteDAO ristoranteDAO=new RistoranteDAO();
             UtenteDAO utenteDAO=new UtenteDAO();
             Utente u=new Utente();
             u.setEmail("ciao@foodout.com");
@@ -249,18 +230,6 @@ public class TryServlet extends HttpServlet {
             u.setVia("Merg");
             u.setCivico(3);
             utenteDAO.doSave(u);
-
-            Utente u1=new Utente();
-            u1.setEmail("hello@foodout.com");
-            u1.setPassword("mico");
-            u1.setSaldo(1000);
-            u1.setNome("Peppe");
-            u1.setCognome("Marrone");
-            u1.setCitta("Caserta");
-            u1.setProvincia("CE");
-            u1.setVia("Casaert");
-            u1.setCivico(3);
-            utenteDAO.doSave(u1);
 
             ProdottoDAO prodottoDAO=new ProdottoDAO();
             OrdineDAO ordineDAO=new OrdineDAO();
@@ -316,27 +285,7 @@ public class TryServlet extends HttpServlet {
             riderDAO.doSave(r2);
 
             ordineDAO.doSave(ordine1);
-            Ordine ordine2=ordineDAO.doRetrieveById(1);
-            ordine2.setUtente(u1);
-            System.out.println(ordine2.getRistorante().getNome());
-            ordineDAO.doSave(ordine2);
-            ArrayList<Ordine> ordine3=ordineDAO.doRetrieveByRistorante(ristoranteDAO.doRetrieveById(1), new Paginator(1,100));
-
-            for(int i=0;i<2;++i) {
-                System.out.println("-----------------------");
-                for (OrdineItem oi : ordine3.get(i).getOrdineItems()) {
-                    System.out.println(ordine3.get(0).getRistorante().getNome());
-                    if (oi.getOff().getClass().getName().contains("Prodotto")) {
-                        Prodotto p = (Prodotto) oi.getOff();
-                        System.out.println(p.getNome());
-                        System.out.println(p.getIngredienti());
-                    } else {
-                        Menu m = (Menu) oi.getOff();
-                        System.out.println(m.getNome());
-                        System.out.println(m.getPrezzo());
-                    }
-                }
-            }
+            ordineDAO.doSave(ordine1);
             ordineDAO.updateRider(1,1);
             ordineDAO.updateRider(2,2);
 
@@ -372,8 +321,22 @@ public class TryServlet extends HttpServlet {
                 System.out.println("Data:" + o.getDataOrdine().toString());
                 System.out.println("Totale:" + o.getTotale());
                 System.out.println("Nota:" + o.getNota());
-            }
+            }*/
 
+            ProdottoDAO prodottoDAO=new ProdottoDAO();
+            ArrayList<Prodotto> prodottos=new ArrayList<>();
+            prodottos.add(prodottoDAO.doRetrievebyId(1));
+            MenuDAO menuDAO=new MenuDAO();
+            menuDAO.addProducts(1,prodottos);
+            for(Prodotto p: menuDAO.doRetrieveById(1).getProdotti()){
+                System.out.println("Nome: " + p.getNome());
+                System.out.println("Ingredienti: " + p.getIngredienti());
+                System.out.println("Prezzo: " + p.getPrezzo());
+                System.out.println("Sconto: " + p.getSconto());
+                System.out.println("Info: " + p.getInfo());
+                System.out.println("Valido: " + p.isValido());
+                System.out.println("URL: " + p.getUrlImmagine());
+            }
 
 
 
