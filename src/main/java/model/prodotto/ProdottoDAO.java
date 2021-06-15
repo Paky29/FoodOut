@@ -1,5 +1,6 @@
 package model.prodotto;
 
+import model.menu.MenuDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteExtractor;
 import model.tipologia.Tipologia;
@@ -130,7 +131,6 @@ public class ProdottoDAO {
         }
     }
 
-    //specificare rapporto prodotto-menu
     public boolean updateValidita(Prodotto p, boolean valido) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             conn.setAutoCommit(false);
@@ -155,6 +155,16 @@ public class ProdottoDAO {
                         }
                         else{
                             ps=conn.prepareStatement("DELETE FROM AppartenenzaRT WHERE codRis_fk=? AND nomeTip_fk=?");
+
+                            MenuDAO menuDAO=new MenuDAO();
+                            int tot_menu=menuDAO.doRetrieveByProdotto(p.getCodice()).size();
+                            PreparedStatement ps2=conn.prepareStatement("UPDATE AppartenenzaPM, Menu SET valido=false WHERE codMenu_fk=codiceMenu AND codProd_fk=?");
+                            ps2.setInt(1,p.getCodice());
+                            if(ps2.executeUpdate()!=tot_menu) {
+                                conn.rollback();
+                                conn.setAutoCommit(true);
+                                return false;
+                            }
                         }
 
                         ps.setInt(1, p.getRistorante().getCodice());
@@ -164,6 +174,8 @@ public class ProdottoDAO {
                             conn.setAutoCommit(true);
                             return false;
                         }
+
+
 
                         conn.commit();
                         conn.setAutoCommit(true);

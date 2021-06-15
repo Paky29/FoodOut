@@ -2,13 +2,14 @@ package model.menu;
 
 import model.prodotto.Prodotto;
 import model.utility.ConPool;
+
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
-//aggiungere eliminaProdotto e aggiungiProdotto
 public class MenuDAO {
     public MenuDAO() {}
 
@@ -134,8 +135,15 @@ public class MenuDAO {
         }
     }
 
-    public boolean updateValidita(int codiceMenu, boolean valido) throws SQLException {
+    public boolean updateValidita(int codiceMenu, boolean valido) throws SQLException, NotValidProductsExcpetion {
         try (Connection conn = ConPool.getConnection()) {
+            if(valido){
+                PreparedStatement ps_false=conn.prepareStatement("SELECT * FROM Prodotto p INNER JOIN AppartenenzaPM apm ON p.codiceProdotto=apm.codProd_fk WHERE p.valido=false AND apm.codMenu_fk=?");
+                ps_false.setInt(1,codiceMenu);
+                ResultSet rs=ps_false.executeQuery();
+                if(rs.next())
+                    throw new NotValidProductsExcpetion("Alcuni prodotti del menu non sono validi");
+            }
             PreparedStatement ps = conn.prepareStatement("UPDATE Menu SET valido=? WHERE codiceMenu=?");
             ps.setBoolean(1, valido);
             ps.setInt(2, codiceMenu);
