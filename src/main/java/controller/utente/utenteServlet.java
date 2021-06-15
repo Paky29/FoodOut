@@ -6,13 +6,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import controller.http.controller;
 
 @WebServlet(name="utenteServlet", value="/utente/*")
-public class utenteServlet extends HttpServlet {
+public class utenteServlet extends controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       String path=(req.getPathInfo()!=null) ? req.getPathInfo() : "/";
-       switch(path){
+        String path=getPath(req);
+        switch(path){
            case "/":
                break;
            case "/signup":
@@ -27,12 +28,12 @@ public class utenteServlet extends HttpServlet {
                break;
            default:
                resp.sendError(HttpServletResponse.SC_NOT_FOUND,"Risorsa non trovata");
-       }
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path=(req.getPathInfo()!=null) ? req.getPathInfo() : "/";
+        String path=getPath(req);
         switch(path){
             case "/":
                 break;
@@ -51,6 +52,8 @@ public class utenteServlet extends HttpServlet {
             case "/update-cliente":
                 break;
             case "/deposit":
+                break;
+            case "/delete":
                 break;
             default:
                 resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED,"Operazione non consentita");

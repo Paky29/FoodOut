@@ -36,6 +36,26 @@ public class RiderDAO {
         }
     }
 
+    public Rider doRetrievebyEmail(String email) throws SQLException {
+        try(Connection conn= ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, citta, veicolo, giorno, oraInizio, oraFine FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk WHERE email=?");
+            ps.setString(1, email);
+            ResultSet rs=ps.executeQuery();
+            OrdineDAO service=new OrdineDAO();
+            Rider rd=null;
+            if(rs.next()){
+                rd = RiderExtractor.extract(rs);
+                do{
+                    Turno t= TurnoExtractor.extract(rs);
+                    rd.getTurni().add(t);
+                }while(rs.next());
+
+                ArrayList<Ordine> ordini=service.doRetrieveByRider(rd);
+                rd.setOrdini(ordini);
+            }
+            return rd;
+        }
+    }
 
     public Rider doRetrievebyEmailAndPassword(String email, String password) throws SQLException {
         try(Connection conn= ConPool.getConnection()){

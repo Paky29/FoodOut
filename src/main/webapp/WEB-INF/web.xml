@@ -6,7 +6,14 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-
+    <context-param>
+        <param-name>basePath</param-name>
+        <param-value>"/WEB-INF/views/</param-value>
+    </context-param>
+    <context-param>
+        <param-name>engine</param-name>
+        <param-value>.jsp</param-value>
+    </context-param>
    <error-page>
        <error-code>404</error-code>
        <location>/WEB-INF/views/errors/notfound.jsp</location>

@@ -130,6 +130,7 @@ public class ProdottoDAO {
         }
     }
 
+    //specificare rapporto prodotto-menu
     public boolean updateValidita(Prodotto p, boolean valido) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             conn.setAutoCommit(false);
