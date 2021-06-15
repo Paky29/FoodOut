@@ -327,7 +327,7 @@ public class TryServlet extends HttpServlet {
             ArrayList<Prodotto> prodottos=new ArrayList<>();
             prodottos.add(prodottoDAO.doRetrievebyId(1));
             MenuDAO menuDAO=new MenuDAO();
-            menuDAO.addProducts(1,prodottos);
+            menuDAO.deleteProducts(1,prodottos);
             for(Prodotto p: menuDAO.doRetrieveById(1).getProdotti()){
                 System.out.println("Nome: " + p.getNome());
                 System.out.println("Ingredienti: " + p.getIngredienti());

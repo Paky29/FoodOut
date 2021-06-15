@@ -192,7 +192,8 @@ public class MenuDAO {
                 sj.add(Integer.toString(p.getCodice()));
             }
 
-            PreparedStatement ps=conn.prepareStatement("DELETE FROM AppartenenzaPM WHERE codMenu_fk=codiceMenu AND codProd_fk IN "+sj.toString());
+            PreparedStatement ps=conn.prepareStatement("DELETE FROM AppartenenzaPM WHERE codMenu_fk=? AND codProd_fk IN "+sj.toString());
+            ps.setInt(1,codiceMenu);
             if(ps.executeUpdate()!=1)
                 return false;
             else
