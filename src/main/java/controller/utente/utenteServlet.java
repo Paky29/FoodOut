@@ -21,6 +21,8 @@ public class utenteServlet extends HttpServlet {
                break;
            case "/show":
                break;
+           case "/profile":
+               break;
            case "/ristoranti-pref":
                break;
            default:
@@ -32,6 +34,8 @@ public class utenteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path=(req.getPathInfo()!=null) ? req.getPathInfo() : "/";
         switch(path){
+            case "/":
+                break;
             case "/signup":
                 break;
             case "/login":
@@ -39,10 +43,12 @@ public class utenteServlet extends HttpServlet {
                 if(email.contains("@foodout.com"))
                 else
                     if(email.contains("@foodout.rider.com");
-                  else
+                    else
                  */
                 break;
-            case "/update":
+            case "update-admin":
+                break;
+            case "/update-cliente":
                 break;
             case "/deposit":
                 break;

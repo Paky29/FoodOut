@@ -2,11 +2,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <jsp:include page="WEB-INF/views/partials/head.jsp">
+        <jsp:param name="title" value="FoodOut a volo"/>
+    </jsp:include>
 </head>
 <body>
 <form action="Tryservlet">
     <input type="submit">
+    hello a tutti
 </form>
 </body>
 </html>
