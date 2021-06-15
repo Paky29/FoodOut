@@ -6,6 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 
 //aggiungere eliminaProdotto e aggiungiProdotto
 public class MenuDAO {
@@ -74,6 +75,8 @@ public class MenuDAO {
 
     public boolean doSave(Menu m) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
+            if(m.getProdotti().isEmpty())
+                return false;
             conn.setAutoCommit(false);
             PreparedStatement ps=conn.prepareStatement("INSERT INTO Menu (nome, prezzo, sconto, valido) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1,m.getNome());
@@ -94,12 +97,13 @@ public class MenuDAO {
             m.setCodice(id);
 
             int total=0;
+            String values="VALUES ";
             for(Prodotto p:m.getProdotti()){
-                ps=conn.prepareStatement("INSERT INTO AppartenenzaPM (codMenu_fk, codProd_fk) VALUES (?,?) ");
-                ps.setInt(1,id);
-                ps.setInt(2,p.getCodice());
-                total+=ps.executeUpdate();
+                values+="("+m.getCodice()+","+p.getCodice()+"),";
             }
+            values=values.substring(0,values.length()-1);
+            ps=conn.prepareStatement("INSERT INTO AppartenenzaPM (codMenu_fk, codProd_fk) "+values);
+            total=ps.executeUpdate();
 
             if(total==(rows*m.getProdotti().size()))
             {
@@ -141,4 +145,52 @@ public class MenuDAO {
                 return true;
         }
     }
+
+    public boolean addProducts(int codiceMenu, ArrayList<Prodotto> prodotti)throws SQLException{
+        try(Connection conn=ConPool.getConnection()){
+            if(prodotti.isEmpty())
+                return true;
+
+            /*String values="VALUES "
+            for(Prodotto p:prodotti){
+                StringJoiner sj=new StringJoiner(",", "(", ")");
+                sj.add(Integer.toString(codiceMenu));
+                sj.add(Integer.toString(p.getCodice()));
+                values+=sj.toString()+",";
+            }
+            values=values.substring(0,values.length()-1);
+            */
+
+            String values="VALUES ";
+            for(Prodotto p:prodotti){
+                values+="("+codiceMenu+","+p.getCodice()+"),";
+            }
+            values=values.substring(0,values.length()-1);
+            PreparedStatement ps=conn.prepareStatement("INSERT INTO AppartenenzaPM(codMenu_fk, codProd_fk) "+values);
+            if(ps.executeUpdate()!=1)
+                return false;
+            else
+                return true;
+        }
+    }
+
+    public boolean deleteProducts(int codiceMenu, ArrayList<Prodotto> prodotti)throws SQLException{
+        try(Connection conn=ConPool.getConnection()){
+            if(prodotti.isEmpty())
+                return true;
+
+            StringJoiner sj=new StringJoiner(",", "(", ")");
+            for(Prodotto p: prodotti){
+                sj.add(Integer.toString(p.getCodice()));
+            }
+
+            PreparedStatement ps=conn.prepareStatement("DELETE FROM AppartenenzaPM WHERE codMenu_fk=codiceMenu AND codProd_fk IN "+sj.toString());
+            if(ps.executeUpdate()!=1)
+                return false;
+            else
+                return true;
+        }
+    }
+
+
 }
