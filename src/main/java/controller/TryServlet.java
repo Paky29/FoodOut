@@ -1,23 +1,36 @@
 package controller;
 
 
+import model.menu.Menu;
 import model.menu.MenuDAO;
+import model.menu.NotValidProductsExcpetion;
 import model.prodotto.Prodotto;
 import model.prodotto.ProdottoDAO;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import controller.http.controller;
 
-@WebServlet("/Tryservlet")
-public class TryServlet extends HttpServlet {
-    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+@WebServlet("/Prova")
+@MultipartConfig
+public class TryServlet extends controller  {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
 
         try {
             /*UtenteDAO utenteDAO=new UtenteDAO();
@@ -321,37 +334,26 @@ public class TryServlet extends HttpServlet {
                 System.out.println("Data:" + o.getDataOrdine().toString());
                 System.out.println("Totale:" + o.getTotale());
                 System.out.println("Nota:" + o.getNota());
-            }*/
+            }
 
+            MenuDAO menuDAO=new MenuDAO();
             ProdottoDAO prodottoDAO=new ProdottoDAO();
             ArrayList<Prodotto> prodottos=new ArrayList<>();
             prodottos.add(prodottoDAO.doRetrievebyId(1));
-            MenuDAO menuDAO=new MenuDAO();
-            menuDAO.deleteProducts(1,prodottos);
-            for(Prodotto p: menuDAO.doRetrieveById(1).getProdotti()){
-                System.out.println("Nome: " + p.getNome());
-                System.out.println("Ingredienti: " + p.getIngredienti());
-                System.out.println("Prezzo: " + p.getPrezzo());
-                System.out.println("Sconto: " + p.getSconto());
-                System.out.println("Info: " + p.getInfo());
-                System.out.println("Valido: " + p.isValido());
-                System.out.println("URL: " + p.getUrlImmagine());
+            prodottos.add(prodottoDAO.doRetrievebyId(2));
+            menuDAO.addProducts(1, prodottos);*/
+
+            Part filepart= request.getPart("cover");
+            String filename= Paths.get(filepart.getSubmittedFileName()).getFileName().toString();
+            String uploadRoot=getUploadPath();
+            try(InputStream fileStream=filepart.getInputStream()){
+                request.getRequestDispatcher("/WEB-INF/presentation.jsp").forward(request,response);
+                File file=new File(uploadRoot + filename);
+                Files.copy(fileStream,file.toPath());
+                System.out.println("File: " + file.toPath().toString());
             }
 
-
-
-
-
-
-
-
-            RequestDispatcher dispatcher=request.getRequestDispatcher("/WEB-INF/presentation.jsp");
-            dispatcher.forward(request, response);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("ok");
-        } catch (ServletException e) {
+        }  catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
