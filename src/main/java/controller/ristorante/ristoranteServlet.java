@@ -1,6 +1,7 @@
 package controller.ristorante;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import controller.http.controller;
 
 
 @WebServlet (name="ristoranteServlet", value="/ristorante/*")
+@MultipartConfig
 public class ristoranteServlet extends controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
