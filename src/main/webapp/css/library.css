@@ -1,28 +1,28 @@
 @font-face {
-    font-family: ;
-    font-weight: ;
-    font-style: ;
-    src: url("../fonts/");
+    font-family: "Myriad";
+    font-weight: normal;
+    font-style: normal;
+    src: url("../fonts/MYRIADPRO-REGULAR.OTF");
 }
 
 @font-face {
-    font-family: ;
-    font-weight: ;
-    font-style: ;
-    src: url("../fonts/");
+    font-family: "Myriad";
+    font-weight: normal;
+    font-style: italic;
+    src: url("../fonts/MYRIADPRO-REGULARIT.OTF");
 }
 
 @font-face {
-    font-family: ;
-    font-weight: ;
-    font-style: ;
-    src: url("../fonts/");
+    font-family: "Myriad";
+    font-weight: bold;
+    font-style: normal;
+    src: url("../fonts/MYRIADPRO-BOLD.OTF");
 }
 
 @font-face {
-    font-family: ;
-    font-weight: ;
-    font-style: ;
-    src: url("../fonts/");
+    font-family: "Myriad";
+    font-weight: bold;
+    font-style: italic;
+    src: url("../fonts/MYRIADPRO-BOLDIT.OTF");
 }
 
