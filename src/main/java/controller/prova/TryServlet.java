@@ -1,4 +1,4 @@
-package controller;
+package controller.prova;
 
 
 import model.menu.Menu;
@@ -27,7 +27,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import controller.http.controller;
 
-@WebServlet("/Prova")
+@WebServlet(name="prova", urlPatterns="/Tryservlet/*")
 @MultipartConfig
 public class TryServlet extends controller  {
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
@@ -352,13 +352,10 @@ public class TryServlet extends controller  {
                 Files.copy(fileStream,file.toPath());
                 System.out.println("File: " + file.toPath().toString());
             }
-
         }  catch (ServletException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }

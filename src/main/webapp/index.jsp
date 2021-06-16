@@ -2,22 +2,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <jsp:include page="WEB-INF/views/partials/head.jsp">
-        <jsp:param name="title" value="FoodOut a volo"/>
-    </jsp:include>
-    <style>
-        p{
-            font-family:"Myriad";
-            font-weight: bold;
-            font-style: normal;
-        }
-    </style>
-
+    <title>JSP - Hello World</title>
 </head>
 <body>
-<form action="Tryservlet">
+<form action="Tryservlet/ok" enctype="multipart/form-data" method="post">
+    <input type="file" name="cover">
     <input type="submit">
-    <p>hello</p>
 </form>
 </body>
 </html>

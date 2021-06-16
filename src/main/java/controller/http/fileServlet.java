@@ -101,7 +101,6 @@ public class fileServlet extends HttpServlet {
 
         // Get requested file by path info.
         String requestedFile = request.getPathInfo();
-
         // Check if file is actually supplied to the request URL.
         if (requestedFile == null) {
             // Do your thing if the file is not supplied to the request URL.
