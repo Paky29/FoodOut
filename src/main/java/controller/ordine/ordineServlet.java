@@ -18,13 +18,17 @@ public class ordineServlet extends controller {
                 break;
             case "/ordini-utente":
                 break;
+            case "ordine-dettagli":
+                break;
             case "/ordini-rider"://passare come parametro lo stato della consegna
                 break;
             case "/ordini-ristorante":
                 break;
             case "/all"://possibile inviare date come parametri per filtrare gli ordini
                 break;
-            case "/ordini-pagamento":
+            case "/ordine-pagamento":
+                break;
+            case "/ordine-recensione":
                 break;
             default:
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND,"Risorsa non trovata");
@@ -37,11 +41,11 @@ public class ordineServlet extends controller {
         switch (path){
             case "/":
                 break;
-            case "/ordini-recensione-utente":
+            case "/ordine-recensione-utente":
                 break;
-            case "/ordini-update-rider":
+            case "/ordine-update-rider":
                 break;
-            case "/ordini-pagamento":
+            case "/ordine-pagamento":
                 break;
             default:
                 resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED,"Operazione non consentita");

@@ -17,7 +17,7 @@ public class ristoranteServlet extends controller {
         switch(path){
             case "/":
                 break;
-            case "/all"://controllare se i parametri sono null per capire se è per l'admin o un utente
+            case "/all":
                 break;
             case "/zona"://controllare se i parametri sono null per capire se è per l'admin o un utente
                 break;
@@ -39,8 +39,6 @@ public class ristoranteServlet extends controller {
         String path=getPath(req);
         switch(path){
             case "/":
-                break;
-            case "/show-menu"://modificare i prodotti e i menu
                 break;
             case "/add-pref":
                 break;
