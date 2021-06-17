@@ -5,6 +5,7 @@ import model.utility.UtenteSession;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 
@@ -25,7 +26,7 @@ public class controller extends HttpServlet implements ErrorHandler {
 
     protected void validate(RequestValidator validator) throws InvalidRequestException {
         if(validator.hasErrors()){
-            throw new InvalidRequestException("Validation error", validator.getErrors());
+            throw new InvalidRequestException("Validation error", validator.getErrors(), HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
