@@ -1,10 +1,14 @@
 package controller.http;
 
+import model.utility.RiderSession;
+import model.utility.UtenteSession;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 
-public class controller extends HttpServlet {
+public class controller extends HttpServlet implements ErrorHandler {
     protected String getPath(HttpServletRequest req){
        return req.getPathInfo() != null ? req.getPathInfo() : "/";
     }
@@ -19,13 +23,23 @@ public class controller extends HttpServlet {
         return req.getServletPath() + req.getPathInfo();
     }
 
-    /*protected void validate(RequestValidator validator) throws InvalidRequestException {
+    protected void validate(RequestValidator validator) throws InvalidRequestException {
         if(validator.hasErrors()){
             throw new InvalidRequestException("Validation error", validator.getErrors());
         }
-    }*/
+    }
 
     protected String getUploadPath(){
         return System.getenv("CATALINA_HOME") + File.separator + "uploads" + File.separator;
+    }
+
+    protected int parsePage(HttpServletRequest request){return Integer.parseInt(request.getParameter("page"));}
+
+    protected UtenteSession getUtenteSession(HttpSession session){
+        return (UtenteSession) session.getAttribute("utenteSession");
+    }
+
+    protected RiderSession getRiderSession(HttpSession session){
+        return (RiderSession) session.getAttribute("riderSession");
     }
 }
