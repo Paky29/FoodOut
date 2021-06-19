@@ -1,13 +1,12 @@
 package model.menu;
 
+import controller.http.InvalidRequestException;
 import model.prodotto.Prodotto;
 import model.utility.ConPool;
 
+import javax.servlet.http.HttpServletResponse;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
 public class MenuDAO {
     public MenuDAO() {}
@@ -134,14 +133,14 @@ public class MenuDAO {
         }
     }
 
-    public boolean updateValidita(int codiceMenu, boolean valido) throws SQLException, NotValidProductsException {
+    public boolean updateValidita(int codiceMenu, boolean valido) throws SQLException, InvalidRequestException {
         try (Connection conn = ConPool.getConnection()) {
             if(valido){
                 PreparedStatement ps_false=conn.prepareStatement("SELECT * FROM Prodotto p INNER JOIN AppartenenzaPM apm ON p.codiceProdotto=apm.codProd_fk WHERE p.valido=false AND apm.codMenu_fk=?");
                 ps_false.setInt(1,codiceMenu);
                 ResultSet rs=ps_false.executeQuery();
                 if(rs.next())
-                    throw new NotValidProductsException("Alcuni prodotti del menu non sono validi");
+                    throw new InvalidRequestException("Errore modifica", List.of("Impossibile settare il menu valido. Sono presenti prodotti non validi"), HttpServletResponse.SC_FORBIDDEN);
             }
             PreparedStatement ps = conn.prepareStatement("UPDATE Menu SET valido=? WHERE codiceMenu=?");
             ps.setBoolean(1, valido);

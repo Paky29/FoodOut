@@ -190,7 +190,7 @@ public class RiderDAO {
 
     public boolean doSave(Rider rd) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
-            if(!rd.getEmail().contains("foodout.rider.com"))
+            if(!rd.getEmail().contains("@foodout.rider.com"))
                 return false;
             PreparedStatement ps=conn.prepareStatement("INSERT INTO Rider (email,pw,veicolo,citta) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1,rd.getEmail());

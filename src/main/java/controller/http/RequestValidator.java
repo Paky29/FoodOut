@@ -68,7 +68,10 @@ public class RequestValidator {
         String[] firstList = request.getParameterValues(first);
         String[] secondList = request.getParameterValues(second);
         return gatherError(firstList.length == secondList.length, msg);
+    }
 
+    public boolean checkLength(String value, int length, String msg){
+        return gatherError(request.getParameter(value).length()<=length, msg);
     }
 
 
