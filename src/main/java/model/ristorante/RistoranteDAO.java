@@ -478,4 +478,98 @@ public class RistoranteDAO {
         }
     }
 
+    public int countAll() throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count(*) as numRist FROM Ristorante r ");
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numRist");
+            }
+            else
+                return 0;
+        }
+    }
+
+    public int countNome(String nome) throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count(*) as numRist FROM Ristorante r WHERE r.nome LIKE ?");
+            ps.setString(1, "%"+nome+"%");
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numRist");
+            }
+            else
+                return 0;
+        }
+    }
+
+    public int countNomeCitta(String nome, String citta) throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count(*) as numRist FROM Ristorante r WHERE r.nome LIKE ? AND r.citta=?");
+            ps.setString(1, "%"+nome+"%");
+            ps.setString(2,citta);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numRist");
+            }
+            else
+                return 0;
+        }
+    }
+
+    public int countCitta(String citta) throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count(*) as numRist FROM Ristorante r WHERE r.citta=?");
+            ps.setString(1,citta);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numRist");
+            }
+            else
+                return 0;
+        }
+    }
+
+    public int countTipologiaCitta(String tipologia, String citta) throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count( distinct r.codiceRistorante) as numRist FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE art.nomeTip_fk=? AND r.citta=?");
+            ps.setString(1, tipologia);
+            ps.setString(2,citta);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numRist");
+            }
+            else
+                return 0;
+        }
+    }
+
+    public int countScontoCitta(String citta) throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps=conn.prepareStatement("SELECT count(distinct r.codiceRistorante) as numRist FROM Ristorante r INNER JOIN Prodotto p ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaPM apm ON p.codiceProdotto=apm.codProd_fk LEFT JOIN Menu m ON apm.codMenu_fk=m.codiceMenu WHERE r.citta=? AND (p.sconto>0 OR m.sconto>0)");
+            ps.setString(1,citta);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numRist");
+            }
+            else
+                return 0;
+        }
+    }
+
+    public int countTassoConsegna(float tasso, String citta) throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps=conn.prepareStatement("SELECT count(*) as numRist FROM Ristorante r WHERE tassoConsegna<=? AND r.citta=?");
+            ps.setString(1,citta);
+            ps.setFloat(2,tasso);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numRist");
+            }
+            else
+                return 0;
+        }
+    }
+
+
 }

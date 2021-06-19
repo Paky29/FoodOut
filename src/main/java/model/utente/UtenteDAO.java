@@ -264,4 +264,17 @@ public class UtenteDAO {
                     return true;
             }
     }
+
+    public int countRistPref(Utente u) throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps=conn.prepareStatement("SELECT count(*) as numRist FROM Preferenza p INNER JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante WHERE p.codUtente_fk=?");
+            ps.setInt(1,u.getCodice());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numRist");
+            }
+            else
+                return 0;
+        }
+    }
 }
