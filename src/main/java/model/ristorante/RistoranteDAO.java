@@ -457,8 +457,8 @@ public class RistoranteDAO {
     public boolean savePreferenza(int codiceRistorante, int codiceUtente) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("INSERT INTO Preferenza (codUtente_fk, codRis_fk) VALUES(?,?)");
-            ps.setInt(1,codiceRistorante);
-            ps.setInt(2,codiceUtente);
+            ps.setInt(1,codiceUtente);
+            ps.setInt(2,codiceRistorante);
             if(ps.executeUpdate()!=1)
                 return false;
             else
@@ -560,8 +560,8 @@ public class RistoranteDAO {
     public int countTassoConsegna(float tasso, String citta) throws SQLException {
         try(Connection conn=ConPool.getConnection()) {
             PreparedStatement ps=conn.prepareStatement("SELECT count(*) as numRist FROM Ristorante r WHERE tassoConsegna<=? AND r.citta=?");
-            ps.setString(1,citta);
-            ps.setFloat(2,tasso);
+            ps.setFloat(1,tasso);
+            ps.setString(2,citta);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 return rs.getInt("numRist");
