@@ -106,7 +106,7 @@ public class RistoranteDAO {
                 tipologia="'" + tipologia + "'";
                 sj_tipologie.add(tipologia);
             }
-            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, d.giorno, d.oraApertura, d.oraChiusura FROM Ristorante r INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE art.nomeTip_fk IN " + sj_tipologie.toString() + " AND r.citta=? LIMIT ?,?");
+            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE art.nomeTip_fk IN " + sj_tipologie.toString() + " AND r.citta=? LIMIT ?,?");
             ps.setString(1,citta);
             ps.setInt(2,paginator.getOffset());
             ps.setInt(3,paginator.getLimit());
@@ -120,9 +120,6 @@ public class RistoranteDAO {
                     Ristorante r=RistoranteExtractor.extract(rs);
                     ristoranti.put(codiceRistorante, r);
                 }
-
-                Disponibilita d =DisponibilitaExtractor.extract(rs);
-                ristoranti.get(codiceRistorante).getGiorni().add(d);
             }
 
             if(ristoranti.isEmpty())
@@ -131,6 +128,15 @@ public class RistoranteDAO {
             StringJoiner sj=new StringJoiner(",","(", ")");
             for(int key: ristoranti.keySet()){
                 sj.add(Integer.toString(key));
+            }
+
+            PreparedStatement disp=conn.prepareStatement("SELECT d,codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN "+sj.toString());
+            ResultSet setDisp=disp.executeQuery();
+
+            while(setDisp.next()){
+                int codiceRistorante=setDisp.getInt("codRis_fk");
+                Disponibilita d =DisponibilitaExtractor.extract(setDisp);
+                ristoranti.get(codiceRistorante).getGiorni().add(d);
             }
 
             PreparedStatement tip=conn.prepareStatement("SELECT art.codRis_fk, t.nome, t.descrizione FROM AppartenenzaRT art INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE art.codRis_fk IN " + sj.toString());
