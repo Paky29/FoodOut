@@ -2,12 +2,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JSP - Hello World</title>
+    <jsp:include page="WEB-INF/views/partials/head.jsp">
+        <jsp:param name="title" value="Home"/>
+    </jsp:include>
 </head>
 <body>
-<form action="Tryservlet/ok" enctype="multipart/form-data" method="post">
-    <input type="file" name="cover">
-    <input type="submit">
-</form>
+<jsp:include page="WEB-INF/views/partials/header.jsp">
+    <jsp:param name="title" value="Header"/>
+</jsp:include>
 </body>
 </html>
