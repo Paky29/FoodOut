@@ -26,32 +26,250 @@
     src: url("../fonts/MYRIADPRO-BOLDIT.OTF");
 }
 
-div {
-    background-color: black;
-    border: 2px solid blue;
+:root{
+    font-family: Myriad;
+    font-weight: normal;
+    font-style: normal;
+    font-size:clamp(16px, 2vw, 24px);
+    --primary: #990000;
+    --error: #EE4037;
+    --success: #89C540
 }
 
-#header img{
-    left: 5px;
-    position: absolute;
-    width: 90px;
-    height: 90px;
-    margin: 5px;
+input, select, textarea{
+    padding: 8px;
+    border-width: 1px;
+    border-color:#CCCCCC;
+    background-color: white;
+    color:black;
+    border-style:solid;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(212,212,212,.54);
 }
-#links a{
-    float:right;
-    margin: 4px;
-    text-decoration: none;
-    font-family: Myriad;
+
+input:focus, textarea:focus, select:focus{
+    outline: var(--primary);
+}
+
+.app{
+    width: 100vw;
+    height: 100vw;
+    max-width: 100%;
+}
+
+.hide{
+    display: none; !important;
+}
+
+.grid-x{
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.grid-y{
+    display: flex;
+    flex-flow: column wrap;
+}
+
+.grid-inline{
+    justify-content: center;
+}
+
+.align-center{
+    align-items: center;
+}
+
+.cell{
+    flex-basis: 100%;
+}
+
+.field{
+    display: inline-flex;
+    align-items: center;
+}
+
+.field > input, .field > select, .field > textarea{
+    width:100%;
+}
+
+.field > input[disabled], .field > select [disabled], .field > textarea[disabled]{
+    background-color: grey;
+}
+
+.btn{
+    padding: 8px;
+    border:none;
+    cursor: pointer;
+}
+
+button.primary{
+    background-color: var(--primary);
+    color: white;
+}
+
+button.primary:hover{
+    filter:brightness(110%);
+}
+
+.table{
+    border-collapse: collapse;
+    background-color:grey;
+}
+
+.table > thead{
+    visibility: hidden;
+}
+
+.table tr{
+    border: 1px solid black;
+    margin-bottom: .5rem;
+    padding: .5rem;
+    display:block;
+}
+
+.table > tbody td{
+    display: block;
+    border-bottom: 1px solid black;
+    text-align: right;
+}
+
+.table > tbody td:before{
+    content: attr(data-head);
+    floar: left;
     font-weight: bold;
-    font-style: normal;
-    text-shadow: black;
+    text-transform: uppercase;
+}
+
+.paginator{
+    list-style-type: none;
+}
+
+.paginator > li {
+    border: 1px solid;
+    padding: .5rem;
+}
+
+.paginator > li> a {
+    text-decoration: none;
+}
+
+@media screen and (min-width: 769px){
+
+    .w10{
+        flex-basis: 10%;
+    }
+
+    .w80{
+        flex-basis: 80%;
+    }
+
+    .w25{
+        flex-basis: 25%;
+    }
+
+    .w40{
+        flex-basis: 40%;
+    }
+
+    .w50{
+        flex-basis: 50%;
+    }
+
+    .w75{
+        flex-basis: 75%;
+    }
+
+    .w33{
+        flex-basis: 33%;
+    }
+
+    .w100{
+        flex-basis: 100%;
+    }
+
+    .table > thead{
+        visibility: visible;
+    }
+
+    .table tr{
+        display: table-row;
+    }
+
+    .table > tbody td{
+        display: table-cell;
+        text-align:center;
+    }
+
+    .table > tbody td:before{
+        content:"";
+        float: none;
+    }
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    width: 15vw;
+}
+
+div#header{
+    display:flex;
+    flex-flow: column wrap;
+    align-items:center;
+    background-color: black;
+}
+
+figure {
+    margin: 5px;
+    border: 8px solid black;
+    background-color:black;
+    color:white;
+    text-align:center;
+    max-width:100%;
+}
+
+#links a{
+    text-decoration: none;
     color:white;
 }
 
-#header #links{
-    right: 2px;
-    position: absolute;
+@media screen and (min-width: 481px){
+    figure {
+        position: absolute;
+        left:20px;
+        margin: 30px;
+        border: 8px solid black;
+        background-color:black;
+        color:white;
+        text-align:center;
+        max-width:100%;
+    }
+
+    div#links a{
+        float:right;
+        margin: 4px;
+        text-decoration: none;
+        font-family: Myriad;
+        font-weight: bold;
+        font-style: normal;
+        text-shadow: black;
+        color:white;
+    }
+
+    div#links{
+        right: 30px;
+        top:60px;
+        position: absolute;
+    }
+
+    div#header{
+        display:flex;
+        flex-flow: row wrap;
+        align-items: normal;
+        background-color: black;
+    }
+
 }
+
 
 

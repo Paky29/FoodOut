@@ -20,6 +20,8 @@ public class utenteServlet extends controller {
                break;
            case "/login":
                break;
+            case "/logout":
+                break;
            case "/show":
                break;
            case "/profile":

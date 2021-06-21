@@ -1,0 +1,28 @@
+
+div#header{
+    background-color: red;
+    height:12vh;
+}
+
+#header img{
+    left: 5px;
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    margin: 5px;
+}
+#links a{
+    float:right;
+    margin: 4px;
+    text-decoration: none;
+    font-family: Myriad;
+    font-weight: bold;
+    font-style: normal;
+    text-shadow: black;
+    color:white;
+}
+
+#links{
+    right: 2px;
+    position: absolute;
+}
