@@ -236,8 +236,8 @@ figure {
 @media screen and (min-width: 481px){
     figure {
         position: absolute;
-        left:20px;
-        margin: 30px;
+        left:30px;
+        margin: 10px;
         border: 8px solid black;
         background-color:black;
         color:white;
@@ -258,8 +258,9 @@ figure {
 
     div#links{
         right: 30px;
-        top:60px;
+        top:40px;
         position: absolute;
+        background-color: black;
     }
 
     div#header{
@@ -267,6 +268,9 @@ figure {
         flex-flow: row wrap;
         align-items: normal;
         background-color: black;
+        height: 25vw;
+        width: auto;
+        padding: 20px;
     }
 
 }
