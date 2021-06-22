@@ -53,7 +53,7 @@ input:focus, textarea:focus, select:focus{
 
 .app{
     width: 100vw;
-    height: 100vw;
+    height: 100vh;
     max-width: 100%;
 }
 
@@ -72,6 +72,10 @@ input:focus, textarea:focus, select:focus{
 }
 
 .grid-inline{
+    justify-content: center;
+}
+
+.justify-center{
     justify-content: center;
 }
 
