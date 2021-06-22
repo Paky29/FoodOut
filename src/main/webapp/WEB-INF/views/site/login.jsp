@@ -44,8 +44,8 @@
             <input type="email" name="email" id="email">
         </label>
         <span> Password </span>
-        <label for="password" class="field">
-            <input type="password" name="password" id="password">
+        <label for="pw" class="field">
+            <input type="password" name="pw" id="pw">
         </label>
         <button type="submit" class="btn primary"> Accedi </button>
     </fieldset>
