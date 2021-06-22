@@ -36,7 +36,7 @@
 </head>
 
 <body>
-<form class="app grid-x justify-center align-center" action="/utente/login" method="post">
+<form class="app grid-x justify-center align-center" action="/FoodOut/utente/login" method="post">
     <fieldset class="grid-y cell w50 login">
         <h2> Login </h2>
         <span> Email </span>

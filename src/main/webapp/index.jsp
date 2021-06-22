@@ -8,7 +8,7 @@
     <style>
 
         .top {
-            background-image: url("/prova_DB/images/image.jpg");
+            background-image: url("/FoodOut/images/sfondo.jpg");
             background-repeat: no-repeat;
             background-size: cover;
             height:80vh;
