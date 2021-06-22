@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="it" dir="ltr">
 <head>
-    <jsp:include page="../../WEB-INF/views/partials/head.jsp">
+    <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Login"/>
     </jsp:include>
     <style>
@@ -32,8 +32,6 @@
         .login > * {
             margin:10px;
         }
-
-
     </style>
 </head>
 

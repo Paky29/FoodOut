@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="it" dir="ltr">
 <head>
-    <jsp:include page="../../WEB-INF/views/partials/head.jsp">
+    <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Sign up"/>
     </jsp:include>
     <style>
@@ -44,7 +44,7 @@
 </head>
 
 <body>
-<form class="app grid-x justify-center align-center" action="/utente/signup" method="post">
+<form class="app grid-x justify-center align-center" action="/FoodOut/utente/signup" method="post">
     <fieldset class="grid-y cell w50 signup">
         <h1> Sign up </h1>
         <span> Nome </span>
@@ -77,8 +77,8 @@
             <input type="email" name="email" id="email">
         </label>
         <span> Password </span>
-        <label for="password" class="field">
-            <input type="password" name="password" id="password">
+        <label for="pw" class="field">
+            <input type="password" name="pw" id="pw">
         </label>
         <button type="submit" class="btn primary"> Registrati </button>
     </fieldset>

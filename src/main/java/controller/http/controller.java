@@ -17,6 +17,7 @@ public class controller extends HttpServlet implements ErrorHandler {
     protected String view(String viewPath){
         String basePath=getServletContext().getInitParameter("basePath");
         String engine=getServletContext().getInitParameter("engine");
+        System.out.println(basePath + viewPath + engine);
         return basePath + viewPath + engine;
     }
 

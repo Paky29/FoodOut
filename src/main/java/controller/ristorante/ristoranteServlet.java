@@ -22,6 +22,9 @@ public class ristoranteServlet extends controller {
             case "/all":
                 break;
             case "/zona"://controllare se i parametri sono null per capire se è per l'admin o un utente
+                System.out.println("sono qui");
+                //req.getRequestDispatcher(view("ristorante/zona")).forward(req,resp);
+                req.getRequestDispatcher("/index.jsp").forward(req,resp);
                 break;
             case "/show-menu"://verificare se l'utente è admin, se è normale possibilità di aggiungere al carrello i prodotti, altrimenti di modificarli
                 break;

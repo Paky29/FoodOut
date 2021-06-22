@@ -5,13 +5,13 @@ import model.utente.Utente;
 public class UtenteSession {
     private final String nome, cognome;
     private final int id;
-    private final boolean isAdmin;
+    private final boolean admin;
 
     public UtenteSession(Utente u){
         this.nome=u.getNome();
         this.cognome=u.getCognome();
         this.id=u.getCodice();
-        this.isAdmin=u.isAmministratore();
+        this.admin=u.isAmministratore();
     }
 
     public String getNome(){
@@ -27,6 +27,6 @@ public class UtenteSession {
     }
 
     public boolean isAdmin() {
-        return isAdmin;
+        return admin;
     }
 }

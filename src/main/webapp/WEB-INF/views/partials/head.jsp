@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${param.title}</title>
 <meta name="description" content="delivery">
-<link rel="icon" type="image/png" href="images/logo.png">
+<link rel="icon" type="image/png" href="${context}/images/logo.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone-no">
 <meta name="apple-mobile-web-app-title" content="FoodOut">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="apple-touch-icon" href="images/logo.png">
-<link rel="apple-touch-startup-image" href="images/logo.png">
+<link rel="apple-touch-icon" href="${context}/images/logo.png">
+<link rel="apple-touch-startup-image" href="${context}/images/logo.png">
 <meta name="theme-color" content="#000000">
 
 <link href="${context}/css/reset.css" rel="stylesheet">
