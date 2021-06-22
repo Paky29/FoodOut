@@ -26,7 +26,7 @@
             margin:10px;
         }
 
-        input:focus {
+        input:focus  {
             outline: 1px solid var(--primary);
         }
     </style>
