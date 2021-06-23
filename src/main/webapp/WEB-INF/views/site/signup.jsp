@@ -13,7 +13,7 @@
     </jsp:include>
     <style>
         .app {
-            background: linear-gradient(red, white);
+            background: linear-gradient(var(--primary), white);
         <%--background-image: url("http://localhost:8080/images/image.jpg");--%>
         }
         .signup{
