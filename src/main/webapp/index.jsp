@@ -47,5 +47,10 @@
         </fieldset>
     </form>
 </div>
+<div class="tipologie app grid-x justify-center align-center">
+    <c:forEach items="${tipologie}" var="tipologia">
+        <p class="tipologia box "> ${tipologia.nome} </p>
+    </c:forEach>
+</div>
 </body>
 </html>

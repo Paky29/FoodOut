@@ -8,11 +8,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import controller.http.InvalidRequestException;
 import controller.http.controller;
 import model.rider.Rider;
 import model.rider.RiderDAO;
+import model.tipologia.Tipologia;
+import model.tipologia.TipologiaDAO;
 import model.utente.Utente;
 import model.utente.UtenteDAO;
 import model.utility.RiderSession;
@@ -69,8 +72,11 @@ public class utenteServlet extends controller {
                     UtenteSession utenteSession=new UtenteSession(u);
                     HttpSession session=req.getSession();
                     System.out.println("Utente session:"+utenteSession.isAdmin());
+                    TipologiaDAO tipologiaDAO=new TipologiaDAO();
+                    ArrayList<Tipologia> tipologie=tipologiaDAO.doRetriveByCitta(u.getCitta());
                     synchronized (session){
                         session.setAttribute("utenteSession",utenteSession);
+                        session.setAttribute("tipologie", tipologie);
                     }
                     if(u.getEmail().contains("@foodout.com"))
                         resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare in /utente/show
@@ -102,10 +108,13 @@ public class utenteServlet extends controller {
                     if(u==null)
                         System.out.println("Credenziali non valide");
                     else{
+                        TipologiaDAO tipologiaDAO=new TipologiaDAO();
+                        ArrayList<Tipologia> tipologie=tipologiaDAO.doRetriveByCitta(u.getCitta());
                         UtenteSession utenteSession=new UtenteSession(u);
                         HttpSession session=req.getSession();
                         synchronized (session){
                             session.setAttribute("utenteSession",utenteSession);
+                            session.setAttribute("tipologie", tipologie);
                         }
                         if(email.contains("@foodout.com"))
                             resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare in /utente/show
