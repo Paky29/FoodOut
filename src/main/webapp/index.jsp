@@ -1,4 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,6 +30,23 @@
 
         input:focus  {
             outline: 1px solid var(--primary);
+        }
+
+        .tipologie{
+            padding: 1rem; <%--dimensione relativa al root--%>
+            background-color:white;
+            border-radius: 10px;
+            opacity: revert;
+        }
+
+        .box{
+            border: 2px solid var(--primary);
+            margin: 10px;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 2vw;
+            color: white;
+            background-color: var(--primary);
         }
     </style>
 </head>

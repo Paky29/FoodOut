@@ -38,6 +38,7 @@ public class utenteServlet extends controller {
             case "/logout":
                 break;
            case "/show":
+               req.getRequestDispatcher(view("site/show")).forward(req,resp);
                break;
            case "/profile":
                break;

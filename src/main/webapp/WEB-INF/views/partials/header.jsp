@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<link href="/FoodOut/css/header.css" rel="stylesheet" type="text/css">
 <div id="header">
     <figure>
         <img src="/FoodOut/images/logo.png" id="logo">

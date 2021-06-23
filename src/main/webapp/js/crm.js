@@ -8,7 +8,7 @@ menu.addEventListener('click', function() {
 
 const home = document.getElementsByClassName("menu")[0].firstElementChild;
 home.addEventListener('click', function (){
-    window.location.href="/prova_DB/utente/show";
+    window.location.href="/FoodOut/utente/show";
 });
 
 home.addEventListener('mouseover', function (){
