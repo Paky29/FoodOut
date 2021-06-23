@@ -31,7 +31,7 @@
     font-weight: normal;
     font-style: normal;
     font-size:clamp(16px, 2vw, 24px);
-    --primary: #990000;
+    --primary: #be1b38;
     --error: #EE4037;
     --success: #89C540
 }

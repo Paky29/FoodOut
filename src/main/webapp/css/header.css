@@ -1,14 +1,16 @@
-img {
+.fluid-image{
     max-width: 100%;
-    height: auto;
-    width: 15vw;
+    height: 65px;
 }
 
 div#header{
-    display:flex;
-    flex-flow: column wrap;
-    align-items:center;
     background-color: rgba(0,0,0,0);
+    background-image: url("/prova_DB/images/image.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 500px;
+    position: relative;
 }
 
 figure {
@@ -24,46 +26,27 @@ figure {
     color:white;
 }
 
-@media screen and (min-width: 481px){
-    figure {
-        position: absolute;
-        left:30px;
-        margin: 10px;
-        background-color: rgba(0,0,0,0);
-        color:white;
-        text-align:center;
-        max-width:100%;
-    }
-
-    div#links a{
-        float:right;
-        margin: 4px;
-        text-decoration: none;
-        font-family: Myriad;
-        font-weight: bold;
-        font-style: normal;
-        text-shadow: black;
-        color:white;
-    }
-
-    div#links{
-        right: 30px;
-        top:40px;
-        position: absolute;
-        background-color: rgba(0,0,0,0);
-    }
-
-    div#header{
-        display:flex;
-        flex-flow: row wrap;
-        align-items: normal;
-        background-color: rgba(0,0,0,0);
-        height: 25vw;
-        width: auto;
-        padding: 20px;
-    }
-
+.navbar{
+    justify-content: space-between;
+    width:100%;
+    padding: 20px;
 }
+
+.address{
+    width:100%;
+    position: absolute;
+    right: 0;
+    top:80%;
+}
+
+@media screen and (min-width: 769px){
+    .fluid-image{
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+
 
 
 
