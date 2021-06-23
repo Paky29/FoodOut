@@ -79,7 +79,7 @@ public class utenteServlet extends controller {
                         session.setAttribute("tipologie", tipologie);
                     }
                     if(u.getEmail().contains("@foodout.com"))
-                        resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare in /utente/show
+                        resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
                     else
                         resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
                     break;
@@ -117,7 +117,7 @@ public class utenteServlet extends controller {
                             session.setAttribute("tipologie", tipologie);
                         }
                         if(email.contains("@foodout.com"))
-                            resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare in /utente/show
+                            resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
                         else
                             resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
                     }
