@@ -94,6 +94,22 @@ public class TipologiaDAO {
         }
     }
 
-    public Tipologia doRetrieveByVendite() {
+    public ArrayList<Tipologia> doRetrieveByVendite() throws SQLException {
+        try(Connection conn= ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("select distinct t.nome, count(cop.codOrd_fk) as numOrdini from tipologia t inner join prodotto p on t.nome=p.nometip_fk left join composizioneOP cop on p.codiceProdotto=cop.codProd_fk group by t.nome order by numOrdini desc;");
+            ResultSet rs=ps.executeQuery();
+            ArrayList<Tipologia> tipologie=new ArrayList<>();
+            while(rs.next()){
+                Tipologia t=new Tipologia();
+                t.setNome(rs.getString("t.nome"));
+                t.setDescrizione(rs.getString("t.descrizione"));
+                tipologie.add(t);
+            }
+            if(tipologie.isEmpty())
+                return null;
+            else
+                return tipologie;
+        }
+
     }
 }
