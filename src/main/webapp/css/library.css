@@ -101,6 +101,7 @@ input:focus, textarea:focus, select:focus{
 input {
     height: 2%;
 }
+
 .btn{
     padding: 8px;
     border:none;
@@ -168,6 +169,7 @@ button.primary:hover{
         flex-basis: 80%;
     }
 
+
     .w25{
         flex-basis: 25%;
     }
@@ -184,8 +186,16 @@ button.primary:hover{
         flex-basis: 75%;
     }
 
+    .w30{
+        flex-basis: 30%;
+    }
+
     .w33{
         flex-basis: 33%;
+    }
+
+    .w85{
+        flex-basis: 85%;
     }
 
     .w100{

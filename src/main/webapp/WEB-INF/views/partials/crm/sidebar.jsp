@@ -1,6 +1,6 @@
 <aside class="sidebar">
     <nav class="menu grid-y align-center">
-        <img src="/FoodOut/images/logo.png" width="100" height="100">
+        <img src="/prova_DB/images/logo.png" width="100" height="100">
         <a href="/"> Gestione rider</a>
         <a href="/"> Gestione ristoranti</a>
         <a href="/"> Gestione ordini</a>

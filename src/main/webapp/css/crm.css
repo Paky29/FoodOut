@@ -59,14 +59,6 @@
     color:white;
     margin-right: 8px;
 }
-
-.topbar > svg{
-    cursor: pointer;
-}
-
-label > input:focus{
-    outline: 1px solid var(--primary);
-}
 @media screen and (min-width:769px){
     .topbar > .account{
         display: block;

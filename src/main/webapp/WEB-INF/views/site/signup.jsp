@@ -38,7 +38,7 @@
 </head>
 
 <body>
-<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/signup"" method="post">
+<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/signup" method="post">
     <fieldset class="grid-x cell w75 signup justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
         <h1 id="title" class="cell"> Sign up </h1>
         <label for="nome" class="field w40 cell">

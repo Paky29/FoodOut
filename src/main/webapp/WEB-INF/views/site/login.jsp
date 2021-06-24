@@ -14,7 +14,7 @@
 <style>
     .app {
     background: linear-gradient(var(--primary), white);
-  <%--background-image: url("/FoodOut/images/image.jpg");--%>
+  <%--background-image: url("/FoodOut/images/sfondo.jpg");--%>
     }
 
     img {
