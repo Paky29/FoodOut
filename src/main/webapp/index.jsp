@@ -63,7 +63,7 @@
 
     <div class="content cell">
         <div class="tipologie app grid-x justify-center align-center">
-            <c:forEach items="${tipologie}" var="tipologia">
+            <c:forEach items="${tipologieVendute}" var="tipologia">
                 <p class="tipologia box "> ${tipologia.nome} </p>
             </c:forEach>
         </div>
