@@ -102,7 +102,6 @@ public class TipologiaDAO {
             while(rs.next()){
                 Tipologia t=new Tipologia();
                 t.setNome(rs.getString("t.nome"));
-                t.setDescrizione(rs.getString("t.descrizione"));
                 tipologie.add(t);
             }
             if(tipologie.isEmpty())

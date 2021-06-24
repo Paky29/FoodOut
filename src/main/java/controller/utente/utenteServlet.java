@@ -73,11 +73,8 @@ public class utenteServlet extends controller {
                     UtenteSession utenteSession=new UtenteSession(u);
                     HttpSession session=req.getSession();
                     System.out.println("Utente session:"+utenteSession.isAdmin());
-                    TipologiaDAO tipologiaDAO=new TipologiaDAO();
-                    ArrayList<Tipologia> tipologie=tipologiaDAO.doRetriveByCitta(u.getCitta());
                     synchronized (session){
                         session.setAttribute("utenteSession",utenteSession);
-                        session.setAttribute("tipologie", tipologie);
                     }
                     if(u.getEmail().contains("@foodout.com"))
                         resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
@@ -109,15 +106,11 @@ public class utenteServlet extends controller {
                     if(u==null)
                         System.out.println("Credenziali non valide");
                     else{
-                        TipologiaDAO tipologiaDAO=new TipologiaDAO();
-                        ArrayList<Tipologia> tipologie=tipologiaDAO.doRetriveByCitta(u.getCitta());
                         UtenteSession utenteSession=new UtenteSession(u);
                         HttpSession session=req.getSession();
                         synchronized (session){
                             System.out.println(utenteSession.getNome());
-                            System.out.println(tipologie.toString());
                             session.setAttribute("utenteSession",utenteSession);
-                            session.setAttribute("tipologie", tipologie);
                         }
                         if(email.contains("@foodout.com"))
                             resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
