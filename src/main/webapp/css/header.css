@@ -24,9 +24,9 @@ figure {
 #links a{
     text-decoration: none;
     color:white;
-    font-weight: bold;
-    font-style: normal;
-    font-family: Myriad;
+    font-family:Myriad;
+    font-weight:bold;
+    font-style:normal;
 }
 
 .navbar{

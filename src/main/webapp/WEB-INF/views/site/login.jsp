@@ -32,8 +32,6 @@
     .login > * {
         margin:10px;
     }
-
-
 </style>
 </head>
 

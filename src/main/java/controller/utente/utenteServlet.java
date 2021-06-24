@@ -114,6 +114,8 @@ public class utenteServlet extends controller {
                         UtenteSession utenteSession=new UtenteSession(u);
                         HttpSession session=req.getSession();
                         synchronized (session){
+                            System.out.println(utenteSession.getNome());
+                            System.out.println(tipologie.toString());
                             session.setAttribute("utenteSession",utenteSession);
                             session.setAttribute("tipologie", tipologie);
                         }

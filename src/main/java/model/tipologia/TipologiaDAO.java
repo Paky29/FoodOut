@@ -93,4 +93,7 @@ public class TipologiaDAO {
                 return true;
         }
     }
+
+    public Tipologia doRetrieveByVendite() {
+    }
 }

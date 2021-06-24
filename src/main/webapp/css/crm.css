@@ -37,6 +37,10 @@
     flex-grow: 1;
 }
 
+.topbar > svg{
+    cursor: pointer;
+}
+
 .info{
     text-align: right;
     font-style: italic;
