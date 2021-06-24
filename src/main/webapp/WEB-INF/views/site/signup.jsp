@@ -26,61 +26,46 @@
             margin:10px;
         }
 
-        #civico{
-            display: inline;
-            width: 20.1%;
-            margin-right: 0;
-
+        button {
+            border-radius: 3px;
         }
 
-        #via{
-            display: inline;
-            width: 78.5%;
-            margin-left: 0;
+        input {
+            height: auto;
         }
-
 
     </style>
 </head>
 
 <body>
-<form class="app grid-x justify-center align-center" action="/FoodOut/utente/signup" method="post">
-    <fieldset class="grid-y cell w50 signup">
-        <h1> Sign up </h1>
-        <span> Nome </span>
-        <label for="nome" class="field">
-            <input type="text" name="nome" id="nome">
+<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/signup"" method="post">
+    <fieldset class="grid-x cell w75 signup justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
+        <h1 id="title" class="cell"> Sign up </h1>
+        <label for="nome" class="field w40 cell">
+            <input type="text" name="nome" id="nome" placeholder="Nome">
         </label>
-        <span> Cognome </span>
-        <label for="cognome" class="field">
-            <input type="text" name="cognome" id="cognome">
+        <label for="cognome" class="field w40 cell">
+            <input type="text" name="cognome" id="cognome" placeholder="Cognome">
         </label>
-        <span> Provincia </span>
-        <label for="provincia" class="field">
-            <input type="text" name="provincia" id="provincia">
+        <label for="provincia" class="field w40 cell">
+            <input type="text" name="provincia" id="provincia" placeholder="Provincia">
         </label>
-        <span> Citta </span>
-        <label for="citta" class="field">
-            <input type="text" name="citta" id="citta">
+        <label for="citta" class="field w40 cell">
+            <input type="text" name="citta" id="citta" placeholder="Citta">
         </label>
-        <span> Via </span>
-        <span>
-        <label for="via" >
-            <input type="text" name="via" id="via">
+        <label for="via" class="field w50 cell" >
+            <input type="text" name="via" id="via" placeholder="Via">
         </label>
-        <label for="civico">
+        <label for="civico" class="field w30 cell">
             <input type="number" name="civico" id="civico" placeholder="n°">
         </label>
-        </span>
-        <span> Email </span>
-        <label for="email" class="field">
-            <input type="email" name="email" id="email">
+        <label for="email" class="field w40 cell">
+            <input type="email" name="email" id="email" placeholder="Email">
         </label>
-        <span> Password </span>
-        <label for="pw" class="field">
-            <input type="password" name="pw" id="pw">
+        <label for="pw" class="field w40 cell">
+            <input type="password" name="pw" id="pw" placeholder="Password">
         </label>
-        <button type="submit" class="btn primary"> Registrati </button>
+        <button type="submit" class="btn primary w30"> Registrati </button>
     </fieldset>
 </form>
 </body>

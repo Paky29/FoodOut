@@ -11,37 +11,39 @@
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Login"/>
     </jsp:include>
-    <style>
-        .app {
-            background: linear-gradient(var(--primary), white);
-        <%--background-image: url("/prova_DB/images/image.jpg");--%>
-        }
+<style>
+    .app {
+    background: linear-gradient(var(--primary), white);
+  <%--background-image: url("/FoodOut/images/image.jpg");--%>
+    }
 
-        img {
-            width: 100%;
-            height: auto;
-            opacity: 0.3;
-        }
-        .login{
-            padding: 1rem; <%--dimensione relativa al root--%>
-            background-color:white;
-            border-radius: 10px;
-            opacity: revert;
-        }
+    img {
+        width: 100%;
+        height: auto;
+        opacity: 0.3;
+    }
+    .login{
+        padding: 1rem; <%--dimensione relativa al root--%>
+        background-color:white;
+        border-radius: 10px;
+        opacity: revert;
+    }
 
-        .login > * {
-            margin:10px;
-        }
-    </style>
+    .login > * {
+        margin:10px;
+    }
+
+
+</style>
 </head>
 
 <body>
-<form class="app grid-x justify-center align-center" action="/FoodOut/utente/login" method="post">
+<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/login" method="post">
     <fieldset class="grid-y cell w50 login">
         <h2> Login </h2>
         <span> Email </span>
         <label for="email" class="field">
-            <input type="email" name="email" id="email">
+        <input type="email" name="email" id="email">
         </label>
         <span> Password </span>
         <label for="pw" class="field">

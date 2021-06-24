@@ -98,6 +98,9 @@ input:focus, textarea:focus, select:focus{
     background-color: grey;
 }
 
+input {
+    height: 2%;
+}
 .btn{
     padding: 8px;
     border:none;

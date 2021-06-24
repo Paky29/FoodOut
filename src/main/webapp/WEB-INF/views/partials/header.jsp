@@ -2,7 +2,7 @@
 
 <div class="cell grid-y" id="header">
     <nav class="grid-x navbar align-center">
-        <img src="/prova_DB/images/logo.png" class="fluid-image" id="logo">
+        <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
     <div class="" id="links">
         <c:choose>
             <c:when test="${not empty utenteSession}">

@@ -16,32 +16,11 @@
 </head>
 <body>
 <main class="app">
-    <aside class="sidebar">
-        <nav class="menu grid-y align-center">
-            <img src="/FoodOut/images/logo.png" width="100" height="100">
-            <a href="/"> Gestione rider</a>
-            <a href="/"> Gestione ristoranti</a>
-            <a href="/"> Gestione ordini</a>
-            <a href="/"> Gestione tipologie</a>
-            <a href="/"> Profilo</a>
-            <a href="/"> Logout</a>
-        </nav>
-    </aside>
+    <%@include file="../partials/crm/sidebar.jsp"%>
     <section class="content grid-y">
-        <header class="topbar grid-x align-center">
-            <%@include file="../../../icons/menu.svg"%>
-            <label class="field command">
-                <input type="text" placeholder="Cerca comandi">
-            </label>
-            <span class="account" style="color: white">
-                <%@include file="../../../icons/menu.svg"%> <%--cambiare con icona user--%>
-                Benvenuto, ${utenteSession.nome}
-            </span>
-        </header>
+        <%@include file="../partials/crm/header.jsp"%>
         <div class="body"></div>
-        <footer class="info">
-            <p> Copyright 2020 Foodout </p>
-        </footer>
+        <%@include file="../partials/crm/footer.jsp"%>
     </section>
 </main>
 </body>

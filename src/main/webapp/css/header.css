@@ -5,7 +5,7 @@
 
 div#header{
     background-color: rgba(0,0,0,0);
-    background-image: url("/prova_DB/images/image.jpg");
+    background-image: url("/FoodOut/images/image.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -24,6 +24,9 @@ figure {
 #links a{
     text-decoration: none;
     color:white;
+    font-weight: bold;
+    font-style: normal;
+    font-family: Myriad;
 }
 
 .navbar{
