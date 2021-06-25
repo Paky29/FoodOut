@@ -34,8 +34,8 @@
     .tipologie {
         padding: 1rem;
     <%--dimensione relativa al root--%> background-color: white;
-        border-radius: 10px;
         opacity: revert;
+        margin-top:10vh;
     }
 
     .box {
@@ -43,9 +43,10 @@
         margin: 10px;
         padding: 15px;
         font-weight: bold;
-        font-size: 2vw;
+        font-size: 3vw;
         color: white;
         background-color: var(--primary);
+        border-radius: 5px;
     }
 
     .cover-image{
@@ -53,6 +54,32 @@
         height: 50vh;
     }
 
+    .info{
+        text-align: center;
+        font-style: normal;
+        font-weight: bold;
+        padding: 1rem;
+        border-top: 1px solid black;
+        background-color: lightgrey;
+    }
+
+    .info > a {
+        text-decoration: none;
+        color: black;
+        margin-right: 25px;
+        margin-left: 25px;
+    }
+
+    .content{
+        background-color: white;
+        flex:1;
+        transition: all .3s ease-in-out;
+    }
+
+    .tipologia{
+        margin: 10vw;
+        margin-bottom: 5px;
+    }
 
 </style>
 <div class="app grid-x">
@@ -61,13 +88,21 @@
     </jsp:include>
 
 
-    <div class="content cell">
+    <div class="content">
         <div class="tipologie app grid-x justify-center align-center">
             <c:forEach items="${tipologieVendute}" var="tipologia">
-                <p class="tipologia box "> ${tipologia.nome} </p>
+                <span class="cell w10 tipologia">
+                <p class="box"> ${tipologia.nome} </p>
+                </span>
             </c:forEach>
         </div>
     </div>
+    <footer class="info grid-x cell justify-center align-center">
+        <a href="/" class="cell w10"> FAQ </a>
+        <a href="/" class="cell w10"> Chi siamo </a>
+        <a href="/" class="cell w10"> Collabora con noi</a>
+        <a href="/" class="cell w10"> Contatti</a>
+    </footer>
 </div>
 
 </body>
