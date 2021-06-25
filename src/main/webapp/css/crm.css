@@ -74,11 +74,13 @@
     margin:10px;
 }
 
+
 fieldset {
     margin-top: 5vh;
     margin-bottom: 5vh;
     margin-right: 5vw;
     margin-left: 5vw;
+    padding: 5vh 5vw ;
 
 }
 
@@ -88,8 +90,17 @@ legend{
     color: var(--primary)
 }
 
-label > span {
-    margin-right: 2px;
+label{
+    margin: 10px;
+}
+
+span{
+    margin-right: 4px;
+}
+
+input {
+    line-height: 30px;
+    height: 30px;
 }
 
 @media screen and (min-width:769px){
