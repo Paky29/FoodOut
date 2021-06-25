@@ -8,14 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-
 import controller.http.InvalidRequestException;
 import controller.http.controller;
 import model.rider.Rider;
-import model.rider.RiderDAO;
-import model.tipologia.Tipologia;
-import model.tipologia.TipologiaDAO;
+import model.rider.RiderDAO;;
 import model.utente.Utente;
 import model.utente.UtenteDAO;
 import model.utility.RiderSession;
@@ -37,9 +33,20 @@ public class utenteServlet extends controller {
                     req.getRequestDispatcher(view("site/login")).forward(req, resp);
                     break;
                 case "/logout":
+                    HttpSession session=req.getSession();
+                    session.invalidate();
+                    resp.sendRedirect("/FoodOut/index.jsp");
+                    break;
+                case "/update-pw":
+                    req.getRequestDispatcher(view("site/update-pw")).forward(req, resp);
                     break;
                 case "/show":
-                    authorizeUtente(req.getSession());
+                    HttpSession ssn=req.getSession();
+                    authorizeUtente(ssn);
+                    UtenteSession us= (UtenteSession) ssn.getAttribute("utenteSession");
+                    UtenteDAO service=new UtenteDAO();
+                    Utente u= service.doRetrieveById(us.getId());
+                    ssn.setAttribute("profilo",u);
                     req.getRequestDispatcher(view("crm/show")).forward(req, resp);
                     break;
                 case "/profile":
@@ -49,6 +56,10 @@ public class utenteServlet extends controller {
                 default:
                     resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Risorsa non trovata");
             }
+        }
+        catch (SQLException e) {
+            log(e.getMessage());
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
         catch (InvalidRequestException e) {
             log(e.getMessage());
@@ -67,7 +78,6 @@ public class utenteServlet extends controller {
                     validate(utenteValidator.validateForm(req));
                     Utente u=new Utente();
                     u.setNome(req.getParameter("nome"));
-                    System.out.println(u.getNome());
                     u.setCognome(req.getParameter("cognome"));
                     u.setEmail(req.getParameter("email"));
                     u.setPassword(req.getParameter("pw"));
@@ -79,7 +89,6 @@ public class utenteServlet extends controller {
                     service.doSave(u);
                     UtenteSession utenteSession=new UtenteSession(u);
                     HttpSession session=req.getSession();
-                    System.out.println("Utente session:"+utenteSession.isAdmin());
                     synchronized (session){
                         session.setAttribute("utenteSession",utenteSession);
                     }
@@ -127,9 +136,33 @@ public class utenteServlet extends controller {
                 }
                 break;
                 }
-                case "/update-admin":
+                case "/update": {
+                    System.out.println("eccomiii");
+                    HttpSession session=req.getSession();
+                    authenticateUtente(session);
+                    validate(utenteValidator.validateUpdate(req));
+                    Utente u = new Utente();
+                    u.setCodice(Integer.parseInt(req.getParameter("id")));
+                    u.setNome(req.getParameter("nome"));
+                    u.setCognome(req.getParameter("cognome"));
+                    u.setEmail(req.getParameter("email"));
+                    u.setProvincia(req.getParameter("provincia"));
+                    u.setCitta(req.getParameter("citta"));
+                    u.setVia(req.getParameter("via"));
+                    u.setCivico(Integer.parseInt(req.getParameter("civico")));
+                    UtenteDAO service = new UtenteDAO();
+                    service.doUpdate(u);
+                    UtenteSession utenteSession=new UtenteSession(u);
+                    synchronized (session){
+                        session.setAttribute("utenteSession",utenteSession);
+                    }
+                    if(u.getEmail().contains("@foodout.com"))
+                        resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
+                    else
+                        resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
                     break;
-                case "/update-cliente":
+                }
+                case "/update-pw":
                     break;
                 case "/deposit":
                     break;
@@ -140,6 +173,8 @@ public class utenteServlet extends controller {
             }
         } catch (SQLException e) {
             log(e.getMessage());
+            System.out.println("non ok");
+            e.printStackTrace();
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
         catch (InvalidRequestException e) {

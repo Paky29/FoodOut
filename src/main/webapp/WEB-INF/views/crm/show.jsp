@@ -57,42 +57,42 @@
                 <button type="submit" class="btn primary w100"> Modifica </button>
             </div>
             --%>
-            <form class="grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/update-admin"
+            <form class="grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/update"
                   method="post">
                 <fieldset
                         class="grid-x cell justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
                     <legend> Profilo</legend>
                     <label for="nome" class="field cell w40">
                         <span style="font-weight: bold"> Nome: </span>
-                        <input type="text" name="nome" id="nome" value="${utenteSession.nome}">
+                        <input type="text" name="nome" id="nome" value="${profilo.nome}">
                     </label>
                     <label for="cognome" class="field cell w40">
                         <span style="font-weight: bold"> Cognome: </span>
-                        <input type="text" name="nome" id="cognome" value="${utenteSession.nome}">
+                        <input type="text" name="cognome" id="cognome" value="${profilo.cognome}">
                     </label>
                     <label for="provincia" class="field cell w40">
                         <span style="font-weight: bold"> Provincia: </span>
-                        <input type="text" name="nome" id="provincia" value="${utenteSession.nome}">
+                        <input type="text" name="provincia" id="provincia" value="${profilo.provincia}">
                     </label>
                     <label for="citta" class="field cell w40">
                         <span style="font-weight: bold"> Citt&agrave: </span>
-                        <input type="text" name="nome" id="citta" value="${utenteSession.nome}">
+                        <input type="text" name="citta" id="citta" value="${profilo.citta}">
                     </label>
                     <label for="via" class="field cell w40">
                         <span style="font-weight: bold"> Via: </span>
-                        <input type="text" name="nome" id="via" value="${utenteSession.nome}">
+                        <input type="text" name="via" id="via" value="${profilo.via}">
                     </label>
                     <label for="civico" class="field cell w40">
                         <span style="font-weight: bold"> Civico: </span>
-                        <input type="text" name="nome" id="civico" value="${utenteSession.nome}">
+                        <input type="text" name="civico" id="civico" value="${profilo.civico}">
                     </label>
-                    <label for="email" class="field cell w40">
+                    <label for="email" class="field cell w50">
                         <span style="font-weight: bold"> Email: </span>
-                        <input type="text" name="nome" id="email" value="${utenteSession.nome}" disabled>
+                        <input type="text" name="email" id="email" value="${profilo.email}" readonly>
                     </label>
-                    <label for="blank" class="field cell w40" style="visibility: hidden ">
-                        <span style="font-weight: bold"> Email: </span>
-                        <input type="text" name="nome" id="blank" value="${utenteSession.nome}" disabled>
+                    <label for="blank" class="field cell w10" style="visibility: hidden ">
+                        <span style="font-weight: bold"></span>
+                        <input type="text" name="id" id="blank" value="${profilo.codice}" readonly>
                     </label>
                     <label for="modifica" class="field cell w40 align-center justify-center">
                         <button type="submit" class="btn primary" id="modifica"> Modifica dati</button>

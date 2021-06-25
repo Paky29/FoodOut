@@ -94,7 +94,11 @@ input:focus, textarea:focus, select:focus{
 }
 
 .field > input[disabled], .field > select [disabled], .field > textarea[disabled]{
-    background-color: grey;
+    background-color: darkgrey;
+}
+
+.field > input[readonly], .field > select [readonly], .field > textarea[readonly]{
+    background-color: lightgrey;
 }
 
 input {

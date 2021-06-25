@@ -81,6 +81,10 @@
         margin-bottom: 5px;
     }
 
+    .tipologia > p:hover{
+        transform: scale3d(1.30,1.30,1.30);
+    }
+
 </style>
 <div class="app grid-x">
     <jsp:include page="WEB-INF/views/partials/header.jsp">

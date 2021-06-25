@@ -227,18 +227,17 @@ public class UtenteDAO {
 
     public boolean doUpdate(Utente u) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("UPDATE Utente SET nome=?, cognome=?, email=?, pw=?, saldo=?, provincia=?, citta=?, via=?, civico=?, interesse=?, amministratore=? WHERE codiceUtente=?");
+            PreparedStatement ps = conn.prepareStatement("UPDATE Utente SET nome=?, cognome=?, email=?, saldo=?, provincia=?, citta=?, via=?, civico=?, interesse=?, amministratore=? WHERE codiceUtente=?");
             ps.setString(1, u.getNome());
             ps.setString(2, u.getCognome());
             ps.setString(3, u.getEmail());
-            ps.setString(4, u.getPassword());
-            ps.setFloat(5, u.getSaldo());
-            ps.setString(6, u.getProvincia());
-            ps.setString(7, u.getCitta());
-            ps.setString(8, u.getVia());
-            ps.setInt(9, u.getCivico());
-            ps.setString(10, u.getInteresse());
-            ps.setInt(11, u.getCodice());
+            ps.setFloat(4, u.getSaldo());
+            ps.setString(5, u.getProvincia());
+            ps.setString(6, u.getCitta());
+            ps.setString(7, u.getVia());
+            ps.setInt(8, u.getCivico());
+            ps.setString(9, u.getInteresse());
+            ps.setInt(10, u.getCodice());
             if (u.getEmail().contains("@foodout.com")) {
                 ps.setBoolean(11, true);
                 u.setAmministratore(true);
@@ -247,6 +246,17 @@ public class UtenteDAO {
                 u.setAmministratore(false);
             }
 
+            if (ps.executeUpdate() != 1)
+                return false;
+            else
+                return true;
+        }
+    }
+
+    public boolean doUpdatePw(Utente u) throws SQLException {
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("UPDATE Utente SET pw=? WHERE codiceUtente=?");
+            ps.setString(1, u.getPassword());
             if (ps.executeUpdate() != 1)
                 return false;
             else

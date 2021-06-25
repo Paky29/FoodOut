@@ -6,6 +6,6 @@
         <a href="/"> Gestione ordini</a>
         <a href="/"> Gestione tipologie</a>
         <a href="/"> Profilo</a>
-        <a href="/"> Logout</a>
+        <a href="/FoodOut/utente/logout"> Logout</a>
     </nav>
 </aside>
