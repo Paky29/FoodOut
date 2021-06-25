@@ -26,26 +26,33 @@ public class utenteServlet extends controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path=getPath(req);
-        switch(path){
-           case "/":
-               break;
-           case "/signup":
-               req.getRequestDispatcher(view("site/signup")).forward(req,resp);
-               break;
-           case "/login":
-               req.getRequestDispatcher(view("site/login")).forward(req,resp);
-               break;
-            case "/logout":
-                break;
-           case "/show":
-               req.getRequestDispatcher(view("site/show")).forward(req,resp);
-               break;
-           case "/profile":
-               break;
-           case "/ristoranti-pref":
-               break;
-           default:
-               resp.sendError(HttpServletResponse.SC_NOT_FOUND,"Risorsa non trovata");
+        try {
+            switch (path) {
+                case "/":
+                    break;
+                case "/signup":
+                    req.getRequestDispatcher(view("site/signup")).forward(req, resp);
+                    break;
+                case "/login":
+                    req.getRequestDispatcher(view("site/login")).forward(req, resp);
+                    break;
+                case "/logout":
+                    break;
+                case "/show":
+                    authorizeUtente(req.getSession());
+                    req.getRequestDispatcher(view("site/show")).forward(req, resp);
+                    break;
+                case "/profile":
+                    break;
+                case "/ristoranti-pref":
+                    break;
+                default:
+                    resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Risorsa non trovata");
+            }
+        }
+        catch (InvalidRequestException e) {
+            log(e.getMessage());
+            e.handle(req,resp);
         }
     }
 
