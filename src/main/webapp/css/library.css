@@ -52,7 +52,6 @@ input:focus, textarea:focus, select:focus{
 }
 
 .app{
-    width: 100vw;
     height: 100vh;
     max-width: 100%;
 }
