@@ -40,7 +40,7 @@ public class utenteServlet extends controller {
                     break;
                 case "/show":
                     authorizeUtente(req.getSession());
-                    req.getRequestDispatcher(view("site/show")).forward(req, resp);
+                    req.getRequestDispatcher(view("crm/show")).forward(req, resp);
                     break;
                 case "/profile":
                     break;
