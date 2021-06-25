@@ -24,7 +24,7 @@
     </nav>
     <form class="grid-x justify-center align-center address" action="/ristorante/zona" method="post">
         <fieldset class="grid-y cell w50 index">
-            <h2> Inserisci il tuo indirizzo </h2>
+            <h2> Inserisci la tua citt&agrave </h2>
             <label for="indirizzo" class="field">
                 <input type="text" name="indirizzo" id="indirizzo">
             </label>
