@@ -137,7 +137,6 @@ public class utenteServlet extends controller {
                 break;
                 }
                 case "/update": {
-                    System.out.println("eccomiii");
                     HttpSession session=req.getSession();
                     authenticateUtente(session);
                     validate(utenteValidator.validateUpdate(req));
