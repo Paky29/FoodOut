@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
+
 import controller.http.InvalidRequestException;
 import controller.http.controller;
 import model.rider.Rider;
@@ -161,8 +163,34 @@ public class utenteServlet extends controller {
                         resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
                     break;
                 }
-                case "/update-pw":
+                case "/update-pw":{
+                    HttpSession session=req.getSession();
+                    authenticateUtente(session);
+                    validate(utenteValidator.validateUpdatePassword(req));
+                    String old_pw=req.getParameter("old_pw");
+                    String new_pw=req.getParameter("new_pw");
+                    String conf_pw=req.getParameter("conf_pw");
+                    String email=req.getParameter("email");
+                    UtenteDAO service=new UtenteDAO();
+                    Utente u=service.doRetrieveByEmailAndPassword(email, old_pw);
+                    if(u==null)
+                        throw new InvalidRequestException("error", List.of("error"),404); // da cambiare
+
+                    if(!new_pw.equals(conf_pw))
+                        throw new InvalidRequestException("error", List.of("error"),404); // da cambiare
+
+                    u.setPassword(new_pw);
+                    service.doUpdatePw(u);
+                    UtenteSession utenteSession=new UtenteSession(u);
+                    synchronized (session){
+                        session.setAttribute("utenteSession",utenteSession);
+                    }
+                    if(u.getEmail().contains("@foodout.com"))
+                        resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
+                    else
+                        resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
                     break;
+                }
                 case "/deposit":
                     break;
                 case "/delete":

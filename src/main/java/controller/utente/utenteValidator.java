@@ -36,4 +36,12 @@ public class utenteValidator {
         return validator;
     }
 
+    static RequestValidator validateUpdatePassword(HttpServletRequest request){
+        RequestValidator validator= new RequestValidator(request);
+        validator.assertMatch("old_pw", Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$"), "password deve essere di minimo otto caratteri con almeno una lettere maiuscola, una lettera minuscola, un numero e un carattere speciale");
+        validator.assertMatch("new_pw", Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$"), "password deve essere di minimo otto caratteri con almeno una lettere maiuscola, una lettera minuscola, un numero e un carattere speciale");
+        validator.assertMatch("conf_pw", Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$"), "password deve essere di minimo otto caratteri con almeno una lettere maiuscola, una lettera minuscola, un numero e un carattere speciale");
+        return validator;
+    }
+
 }
