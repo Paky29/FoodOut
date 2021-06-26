@@ -1,0 +1,17 @@
+.searchbar {
+    background-color: white;
+    padding: .2rem;
+    border-bottom: 2px dotted var(--primary);
+}
+
+.searchbar > .command {
+    flex: 1;
+    max-width: 70%;
+}
+
+.searchbar > *{
+    color:white;
+    margin-right: 8px;
+    margin-left: 8px;
+
+}

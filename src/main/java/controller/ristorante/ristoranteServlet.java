@@ -20,6 +20,7 @@ public class ristoranteServlet extends controller {
             case "/":
                 break;
             case "/all":
+                req.getRequestDispatcher(view("ristorante/show-all")).forward(req,resp);
                 break;
             case "/zona"://controllare se i parametri sono null per capire se è per l'admin o un utente
                 System.out.println("sono qui");
