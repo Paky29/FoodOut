@@ -16,7 +16,7 @@
 <style>
 
     body {
-        background-image: url("/prova_DB/images/sfondo.jpg");
+        background-image: url("/FoodOut/images/sfondo.jpg");
         background-size: cover;
     }
 

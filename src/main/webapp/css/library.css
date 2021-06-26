@@ -185,6 +185,10 @@ button.primary:hover{
         flex-basis: 50%;
     }
 
+    .w65{
+        flex-basis: 65%;
+    }
+
     .w75{
         flex-basis: 75%;
     }
