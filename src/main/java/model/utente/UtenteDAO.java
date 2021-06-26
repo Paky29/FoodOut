@@ -237,12 +237,12 @@ public class UtenteDAO {
             ps.setString(7, u.getVia());
             ps.setInt(8, u.getCivico());
             ps.setString(9, u.getInteresse());
-            ps.setInt(10, u.getCodice());
+            ps.setInt(11, u.getCodice());
             if (u.getEmail().contains("@foodout.com")) {
-                ps.setBoolean(11, true);
+                ps.setBoolean(10, true);
                 u.setAmministratore(true);
             } else {
-                ps.setBoolean(11, false);
+                ps.setBoolean(10, false);
                 u.setAmministratore(false);
             }
 
@@ -257,6 +257,7 @@ public class UtenteDAO {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("UPDATE Utente SET pw=? WHERE codiceUtente=?");
             ps.setString(1, u.getPassword());
+            ps.setInt(2,u.getCodice());
             if (ps.executeUpdate() != 1)
                 return false;
             else
