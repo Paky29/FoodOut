@@ -10,7 +10,7 @@
 <head>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Ristoranti"/>
-        <jsp:param name="scripts" value="crm"/>
+        <jsp:param name="scripts" value="crm,crm_ristoranti"/>
         <jsp:param name="styles" value="crm,crm_ristoranti"/>
     </jsp:include>
 </head>
@@ -21,7 +21,9 @@
         <%@include file="../partials/crm/header.jsp" %>
         <div class="body grid-x justify-center">
             <div class="searchbar grid-x align-center cell">
-                <%@include file="../../../icons/plus.svg" %>
+                <span title="Aggiungi ristorante">
+                    <%@include file="../../../icons/plus.svg" %>
+                </span>
                 <label class="field command w75">
                     <input type="text" placeholder="Cerca Ristoranti">
                 </label>

@@ -34,6 +34,7 @@ public class ristoranteServlet extends controller {
             case "/show-recensioni":
                 break;
             case "/add":
+                req.getRequestDispatcher(view("ristorante/add-ristorante")).forward(req,resp);
                 break;
             default:
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND,"Risorsa non trovata");

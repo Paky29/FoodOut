@@ -5,7 +5,7 @@
         <a href="/FoodOut/ristorante/all"> Gestione ristoranti</a>
         <a href="/"> Gestione ordini</a>
         <a href="/"> Gestione tipologie</a>
-        <a href="/FoodOut/utente/profilo"> Profilo</a>
+        <a href="/FoodOut/utente/show"> Profilo</a>
         <a href="/FoodOut/utente/logout"> Logout</a>
     </nav>
 </aside>
