@@ -32,13 +32,6 @@
         outline: 1px solid var(--primary);
     }
 
-    .tipologie {
-        padding: 1rem;
-    <%--dimensione relativa al root--%> background-color: white;
-        opacity: revert;
-        margin-top:10vh;
-    }
-
     .box {
         border: 2px solid var(--primary);
         margin: 10px;
@@ -77,28 +70,55 @@
         transition: all .3s ease-in-out;
     }
 
-    .tipologia{
-        margin: 10vw;
-        margin-bottom: 5px;
-    }
-
-    .tipologia > p:hover{
-        transform: scale3d(1.30,1.30,1.30);
-    }
-
     label > span {
         margin: 5px 5px;
         font-style: italic;
     }
 
+    .table{
+        border-collapse: collapse;
+        background-color:white;
+        font-size: large;
+        font-weight: normal;
+        font-style: normal;
+        font-family: Myriad;
+    }
+
+    .table > thead{
+        visibility: hidden;
+    }
+
+    .table tr{
+        border:none;
+        margin-bottom: .5rem;
+        padding: .5rem;
+        display:block;
+    }
+
+    .table > tbody{
+        border:2px solid black;
+    }
+
+    .table > tbody td{
+        display: block;
+        border-bottom: 1px solid black;
+        text-align: right;
+        padding: .5rem;
+    }
+
+    .table > tbody td:before{
+        content: attr(data-head);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
 
 </style>
 <div class="app grid-x">
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-    <div class="cell grid-y" id="header">
+    <div class="cell grid-x" id="header">
         <nav class="grid-y navbar align-center">
-            <img src="/prova_DB/images/logo.png" class="fluid-image" id="logo">
+            <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
         </nav>
         <form class="grid-x justify-center align-center info-ris" action="/ristorante/update" method="post" enctype="multipart/form-data">
             <fieldset class="grid-x cell w63 index">
@@ -135,19 +155,24 @@
                     <span style="font-weight: bold"> Info:</span>
                     <textarea rows="4" cols="100" type="text" name="info" id="info" maxlength="200"> ${ristorante.info}</textarea>
                 </label>
+                <span class="grid-x cell justify-center">
                 <button type="submit" class="btn primary"> Modifica info</button>
+                </span>
             </fieldset>
         </form>
-    </div>
-
-
-    <div class="content">
-        <div class="tipologie app grid-x justify-center align-center">
-            <c:forEach items="${tipologieVendute}" var="tipologia">
-                <span class="cell w10 tipologia">
-                <p class="box"> ${tipologia.nome} </p>
-                </span>
-            </c:forEach>
+        <div class="disponibilita grid-x justify-center align-center">
+            <section class="grid-y cell restaurants w65">
+                <table class="table restaurants-table">
+                    <caption>Tabella orari apertura</caption>
+                    <tbody>
+                    <c:forEach items="${ristorante.giorni}" var="disp">
+                        <tr>
+                            <td data-head="${disp.giorno}">${disp.oraApertura} - ${disp.oraChiusura} </td> <%--link a pagina con prodotti--%>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </section>
         </div>
     </div>
 </div>

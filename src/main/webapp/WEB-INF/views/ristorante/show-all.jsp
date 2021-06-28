@@ -43,6 +43,7 @@
                         <th> Via </th>
                         <th> Civico </th>
                         <th> Rating </th>
+                        <th> Tipologie </th>
                         <th> </th>
                     </tr>
                     </thead>
@@ -58,6 +59,9 @@
                                 <c:forEach var="counter" begin="1" end="${ristorante.rating}">
                                     <%@include file="../../../icons/moto.svg" %>
                                 </c:forEach>
+                            </td>
+                            <td data-head="Tipologie">
+                                    ${ristorante.tipologie[0].nome},${ristorante.tipologie[1].nome}...
                             </td>
                             <td style="border-bottom: 0"> <a href="/FoodOut/ristorante/show-info-admin?id=${ristorante.codice}" target="_blank"> Vai al profilo </a></td>
                         </tr>
