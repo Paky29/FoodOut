@@ -144,7 +144,7 @@ button.primary:hover{
 
 .table > tbody td:before{
     content: attr(data-head);
-    floar: left;
+    float: left;
     font-weight: bold;
     text-transform: uppercase;
 }
