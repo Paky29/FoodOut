@@ -144,7 +144,7 @@ button.primary:hover{
 
 .table > tbody td:before{
     content: attr(data-head);
-    floar: left;
+    float: left;
     font-weight: bold;
     text-transform: uppercase;
 }
@@ -183,6 +183,10 @@ button.primary:hover{
 
     .w50{
         flex-basis: 50%;
+    }
+
+    .w63{
+        flex-basis: 63%;
     }
 
     .w65{

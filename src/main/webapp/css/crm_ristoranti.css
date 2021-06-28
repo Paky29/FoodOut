@@ -2,7 +2,7 @@
     background-color: white;
     padding: .2rem;
     border-bottom: 2px dotted var(--primary);
-    max-height: 120px;
+    max-height: 20%; /* da vedere */
 }
 
 .searchbar > .command {
@@ -17,6 +17,21 @@
 
 }
 
-svg{
-    cursor:pointer;
+.restaurants{
+    margin: 1rem;
+}
+
+.restaurants-table > thead {
+    background-color: var(--primary);
+    color: white;
+}
+
+table > caption {
+    font-weight: bold;
+    font-size: large;
+    margin: 10px;
+}
+
+td > a {
+    text-decoration: none;
 }
