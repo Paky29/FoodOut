@@ -90,13 +90,14 @@
 
     .table tr{
         border:none;
-        margin-bottom: .5rem;
+        margin: .5rem;
         padding: .5rem;
         display:block;
     }
 
     .table > tbody{
-        border:2px solid black;
+        border:1px solid black;
+        border-radius: 20px;
     }
 
     .table > tbody td{
@@ -113,9 +114,8 @@
         text-transform: uppercase;
     }
 
-
 </style>
-<div class="app grid-x">
+<div class="app">
     <div class="cell grid-x" id="header">
         <nav class="grid-y navbar align-center">
             <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
@@ -161,15 +161,17 @@
             </fieldset>
         </form>
         <div class="disponibilita grid-x justify-center align-center">
-            <section class="grid-y cell restaurants w65">
-                <table class="table restaurants-table">
-                    <caption>Tabella orari apertura</caption>
+            <section class="grid-y cell w63">
+                <table class="table">
                     <tbody>
                     <c:forEach items="${ristorante.giorni}" var="disp">
                         <tr>
                             <td data-head="${disp.giorno}">${disp.oraApertura} - ${disp.oraChiusura} </td> <%--link a pagina con prodotti--%>
                         </tr>
                     </c:forEach>
+                    <tr>
+                        <td style="border-bottom: none"><a href="#">Modifica orario</a></td>
+                    </tr>
                     </tbody>
                 </table>
             </section>

@@ -44,9 +44,9 @@ figure {
 
 .disponibilita{
     width:100%;
-    position: absolute;
+    position: relative;
     right: 0;
-    top:200%;
+    top:180%;
 }
 
 @media screen and (min-width: 769px){
@@ -55,6 +55,7 @@ figure {
         height: auto;
     }
 }
+
 
 
 
