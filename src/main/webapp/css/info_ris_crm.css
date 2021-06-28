@@ -46,7 +46,7 @@ figure {
     width:100%;
     position: relative;
     right: 0;
-    top:180%;
+    top:200%;
 }
 
 @media screen and (min-width: 769px){

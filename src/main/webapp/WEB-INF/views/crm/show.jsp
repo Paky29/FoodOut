@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: User01
-  Date: 16/06/2021
-  Time: 20:13
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -13,6 +6,12 @@
         <jsp:param name="scripts" value="crm"/>
         <jsp:param name="styles" value="crm"/>
     </jsp:include>
+    <style>
+        input {
+            height: 40px;
+            line-height: 40px;
+        }
+    </style>
 </head>
 <body>
 <main class="app">
@@ -20,43 +19,6 @@
     <section class="content grid-y">
         <%@include file="../partials/crm/header.jsp" %>
         <div class="body grid-x justify-center">
-            <%--<div class="grid-x show "> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno
-                <h1 id="title" class="cell"> Profilo </h1>
-                <label for="nome" class="field w40 cell">
-                    <span style="font-weight: bold"> Nome: </span>
-                    <p type="text" name="nome" id="nome"> ${utenteSession.nome} </p>
-                </label>
-                <label for="cognome" class="field w40 cell">
-                    <span style="font-weight: bold"> Cognome: </span>
-                    <p type="text" name="nome" id="cognome"> ${utenteSession.nome} </p>
-                </label>
-                <label for="provincia" class="field w40 cell">
-                    <span style="font-weight: bold"> Provincia: </span>
-                    <p type="text" name="nome" id="provincia"> ${utenteSession.nome} </p>
-                </label>
-                <label for="citta" class="field w40 cell">
-                    <span style="font-weight: bold"> Citt&agrave: </span>
-                    <p type="text" name="nome" id="citta"> ${utenteSession.nome} </p>
-                </label>
-                <label for="via" class="field w40 cell">
-                    <span style="font-weight: bold"> Via: </span>
-                    <p type="text" name="nome" id="via"> ${utenteSession.nome} </p>
-                </label>
-                <label for="civico" class="field w40 cell">
-                    <span style="font-weight: bold"> Civico: </span>
-                    <p type="text" name="nome" id="civico"> ${utenteSession.nome} </p>
-                </label>
-                <label for="email" class="field w40 cell">
-                    <span style="font-weight: bold"> Email: </span>
-                    <p type="text" name="nome" id="email"> ${utenteSession.nome} </p>
-                </label>
-                <label for="blank" class="field w40 cell" >
-                    <span style="font-weight: bold"> </span>
-                    <p type="text" name="nome" id="blank"> </p>
-                </label>
-                <button type="submit" class="btn primary w100"> Modifica </button>
-            </div>
-            --%>
             <form class="grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/update"
                   method="post">
                 <fieldset

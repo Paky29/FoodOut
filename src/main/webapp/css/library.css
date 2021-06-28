@@ -71,7 +71,7 @@ input:focus, textarea:focus, select:focus{
 }
 
 .grid-inline{
-    justify-content: center;
+    display:inline-flex;
 }
 
 .justify-center{
@@ -104,8 +104,8 @@ input:focus, textarea:focus, select:focus{
 }
 
 input{
-    height: 30px;
-    line-height: 30px;
+    height: 5%;
+    line-height: 5%;
 }
 
 .btn{
@@ -162,12 +162,41 @@ button.primary:hover{
 }
 
 .paginator > li {
-    border: 1px solid;
+    border: 1px solid white;
     padding: .5rem;
+    background-color: var(--primary);
 }
 
 .paginator > li> a {
     text-decoration: none;
+    color: white;
+}
+
+.paginator > li:hover{
+    filter:brightness(110%);
+}
+
+.notification {
+    position:relative;
+    color:white;
+    border-radius:10px;
+    padding: .2rem;
+    margin-bottom:.2rem;
+}
+
+.notification.success{
+    background-color: var(--success);
+}
+
+.notification.danger{
+    background-color: var(--error);
+}
+
+.notification .close{
+    position:absolute;
+    top:10px;
+    right: 10px;
+    fill:white;
 }
 
 @media screen and (min-width: 769px){

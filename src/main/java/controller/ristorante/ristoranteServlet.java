@@ -28,8 +28,15 @@ public class ristoranteServlet extends controller {
                     break;
                 case "/all": {
                     authorizeUtente(req.getSession());
-                    RistoranteDAO service = new RistoranteDAO();
-                    ArrayList<Ristorante> ristoranti = service.doRetrieveAll(new Paginator(1, 100));
+                    RistoranteDAO service=new RistoranteDAO();
+                    int intPage=parsePage(req);
+                    Paginator paginator=new Paginator(intPage,2);
+                    System.out.println(intPage);
+                    int size=service.countAll();
+                    System.out.println(size);
+                    req.setAttribute("pages",paginator.getPages(size));
+                    ArrayList<Ristorante> ristoranti = service.doRetrieveAll(paginator);
+                    System.out.println("ok");
                     req.setAttribute("ristoranti", ristoranti);
                     req.getRequestDispatcher(view("ristorante/show-all")).forward(req, resp);
                     break;
@@ -69,6 +76,7 @@ public class ristoranteServlet extends controller {
         }
         catch (SQLException e) {
             log(e.getMessage());
+            e.printStackTrace();
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
         catch (InvalidRequestException e) {

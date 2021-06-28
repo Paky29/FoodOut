@@ -36,6 +36,7 @@ public class utenteServlet extends controller {
                     break;
                 case "/logout":
                     HttpSession session=req.getSession();
+                    authenticateUtente(session);
                     session.invalidate();
                     resp.sendRedirect("/FoodOut/index.jsp");
                     break;

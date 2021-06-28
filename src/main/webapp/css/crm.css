@@ -98,11 +98,6 @@ span{
     margin-right: 4px;
 }
 
-input {
-    line-height: 30px;
-    height: 30px;
-}
-
 @media screen and (min-width:769px){
     .topbar > .account{
         display: block;

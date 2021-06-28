@@ -412,21 +412,16 @@ public class RistoranteDAO {
 
     public ArrayList<Ristorante> doRetrieveAll(Paginator paginator) throws SQLException{
             try(Connection conn=ConPool.getConnection()){
-                PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, d.giorno, d.oraApertura, d.oraChiusura FROM Ristorante r INNER JOIN Disponibilita d ON d.codRis_fk=r.codiceRistorante LIMIT ?,?");
+                PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ristorante r LIMIT ?,?");
                 ps.setInt(1,paginator.getOffset());
                 ps.setInt(2,paginator.getLimit());
                 Map<Integer, Ristorante> ristoranti=new LinkedHashMap<>();
                 ResultSet rs=ps.executeQuery();
-
-                while(rs.next()){
-                    int codiceRistorante=rs.getInt("r.codiceRistorante");
-                    if(!ristoranti.containsKey(codiceRistorante)){
-                        Ristorante r=RistoranteExtractor.extract(rs);
-                        ristoranti.put(codiceRistorante, r);
-                    }
-
-                    Disponibilita d=DisponibilitaExtractor.extract(rs);
-                    ristoranti.get(codiceRistorante).getGiorni().add(d);
+                while(rs.next()) {
+                    int codiceRistorante = rs.getInt("r.codiceRistorante");
+                    System.out.println("DAO"+codiceRistorante);
+                    Ristorante r = RistoranteExtractor.extract(rs);
+                    ristoranti.put(codiceRistorante, r);
                 }
 
                 if(ristoranti.isEmpty())
@@ -435,6 +430,14 @@ public class RistoranteDAO {
                 StringJoiner sj=new StringJoiner(",","(", ")");
                 for(int key: ristoranti.keySet()){
                     sj.add(Integer.toString(key));
+                }
+
+                PreparedStatement disp=conn.prepareStatement("SELECT d.codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN"+sj.toString());
+                ResultSet setDisp=disp.executeQuery();
+                while(setDisp.next()){
+                    int codiceRistorante=setDisp.getInt("d.codRis_fk");
+                    Disponibilita d=DisponibilitaExtractor.extract(setDisp);
+                    ristoranti.get(codiceRistorante).getGiorni().add(d);
                 }
 
                 PreparedStatement tip=conn.prepareStatement("SELECT art.codRis_fk, t.nome, t.descrizione FROM AppartenenzaRT art INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE art.codRis_fk IN" + sj.toString());

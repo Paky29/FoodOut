@@ -12,14 +12,9 @@
 <body>
 <style>
 
-    .top {
-        position: relative;
-    }
-
-
     .index {
-        padding: 1rem;
-    <%--dimensione relativa al root--%> background-color: white;
+        padding: 1rem;<%--dimensione relativa al root--%>
+        background-color: white;
         border-radius: 10px;
         opacity: revert;
     }
@@ -32,20 +27,9 @@
         outline: 1px solid var(--primary);
     }
 
-    .box {
-        border: 2px solid var(--primary);
-        margin: 10px;
-        padding: 15px;
-        font-weight: bold;
-        font-size: 3vw;
-        color: white;
-        background-color: var(--primary);
-        border-radius: 5px;
-    }
-
-    .cover-image{
-        max-width: 100%;
-        height: 50vh;
+    input {
+        height: 40px;
+        line-height: 40px;
     }
 
     .info{
@@ -62,12 +46,6 @@
         color: black;
         margin-right: 25px;
         margin-left: 25px;
-    }
-
-    .content{
-        background-color: white;
-        flex:1;
-        transition: all .3s ease-in-out;
     }
 
     label > span {

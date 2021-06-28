@@ -6,7 +6,7 @@ public class Paginator {
 
     public Paginator(int page, int itemPage){
         limit=itemPage;
-        offset=(page-1) * (itemPage + 1);
+        offset=(page==1) ? 0 : (page-1) * itemPage;
     }
 
     public int getLimit() {

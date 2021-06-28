@@ -68,6 +68,11 @@
                     </c:forEach>
                     </tbody>
                 </table>
+                <div>
+                    <jsp:include page="../partials/paginator.jsp">
+                        <jsp:param name="risorsa" value="all"/>
+                    </jsp:include>
+                </div>
             </section>
         </div>
         <%@include file="../partials/crm/footer.jsp" %>
