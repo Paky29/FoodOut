@@ -103,7 +103,7 @@
                 <h2 class="cell"> Info </h2>
                 <label for="nome" class="field cell w80" >
                     <span style="font-weight: bold"> Nome: </span>
-                    <input type="text" name="nome" id="nome" value="${ristorante.info}">
+                    <input type="text" name="nome" id="nome" value="${ristorante.nome}">
                 </label>
                 <label class="field cell w40 grid-x">
                     <span style="font-weight: bold" class="field cell w40"> Provincia: </span>

@@ -1,7 +1,6 @@
 package controller.ristorante;
 
-import controller.http.InvalidRequestException;
-import controller.http.controller;
+import controller.http.*;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
 import model.utility.Paginator;
@@ -11,17 +10,25 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 
 @WebServlet (name="ristoranteServlet", value="/ristorante/*")
 @MultipartConfig
-public class ristoranteServlet extends controller {
+public class ristoranteServlet extends controller implements ErrorHandler {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path=getPath(req);
+        System.out.println((path));
         try {
             switch (path) {
                 case "/":
@@ -31,12 +38,9 @@ public class ristoranteServlet extends controller {
                     RistoranteDAO service=new RistoranteDAO();
                     int intPage=parsePage(req);
                     Paginator paginator=new Paginator(intPage,2);
-                    System.out.println(intPage);
                     int size=service.countAll();
-                    System.out.println(size);
                     req.setAttribute("pages",paginator.getPages(size));
                     ArrayList<Ristorante> ristoranti = service.doRetrieveAll(paginator);
-                    System.out.println("ok");
                     req.setAttribute("ristoranti", ristoranti);
                     req.getRequestDispatcher(view("ristorante/show-all")).forward(req, resp);
                     break;
@@ -61,7 +65,7 @@ public class ristoranteServlet extends controller {
                     RistoranteDAO ristoranteDAO=new RistoranteDAO();
                     Ristorante r=ristoranteDAO.doRetrieveById(id);
                     req.setAttribute("ristorante", r);
-                    req.setAttribute("ristoranteUrl", "Foodout/covers/" + r.getUrlImmagine());
+                    //req.setAttribute("ristoranteUrl", "Foodout/covers/" + r.getUrlImmagine());
                     req.getRequestDispatcher(view("ristorante/info-admin")).forward(req, resp);
                     break;
                 }
@@ -69,7 +73,22 @@ public class ristoranteServlet extends controller {
                     req.getRequestDispatcher(view("ristorante/recensioni")).forward(req, resp);
                     break;
                 case "/add":
+                    req.getRequestDispatcher(view("ristorante/add-ristorante")).forward(req,resp);
                     break;
+                case "/delete": {
+                    authorizeUtente(req.getSession());
+                    CommonValidator validator=new CommonValidator();
+                    validator.validateId(req);
+                    RistoranteDAO service=new RistoranteDAO();
+                    int id=Integer.parseInt(req.getParameter("id"));
+                    if(service.doDelete(id)){
+                        resp.sendRedirect("/FoodOut/ristorante/all");//non sicuro
+                    }
+                    else {
+                        InternalError();
+                    }
+                    break;
+                }
                 default:
                     resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Risorsa non trovata");
             }
@@ -87,20 +106,58 @@ public class ristoranteServlet extends controller {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path=getPath(req);
-        switch(path){
-            case "/":
-                break;
-            case "/add-pref":
-                break;
-            case "/update":
-                break;
-            case "/add":
-                break;
-            case "/delete":
-                break;
-            default:
-                resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED,"Operazione non consentita");
+        String path = getPath(req);
+        try {
+            switch (path) {
+                case "/":
+                    break;
+                case "/add-pref":
+                    break;
+                case "/update":
+                    break;
+                case "/add": {
+                    HttpSession session = req.getSession();
+                    authorizeUtente(session);
+                    ristoranteValidator validator = new ristoranteValidator();
+                    validator.validateForm(req);
+                    Ristorante r = new Ristorante();
+                    r.setNome(req.getParameter("nome"));
+                    r.setProvincia(req.getParameter("provincia"));
+                    r.setCitta(req.getParameter("citta"));
+                    r.setVia(req.getParameter("via"));
+                    r.setCivico(Integer.parseInt(req.getParameter("civico")));
+                    r.setSpesaMinima(Float.parseFloat(req.getParameter("spesaMinima")));
+                    r.setTassoConsegna(Float.parseFloat(req.getParameter("tassoConsegna")));
+                    r.setInfo(req.getParameter("info"));
+                    Part filePart = req.getPart("urlImmagine");
+                    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                    r.setUrlImmagine(fileName);
+                    RistoranteDAO service = new RistoranteDAO();
+                    int size = service.countAll();
+                    if (service.doSave(r)) {
+                        resp.sendRedirect("/FoodOut/ristorante/all");
+                        String uploadRoot=getUploadPath();
+                        try(InputStream fileStream=filePart.getInputStream()){
+                            File file=new File(uploadRoot+fileName);
+                            Files.copy(fileStream, file.toPath());
+                        }
+                    }
+                    else
+                        InternalError();
+                    break;
+                }
+                default:
+                    resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, "Operazione non consentita");
+            }
+        }catch (SQLException e) {
+            log(e.getMessage());
+            e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        catch (InvalidRequestException e) {
+            log(e.getMessage());
+            System.out.println(e.getMessage());
+            e.handle(req,resp);
         }
     }
 }

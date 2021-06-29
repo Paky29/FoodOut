@@ -155,6 +155,7 @@ button.primary:hover{
     float: left;
     font-weight: bold;
     text-transform: uppercase;
+    color:var(--primary);
 }
 
 .paginator{
@@ -240,6 +241,10 @@ button.primary:hover{
 
     .w33{
         flex-basis: 33%;
+    }
+
+    .w82{
+        flex-basis: 82%;
     }
 
     .w85{

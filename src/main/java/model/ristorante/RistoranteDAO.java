@@ -470,7 +470,7 @@ public class RistoranteDAO {
             ps.setFloat(7,r.getSpesaMinima());
             ps.setFloat(8,r.getTassoConsegna());
             ps.setString(9,r.getUrlImmagine());
-            ps.setInt(10,r.getRating());
+            ps.setInt(10,1);
             if(ps.executeUpdate()!=1){
                return false;
             }

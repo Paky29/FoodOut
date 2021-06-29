@@ -12,6 +12,7 @@ public class RequestValidator {
     private final HttpServletRequest request;
     private static final Pattern INT_PATTERN = Pattern.compile("^\\d+$");
     private static final Pattern DOUBLE_PATTERN = Pattern.compile("^(-)?(0|[1-9]\\d+)\\.\\d+$");
+    private static final Pattern POSITIVE_DOUBLE_PATTERN = Pattern.compile("^(0|[1-9]\\d+)\\.\\d+$");
 
     public RequestValidator(HttpServletRequest request){
         this.errors=new ArrayList<>();
@@ -52,6 +53,7 @@ public class RequestValidator {
     public boolean assertDouble(String value, String msg){
         return assertMatch(value, DOUBLE_PATTERN, msg);
     }
+    public boolean assertPositiveDouble(String value, String msg){ return assertMatch(value, POSITIVE_DOUBLE_PATTERN, msg); }
 
     public boolean assertEmail(String value, String msg){
         Pattern pattern = Pattern.compile("^([\\w\\.\\-]+)@([\\w\\-]+)((\\.(\\w){2,})+)$");
