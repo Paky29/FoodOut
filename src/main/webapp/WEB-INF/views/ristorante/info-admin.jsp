@@ -1,3 +1,6 @@
+<%@ page import="model.ristorante.Ristorante" %>
+<%@ page import="model.tipologia.Tipologia" %>
+<%@ page import="java.util.StringJoiner" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -128,6 +131,19 @@
                     <input type="text" name="rating" id="rating" value="${ristorante.rating}" readonly>
                     <span style="font-weight: bold" class="cell" style="visibility: hidden"> </span>
                     <input type="text" name="id" id="id" value="${ristorante.codice}" style="visibility: hidden" readonly >
+                </label>
+                <label for="tipologie" class="field cell w80">
+                    <span style="font-weight: bold"> Tipologie: </span>
+                    <textarea name="tipologie" id="tipologie" rows="3" cols="100" readonly>
+                        <%
+                            Ristorante r= (Ristorante) request.getAttribute("ristorante");
+                            StringJoiner sj=new StringJoiner(",");
+                            for(Tipologia t: r.getTipologie()){
+                                sj.add(t.getNome());
+                            }
+                        %>
+                        <%=sj.toString()%>
+                    </textarea>
                 </label>
                 <label for="info" class="field cell w80">
                     <span style="font-weight: bold"> Info:</span>
