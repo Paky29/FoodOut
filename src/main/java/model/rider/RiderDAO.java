@@ -1,5 +1,7 @@
 package model.rider;
 
+import model.disponibilita.Disponibilita;
+import model.disponibilita.DisponibilitaExtractor;
 import model.ordine.Ordine;
 import model.ordine.OrdineDAO;
 import model.turno.Turno;
@@ -11,6 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 
 public class RiderDAO {
     public RiderDAO(){}
@@ -82,52 +85,72 @@ public class RiderDAO {
 
     public ArrayList<Rider> doRetrieveAll(Paginator paginator) throws SQLException{
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, citta, veicolo, giorno, oraInizio, oraFine FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk LIMIT ?,?");
+            PreparedStatement ps=conn.prepareStatement("SELECT rd.codiceRider, rd.email, rd.citta, rd.veicolo FROM Rider rd LIMIT ?,?");
             ps.setInt(1, paginator.getOffset());
             ps.setInt(2, paginator.getLimit());
-
             ResultSet rs=ps.executeQuery();
+
             Map<Integer, Rider> riders= new LinkedHashMap<>();
             while(rs.next()){
                 int codiceRider=rs.getInt("rd.codiceRider");
-                if(!riders.containsKey(codiceRider)){
-                    Rider rd=RiderExtractor.extract(rs);
-                    riders.put(codiceRider, rd);
-                }
-                Turno t=TurnoExtractor.extract(rs);
-                riders.get(codiceRider).getTurni().add(t);
+                Rider rd=RiderExtractor.extract(rs);
+                riders.put(codiceRider, rd);
             }
+
             if(riders.isEmpty())
                 return null;
+
+            StringJoiner sj=new StringJoiner(",","(", ")");
+            for(int key: riders.keySet()){
+                sj.add(Integer.toString(key));
+            }
+
+            PreparedStatement turno=conn.prepareStatement("SELECT t.codRider_fk, t.giorno, t.oraInizio, t.oraFine FROM Turno t WHERE t.codRider_fk IN "+sj.toString());
+            ResultSet setTurno=turno.executeQuery();
+
+            while(setTurno.next()){
+                int codiceRider=setTurno.getInt("t.codRider_fk");
+                Turno t = TurnoExtractor.extract(setTurno);
+                riders.get(codiceRider).getTurni().add(t);
+            }
+
             return new ArrayList<>(riders.values());
         }
     }
 
     public ArrayList<Rider> doRetrieveByCitta(String citta, Paginator paginator) throws SQLException{
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, citta, veicolo, giorno, oraInizio, oraFine FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk WHERE citta=? LIMIT ?,?");
+            PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, citta, veicolo FROM Rider rd WHERE citta=? LIMIT ?,?");
             ps.setString(1, citta);
             ps.setInt(2, paginator.getOffset());
             ps.setInt(3, paginator.getLimit());
-
             ResultSet rs=ps.executeQuery();
+
             Map<Integer, Rider> riders= new LinkedHashMap<>();
             while(rs.next()){
                 int codiceRider=rs.getInt("rd.codiceRider");
-                if(!riders.containsKey(codiceRider)){
-                    Rider rd=RiderExtractor.extract(rs);
-                    riders.put(codiceRider, rd);
-                }
-
-                Turno t=TurnoExtractor.extract(rs);
-                riders.get(codiceRider).getTurni().add(t);
-
+                Rider rd=RiderExtractor.extract(rs);
+                riders.put(codiceRider, rd);
             }
 
             if(riders.isEmpty())
                 return null;
-            return new ArrayList<>(riders.values());
 
+            StringJoiner sj=new StringJoiner(",","(", ")");
+            for(int key: riders.keySet()){
+                sj.add(Integer.toString(key));
+            }
+
+            PreparedStatement turno=conn.prepareStatement("SELECT t.codRider_fk, t.giorno, t.oraInizio, t.oraFine FROM Turno t WHERE t.codRider_fk IN "+sj.toString());
+            ResultSet setTurno=turno.executeQuery();
+
+            while(setTurno.next()){
+                int codiceRider=setTurno.getInt("t.codRider_fk");
+                Turno t = TurnoExtractor.extract(setTurno);
+                riders.get(codiceRider).getTurni().add(t);
+            }
+
+            return new ArrayList<>(riders.values());
         }
     }
 
@@ -137,54 +160,70 @@ public class RiderDAO {
             ps.setString(1, giorno);
             ps.setInt(2, paginator.getOffset());
             ps.setInt(3, paginator.getLimit());
-
             ResultSet rs=ps.executeQuery();
+
             Map<Integer, Rider> riders= new LinkedHashMap<>();
             while(rs.next()){
                 int codiceRider=rs.getInt("rd.codiceRider");
-                if(!riders.containsKey(codiceRider)){
-                    Rider rd=RiderExtractor.extract(rs);
-                    riders.put(codiceRider, rd);
-                }
-
-                Turno t=TurnoExtractor.extract(rs);
-                riders.get(codiceRider).getTurni().add(t);
-
+                Rider rd=RiderExtractor.extract(rs);
+                riders.put(codiceRider, rd);
             }
 
             if(riders.isEmpty())
                 return null;
-            return new ArrayList<>(riders.values());
 
+            StringJoiner sj=new StringJoiner(",","(", ")");
+            for(int key: riders.keySet()){
+                sj.add(Integer.toString(key));
+            }
+
+            PreparedStatement turno=conn.prepareStatement("SELECT t.codRider_fk, t.giorno, t.oraInizio, t.oraFine FROM Turno t WHERE t.codRider_fk IN "+sj.toString());
+            ResultSet setTurno=turno.executeQuery();
+
+            while(setTurno.next()){
+                int codiceRider=setTurno.getInt("t.codRider_fk");
+                Turno t = TurnoExtractor.extract(setTurno);
+                riders.get(codiceRider).getTurni().add(t);
+            }
+
+            return new ArrayList<>(riders.values());
         }
     }
 
-    public ArrayList<Rider> doRetrieveByGiornoTurnoANDCitta(String giorno, String citta, Paginator paginator) throws SQLException{
-        try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT codiceRider, email, citta, veicolo, giorno, oraInizio, oraFine FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk WHERE giorno=? AND citta=?LIMIT ?,?");
+    public ArrayList<Rider> doRetrieveByGiornoTurnoANDCitta(String giorno, String citta, Paginator paginator) throws SQLException {
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT codiceRider, email, citta, veicolo, giorno, oraInizio, oraFine FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk WHERE giorno=? AND citta=? LIMIT ?,?");
             ps.setString(1, giorno);
             ps.setString(2, citta);
             ps.setInt(3, paginator.getOffset());
             ps.setInt(4, paginator.getLimit());
+            ResultSet rs = ps.executeQuery();
 
-            ResultSet rs=ps.executeQuery();
-            Map<Integer, Rider> riders= new LinkedHashMap<>();
-            while(rs.next()){
-                int codiceRider=rs.getInt("rd.codiceRider");
-                if(!riders.containsKey(codiceRider)){
-                    Rider r=RiderExtractor.extract(rs);
-                    riders.put(codiceRider, r);
-                }
-
-                Turno t=TurnoExtractor.extract(rs);
-                riders.get(codiceRider).getTurni().add(t);
-
+            Map<Integer, Rider> riders = new LinkedHashMap<>();
+            while (rs.next()) {
+                int codiceRider = rs.getInt("rd.codiceRider");
+                Rider rd = RiderExtractor.extract(rs);
+                riders.put(codiceRider, rd);
             }
 
-            if(riders.isEmpty())
+            if (riders.isEmpty())
                 return null;
-            return new ArrayList<>(riders.values());
 
+            StringJoiner sj = new StringJoiner(",", "(", ")");
+            for (int key : riders.keySet()) {
+                sj.add(Integer.toString(key));
+            }
+
+            PreparedStatement turno = conn.prepareStatement("SELECT t.codRider_fk, t.giorno, t.oraInizio, t.oraFine FROM Turno t WHERE t.codRider_fk IN " + sj.toString());
+            ResultSet setTurno = turno.executeQuery();
+
+            while (setTurno.next()) {
+                int codiceRider = setTurno.getInt("t.codRider_fk");
+                Turno t = TurnoExtractor.extract(setTurno);
+                riders.get(codiceRider).getTurni().add(t);
+            }
+
+            return new ArrayList<>(riders.values());
         }
     }
 

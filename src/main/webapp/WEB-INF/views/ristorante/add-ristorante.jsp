@@ -58,10 +58,10 @@
             <input type="number" name="civico" id="civico" placeholder="n°">
         </label>
         <label for="spesaMinima" class="field w40 cell">
-            <input type="number" name="spesaMinima" id="spesaMinima" placeholder="Spesa minima (€)">
+            <input type="number" name="spesaMinima" id="spesaMinima" placeholder="Spesa minima (€)" step="0.01">
         </label>
         <label for="tassoConsegna" class="field w40 cell">
-            <input type="number" name="tassoConsegna" id="tassoConsegna" placeholder="Tasso Consegna (€)">
+            <input type="number" name="tassoConsegna" id="tassoConsegna" placeholder="Tasso Consegna (€)" step="0.01">
         </label>
         <label for="urlImmagine" class="field w40 cell">
             <input type="file" name="urlImmagine" id="urlImmagine" placeholder="Immagine del tuo ristorante">
