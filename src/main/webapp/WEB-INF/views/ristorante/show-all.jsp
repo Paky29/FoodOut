@@ -2,6 +2,7 @@
 <%@ page import="model.ristorante.Ristorante" %>
 <%@ page import="java.io.PrintWriter" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -70,7 +71,17 @@
                                 </c:forEach>
                             </td>
                             <td data-head="Tipologie">
-                                    ${ristorante.tipologie[0].nome},${ristorante.tipologie[1].nome}...
+                                <c:choose>
+                                    <c:when test="${fn:length(ristorante.tipologie)==0}">
+                                        No tipologie
+                                    </c:when>
+                                    <c:when test="${fn:length(ristorante.tipologie)==1}">
+                                        ${ristorante.tipologie[0].nome}...
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${ristorante.tipologie[0].nome}, ${ristorante.tipologie[1].nome}...
+                                    </c:otherwise>
+                                </c:choose>
                             </td>
                             <td class="delete" data-head="Elimina">
                                 <%@include file="../../../icons/delete.svg" %>
