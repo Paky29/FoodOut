@@ -100,13 +100,23 @@
         text-transform: uppercase;
     }
 
+    div#header{
+        background-color: rgba(0,0,0,0);
+        background-image: url("/FoodOut/covers/${ristorante.urlImmagine}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        height: 500px;
+        position: relative;
+    }
+
 </style>
 <div class="app">
     <div class="cell grid-x" id="header">
-        <nav class="grid-y navbar align-center">
-            <img src="/prova_DB/images/logo.png" class="fluid-image" id="logo">
+        <nav class="grid-y navbar align-center cell">
+            <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
         </nav>
-        <form class="grid-x justify-center align-center info-ris" action="${pageContext.request.contextPath}/ristorante/update" method="post" enctype="multipart/form-data">
+        <form class="grid-x justify-center align-center info-ris cell" action="${pageContext.request.contextPath}/ristorante/update" method="post" enctype="multipart/form-data">
             <fieldset class="grid-x cell w63 index">
                 <h2 class="cell"> Info </h2>
                 <label for="nome" class="field cell w80" >
@@ -162,7 +172,7 @@
                 </span>
             </fieldset>
         </form>
-        <div class="disponibilita grid-x justify-center align-center">
+        <div class="disponibilita grid-x justify-center align-center cell">
             <section class="grid-y cell w63">
                 <table class="table">
                     <tbody>

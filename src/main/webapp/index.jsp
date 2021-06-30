@@ -72,7 +72,7 @@
 
     .content{
         background-color: white;
-        flex:1;
+        flex:1 1 100%;
         transition: all .3s ease-in-out;
     }
 

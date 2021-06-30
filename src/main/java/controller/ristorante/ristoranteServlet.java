@@ -137,8 +137,9 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                         r.setUrlImmagine(fileName);
                         if (service.doUpdateWithUrl(r)) {
                             req.setAttribute("ristorante", service.doRetrieveById(r.getCodice()));
-                            req.getRequestDispatcher(view("ristorante/info-admin")).forward(req, resp);
-                            //req.getRequestDispatcher("/ristorante/show-info-admin?id=" + r.getCodice()).forward(req, resp);
+                            //req.getRequestDispatcher(view("ristorante/info-admin")).forward(req, resp);
+                            //req.getRequestDispatcher("ristorante/show-info-admin?id=" + r.getCodice()).forward(req, resp);
+                            resp.sendRedirect("/FoodOut/ristorante/show-info-admin?id=" + r.getCodice());
                             String uploadRoot = getUploadPath();
                             try (InputStream fileStream = filePart.getInputStream()) {
                                 File file = new File(uploadRoot + fileName);

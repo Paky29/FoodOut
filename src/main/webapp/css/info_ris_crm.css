@@ -3,15 +3,6 @@
     height: 65px;
 }
 
-div#header{
-    background-color: rgba(0,0,0,0);
-    background-image: url("/FoodOut/images/sfondo.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    height: 500px;
-    position: relative;
-}
 
 figure {
     margin: 5px;
@@ -35,19 +26,6 @@ figure {
     padding: 20px;
 }
 
-.info-ris{
-    width:100%;
-    position: absolute;
-    right: 0;
-    top:60%;
-}
-
-.disponibilita{
-    width:100%;
-    position: relative;
-    right: 0;
-    top:200%;
-}
 
 @media screen and (min-width: 769px){
     .fluid-image{
