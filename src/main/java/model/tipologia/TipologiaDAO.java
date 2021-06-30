@@ -109,6 +109,17 @@ public class TipologiaDAO {
             else
                 return tipologie;
         }
+    }
 
+    public int countAll() throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count(*) as numTip FROM Tipologia t");
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numTip");
+            }
+            else
+                return 0;
+        }
     }
 }

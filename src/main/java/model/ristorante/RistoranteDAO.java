@@ -499,7 +499,7 @@ public class RistoranteDAO {
 
     public boolean doUpdate(Ristorante r) throws SQLException{
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("UPDATE Ristorante SET nome=?, provincia=?, citta=?, via=?, civico=?, info=?, spesaMinima=?, tassoConsegna=?, urlImmagine=?, rating=? WHERE codiceRistorante=?");
+            PreparedStatement ps=conn.prepareStatement("UPDATE Ristorante SET nome=?, provincia=?, citta=?, via=?, civico=?, info=?, spesaMinima=?, tassoConsegna=?, rating=? WHERE codiceRistorante=?");
             ps.setString(1,r.getNome());
             ps.setString(2,r.getProvincia());
             ps.setString(3,r.getCitta());
@@ -516,6 +516,28 @@ public class RistoranteDAO {
                 return true;
         }
     }
+
+    public boolean doUpdateWithUrl(Ristorante r) throws SQLException{
+        try(Connection conn= ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("UPDATE Ristorante SET nome=?, provincia=?, citta=?, via=?, civico=?, info=?, spesaMinima=?, tassoConsegna=?, urlImmagine=?, rating=? WHERE codiceRistorante=?");
+            ps.setString(1,r.getNome());
+            ps.setString(2,r.getProvincia());
+            ps.setString(3,r.getCitta());
+            ps.setString(4,r.getVia());
+            ps.setInt(5,r.getCivico());
+            ps.setString(6,r.getInfo());
+            ps.setFloat(7,r.getSpesaMinima());
+            ps.setFloat(8,r.getTassoConsegna());
+            ps.setString(9,r.getUrlImmagine());
+            ps.setInt(10,r.getRating());
+            ps.setInt(11,r.getCodice());
+            if(ps.executeUpdate()!=1)
+                return false;
+            else
+                return true;
+        }
+    }
+
 
     public boolean doDelete(int codice) throws SQLException{
         try(Connection conn= ConPool.getConnection()){

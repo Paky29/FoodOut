@@ -273,4 +273,56 @@ public class RiderDAO {
                 return true;
         }
     }
+
+    public int countAll() throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count(*) as numRider FROM Rider rd ");
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numRider");
+            }
+            else
+                return 0;
+        }
+    }
+
+    public int countCitta(String citta) throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count(*) as numRider FROM Rider rd WHERE rd.citta=?");
+            ps.setString(1,citta);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numRider");
+            }
+            else
+                return 0;
+        }
+    }
+
+    public int countGiornoTurnoCitta(String giorno,String citta) throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count(*) as numRider FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk WHERE t.giorno=? AND r.citta=?");
+            ps.setString(1,giorno);
+            ps.setString(2,citta);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numRider");
+            }
+            else
+                return 0;
+        }
+    }
+
+    public int countGiornoTurno(String giorno) throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count(*) as numRider FROM Rider rd INNER JOIN Turno t ON rd.codiceRider=t.codRider_fk WHERE t.giorno=?");
+            ps.setString(1,giorno);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numRider");
+            }
+            else
+                return 0;
+        }
+    }
 }
