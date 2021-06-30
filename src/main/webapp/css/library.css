@@ -104,8 +104,8 @@ input:focus, textarea:focus, select:focus{
 }
 
 input{
-    height: 5%;
-    line-height: 5%;
+    height: 50px;
+    line-height: 27px;
 }
 
 .btn{

@@ -186,7 +186,7 @@
                             <tr>
                                 <c:choose>
                                     <c:when test="${disp.oraApertura==disp.oraChiusura}">
-                                        <td data-head="${disp.giorno}">Chiuso </td>
+                                        <td data-head="${disp.giorno}">CHIUSO </td>
                                     </c:when>
                                     <c:otherwise>
                                         <td data-head="${disp.giorno}">${disp.oraApertura} - ${disp.oraChiusura} </td>

@@ -9,20 +9,20 @@
 <html lang="it" dir="ltr">
 <head>
     <jsp:include page="../partials/head.jsp">
-        <jsp:param name="title" value="Sign up"/>
+        <jsp:param name="title" value="Aggiungi Ristorante"/>
     </jsp:include>
     <style>
         .app {
             background: linear-gradient(var(--primary), white);
         <%--background-image: url("http://localhost:8080/images/image.jpg");--%>
         }
-        .signup{
+        .add-ris{
             padding: 1rem; <%--dimensione relativa al root--%>
             background-color:white;
             border-radius: 10px;
         }
 
-        .signup > * {
+        .add-ris > * {
             margin:10px;
         }
 
@@ -40,7 +40,7 @@
 
 <body>
 <form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ristorante/add" method="post" enctype="multipart/form-data">
-    <fieldset class="grid-x cell w75 signup justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
+    <fieldset class="grid-x cell w75 add-ris justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
         <h2 class="cell"> Aggiungi ristorante</h2>
         <label for="nome" class="field cell w82">
             <input type="text" name="nome" id="nome" placeholder="Nome">
