@@ -1,6 +1,8 @@
 package controller.ristorante;
 
 import controller.http.*;
+import model.disponibilita.Disponibilita;
+import model.disponibilita.DisponibilitaDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
 import model.utility.Paginator;
@@ -19,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 
@@ -64,7 +67,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     CommonValidator.validateId(req);
                     int id=Integer.parseInt(req.getParameter("id"));
                     RistoranteDAO ristoranteDAO=new RistoranteDAO();
-                    Ristorante r=ristoranteDAO.doRetrieveById(id);
+                    Ristorante r=ristoranteDAO.doRetrieveByIdAdmin(id);
                     req.setAttribute("ristorante", r);
                     //req.setAttribute("ristoranteUrl", "FoodOut/covers/" + r.getUrlImmagine());
                     req.getRequestDispatcher(view("ristorante/info-admin")).forward(req, resp);
@@ -132,13 +135,9 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     Part filePart = req.getPart("urlImmagine");
                     String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
                     RistoranteDAO service = new RistoranteDAO();
-
                     if (!fileName.isBlank()) {
                         r.setUrlImmagine(fileName);
                         if (service.doUpdateWithUrl(r)) {
-                            req.setAttribute("ristorante", service.doRetrieveById(r.getCodice()));
-                            //req.getRequestDispatcher(view("ristorante/info-admin")).forward(req, resp);
-                            //req.getRequestDispatcher("ristorante/show-info-admin?id=" + r.getCodice()).forward(req, resp);
                             resp.sendRedirect("/FoodOut/ristorante/show-info-admin?id=" + r.getCodice());
                             String uploadRoot = getUploadPath();
                             try (InputStream fileStream = filePart.getInputStream()) {
@@ -152,8 +151,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
 
                     } else {
                         if (service.doUpdate(r)) {
-                            req.setAttribute("ristorante", service.doRetrieveById(r.getCodice()));
-                            req.getRequestDispatcher(view("ristorante/info-admin")).forward(req, resp);
+                            resp.sendRedirect("/FoodOut/ristorante/show-info-admin?id=" + r.getCodice());
                         } else {
                             InternalError();
                         }
@@ -181,6 +179,14 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     int size = service.countAll();
                     if (service.doSave(r)) {
                         resp.sendRedirect("/FoodOut/ristorante/all");
+                        DisponibilitaDAO serviceDisp=new DisponibilitaDAO();
+                        for(int i = 0; i< Disponibilita.giorni.length; ++i){
+                            Disponibilita d=new Disponibilita();
+                            d.setGiorno(Disponibilita.giorni[i]);
+                            d.setOraApertura(LocalTime.of(0,0));
+                            d.setOraChiusura(LocalTime.of(0,0));
+                            serviceDisp.doSave(d,r.getCodice());
+                        }
                         String uploadRoot=getUploadPath();
                         try(InputStream fileStream=filePart.getInputStream()){
                             File file=new File(uploadRoot+fileName);

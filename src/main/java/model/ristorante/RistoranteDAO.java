@@ -47,6 +47,47 @@ public class RistoranteDAO {
         }
     }
 
+    public Ristorante doRetrieveByIdAdmin(int codice) throws SQLException {
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT codiceRistorante, r.nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna, urlImmagine, rating, t.nome, t.descrizione FROM Ristorante r LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE r.codiceRistorante=?");
+            ps.setInt(1, codice);
+            ResultSet rs = ps.executeQuery();
+            Ristorante r = null;
+            if(rs.next()) {
+                r = RistoranteExtractor.extract(rs);
+                do {
+                    if(rs.getString("t.nome")!=null) {
+                        Tipologia t = new Tipologia();
+                        t.setNome(rs.getString("t.nome"));
+                        t.setDescrizione(rs.getString("t.descrizione"));
+                        r.getTipologie().add(t);
+                    }
+                } while (rs.next());
+
+                ArrayList<Disponibilita> disp=new ArrayList<>();
+                PreparedStatement calendario = conn.prepareStatement("SELECT giorno, oraApertura, oraChiusura FROM Disponibilita d WHERE d.codRis_fk=?");
+                calendario.setInt(1, codice);
+                rs = calendario.executeQuery();
+                while (rs.next()) {
+                    Disponibilita d = DisponibilitaExtractor.extract(rs);
+                    disp.add(d);
+                }
+
+                //ordina i giorni della settimana
+                for(int i=0;i<Disponibilita.giorni.length;++i){
+                    for(Disponibilita d:disp){
+                        if(d.getGiorno().compareToIgnoreCase(Disponibilita.giorni[i])==0){
+                            r.getGiorni().add(d);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return r;
+        }
+    }
+
     public ArrayList<Ristorante> doRetrieveByScontoDisp(String citta, Paginator paginator) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT distinct r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ristorante r INNER JOIN Prodotto p ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaPM apm ON p.codiceProdotto=apm.codProd_fk LEFT JOIN Menu m ON apm.codMenu_fk=m.codiceMenu WHERE r.citta=? AND (p.sconto>0 OR m.sconto>0) LIMIT ?,?");

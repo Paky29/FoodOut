@@ -152,15 +152,21 @@
                 </label>
                 <label for="tipologie" class="field cell w80">
                     <span style="font-weight: bold"> Tipologie: </span>
-                    <textarea name="tipologie" id="tipologie" rows="3" cols="100" readonly>
+                    <textarea name="tipologie" id="tipologie" rows="4" cols="100" readonly>
                         <%
                             Ristorante r= (Ristorante) request.getAttribute("ristorante");
-                            StringJoiner sj=new StringJoiner(",");
-                            for(Tipologia t: r.getTipologie()){
-                                sj.add(t.getNome());
-                            }
+                            if(!r.getTipologie().isEmpty()){
+                                StringJoiner sj=new StringJoiner(",");
+                                for(Tipologia t: r.getTipologie()){
+                                  sj.add(t.getNome());
+                                }
                         %>
                         <%=sj.toString()%>
+                        <%}else{
+                                String str="Non ci sono prodotti, quindi tipologie per il ristorante";
+                        %>
+                        <%=str%>
+                        <%}%>
                     </textarea>
                 </label>
                 <label for="info" class="field cell w80">
@@ -176,11 +182,18 @@
             <section class="grid-y cell w63">
                 <table class="table">
                     <tbody>
-                    <c:forEach items="${ristorante.giorni}" var="disp">
-                        <tr>
-                            <td data-head="${disp.giorno}">${disp.oraApertura} - ${disp.oraChiusura} </td> <%--link a pagina con prodotti--%>
-                        </tr>
-                    </c:forEach>
+                        <c:forEach items="${ristorante.giorni}" var="disp">
+                            <tr>
+                                <c:choose>
+                                    <c:when test="${disp.oraApertura==disp.oraChiusura}">
+                                        <td data-head="${disp.giorno}">Chiuso </td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td data-head="${disp.giorno}">${disp.oraApertura} - ${disp.oraChiusura} </td>
+                                    </c:otherwise>
+                                </c:choose>
+                            </tr>
+                        </c:forEach>
                     <tr>
                         <td style="border-bottom: none"><a href="#">Modifica orario</a></td>
                     </tr>

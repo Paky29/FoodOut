@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 public class Disponibilita {
+    public static final String[] giorni={"Lunedi","Martedi","Mercoledi","Giovedi","Venerdi", "Sabato", "Domenica"};
 
     public Disponibilita(){}
 
