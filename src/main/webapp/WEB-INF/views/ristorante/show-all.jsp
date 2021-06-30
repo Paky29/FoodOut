@@ -34,6 +34,10 @@
                 <label class="field command w75">
                     <input type="text" placeholder="Cerca Ristoranti">
                 </label>
+                <label class="field command w25" id="totale">
+                    <span> Totale ristoranti:</span>
+                    <span style="color: black; font-weight: normal"> ${totRis}</span>
+                </label>
             </div>
             <section class="grid-y cell restaurants">
                 <table class="table restaurants-table">

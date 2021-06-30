@@ -40,11 +40,13 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     authorizeUtente(req.getSession());
                     RistoranteDAO service=new RistoranteDAO();
                     int intPage=parsePage(req);
+                    int totRis=service.countAll();
                     Paginator paginator=new Paginator(intPage,2);
                     int size=service.countAll();
                     req.setAttribute("pages",paginator.getPages(size));
                     ArrayList<Ristorante> ristoranti = service.doRetrieveAll(paginator);
                     req.setAttribute("ristoranti", ristoranti);
+                    req.setAttribute("totRis", totRis);
                     req.getRequestDispatcher(view("ristorante/show-all")).forward(req, resp);
                     break;
                 }

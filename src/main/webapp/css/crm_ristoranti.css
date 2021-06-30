@@ -35,3 +35,12 @@ table > caption {
 td > a {
     text-decoration: none;
 }
+
+#totale{
+    color: var(--primary);
+    font-weight: bold;
+    font-style: normal;
+    font-family: Myriad;
+    padding: 10px;
+    justify-content: flex-end;
+}
