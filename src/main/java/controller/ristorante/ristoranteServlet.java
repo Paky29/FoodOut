@@ -61,11 +61,12 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 }
                 case "/show-info-admin": {// mostrare all'admin info modificabili
                     authorizeUtente(req.getSession());
+                    CommonValidator.validateId(req);
                     int id=Integer.parseInt(req.getParameter("id"));
                     RistoranteDAO ristoranteDAO=new RistoranteDAO();
                     Ristorante r=ristoranteDAO.doRetrieveById(id);
                     req.setAttribute("ristorante", r);
-                    //req.setAttribute("ristoranteUrl", "Foodout/covers/" + r.getUrlImmagine());
+                    //req.setAttribute("ristoranteUrl", "FoodOut/covers/" + r.getUrlImmagine());
                     req.getRequestDispatcher(view("ristorante/info-admin")).forward(req, resp);
                     break;
                 }
@@ -77,8 +78,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     break;
                 case "/delete": {
                     authorizeUtente(req.getSession());
-                    CommonValidator validator=new CommonValidator();
-                    validator.validateId(req);
+                    CommonValidator.validateId(req);
                     RistoranteDAO service=new RistoranteDAO();
                     int id=Integer.parseInt(req.getParameter("id"));
                     if(service.doDelete(id)){
@@ -113,8 +113,52 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     break;
                 case "/add-pref":
                     break;
-                case "/update":
+                case "/update": {
+                    HttpSession session = req.getSession();
+                    authorizeUtente(session);
+                    ristoranteValidator validator = new ristoranteValidator();
+                    validator.validateForm(req);
+                    Ristorante r = new Ristorante();
+                    r.setCodice(Integer.parseInt(req.getParameter("id")));
+                    r.setNome(req.getParameter("nome"));
+                    r.setProvincia(req.getParameter("provincia"));
+                    r.setCitta(req.getParameter("citta"));
+                    r.setVia(req.getParameter("via"));
+                    r.setCivico(Integer.parseInt(req.getParameter("civico")));
+                    r.setSpesaMinima(Float.parseFloat(req.getParameter("spesaMinima")));
+                    r.setTassoConsegna(Float.parseFloat(req.getParameter("tassoConsegna")));
+                    r.setInfo(req.getParameter("info"));
+                    r.setRating(Integer.parseInt(req.getParameter("rating")));
+                    Part filePart = req.getPart("urlImmagine");
+                    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                    RistoranteDAO service = new RistoranteDAO();
+
+                    if (!fileName.isBlank()) {
+                        r.setUrlImmagine(fileName);
+                        if (service.doUpdateWithUrl(r)) {
+                            req.setAttribute("ristorante", service.doRetrieveById(r.getCodice()));
+                            req.getRequestDispatcher(view("ristorante/info-admin")).forward(req, resp);
+                            //req.getRequestDispatcher("/ristorante/show-info-admin?id=" + r.getCodice()).forward(req, resp);
+                            String uploadRoot = getUploadPath();
+                            try (InputStream fileStream = filePart.getInputStream()) {
+                                File file = new File(uploadRoot + fileName);
+                                Files.copy(fileStream, file.toPath());
+                            }
+                        }
+                        else {
+                            InternalError();
+                        }
+
+                    } else {
+                        if (service.doUpdate(r)) {
+                            req.setAttribute("ristorante", service.doRetrieveById(r.getCodice()));
+                            req.getRequestDispatcher(view("ristorante/info-admin")).forward(req, resp);
+                        } else {
+                            InternalError();
+                        }
+                    }
                     break;
+                }
                 case "/add": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);

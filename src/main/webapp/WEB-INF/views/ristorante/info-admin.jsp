@@ -35,6 +35,11 @@
         line-height: 40px;
     }
 
+    #urlImmagine {
+        height: 50px;
+        line-height: 27px;
+    }
+
     .info{
         text-align: center;
         font-style: normal;
@@ -99,9 +104,9 @@
 <div class="app">
     <div class="cell grid-x" id="header">
         <nav class="grid-y navbar align-center">
-            <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
+            <img src="/prova_DB/images/logo.png" class="fluid-image" id="logo">
         </nav>
-        <form class="grid-x justify-center align-center info-ris" action="/ristorante/update" method="post" enctype="multipart/form-data">
+        <form class="grid-x justify-center align-center info-ris" action="${pageContext.request.contextPath}/ristorante/update" method="post" enctype="multipart/form-data">
             <fieldset class="grid-x cell w63 index">
                 <h2 class="cell"> Info </h2>
                 <label for="nome" class="field cell w80" >
@@ -112,7 +117,7 @@
                     <span style="font-weight: bold" class="field cell w40"> Provincia: </span>
                     <input type="text" name="provincia" id="provincia" value="${ristorante.provincia}">
                     <span style="font-weight: bold" class="field cell w40"> Citta: </span>
-                    <input type="text" name="citta" id="citta" placeholder="${ristorante.citta}">
+                    <input type="text" name="citta" id="citta" value="${ristorante.citta}">
                 </label>
                 <label class="field cell w40 grid-x">
                     <span style="font-weight: bold" class="field cell w75"> Via: </span>
@@ -131,6 +136,9 @@
                     <input type="text" name="rating" id="rating" value="${ristorante.rating}" readonly>
                     <span style="font-weight: bold" class="cell" style="visibility: hidden"> </span>
                     <input type="text" name="id" id="id" value="${ristorante.codice}" style="visibility: hidden" readonly >
+                </label>
+                <label for="urlImmagine" class="field w80 cell">
+                    <input type="file" name="urlImmagine" id="urlImmagine" placeholder="Immagine del tuo ristorante" style="">
                 </label>
                 <label for="tipologie" class="field cell w80">
                     <span style="font-weight: bold"> Tipologie: </span>
