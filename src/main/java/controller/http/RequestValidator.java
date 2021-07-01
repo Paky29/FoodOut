@@ -36,7 +36,7 @@ public class RequestValidator {
         }
     }
 
-    private boolean required(String value){
+    public boolean required(String value){
         return value != null && !value.isBlank();
     }
 

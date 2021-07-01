@@ -170,5 +170,22 @@
         </span>
     </fieldset>
 </form>
+<%--<script>
+    var checks=document.getElementsByClassName("closed");
+    for(let i=0; i<checks.length; i++) {
+        var parent = checks[i].parentElement.parentElement;
+        var opens = parent.getElementsByClassName("open");
+        if (checks[i].checked) {
+            for (let j = 0; j < opens.length; j++) {
+                opens[j].setAttribute("disabled", true);
+                opens[j].value = null;
+            }
+        } else {
+            for (let j = 0; i < opens.length; j++) {
+                opens[j].removeAttribute("disabled");
+            }
+        }
+    }
+</script>--%>
 </body>
 </html>

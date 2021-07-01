@@ -195,7 +195,7 @@
                             </tr>
                         </c:forEach>
                     <tr>
-                        <td style="border-bottom: none"><a href="#">Modifica orario</a></td>
+                        <td style="border-bottom: none"><a href="/FoodOut/ristorante/update-disponibilita?id=${ristorante.codice}">Modifica orario</a></td>
                     </tr>
                     </tbody>
                 </table>

@@ -66,7 +66,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 }
                 case "/show-info-admin": {// mostrare all'admin info modificabili
                     authorizeUtente(req.getSession());
-                    CommonValidator.validateId(req);
+                    validate(CommonValidator.validateId(req));
                     int id=Integer.parseInt(req.getParameter("id"));
                     RistoranteDAO ristoranteDAO=new RistoranteDAO();
                     Ristorante r=ristoranteDAO.doRetrieveByIdAdmin(id);
@@ -82,14 +82,23 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     break;
                 case "/add-disponibilita": {
                     authorizeUtente(req.getSession());
-                    CommonValidator.validateId(req);
+                    validate(CommonValidator.validateId(req));
                     req.setAttribute("id", req.getParameter("id"));
                     req.getRequestDispatcher(view("ristorante/add-disponibilita")).forward(req, resp);
                     break;
                 }
+                case "/update-disponibilita" : {
+                    authorizeUtente(req.getSession());
+                    validate(CommonValidator.validateId(req));
+                    RistoranteDAO service=new RistoranteDAO();
+                    Ristorante r=service.doRetrieveByIdAdmin(Integer.parseInt(req.getParameter("id")));
+                    req.setAttribute("ristorante", r);
+                    req.getRequestDispatcher(view("ristorante/update-disponibilita")).forward(req, resp);
+                    break;
+                }
                 case "/delete": {
                     authorizeUtente(req.getSession());
-                    CommonValidator.validateId(req);
+                    validate(CommonValidator.validateId(req));
                     RistoranteDAO service=new RistoranteDAO();
                     int id=Integer.parseInt(req.getParameter("id"));
                     if(service.doDelete(id)){
@@ -128,7 +137,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
                     ristoranteValidator validator = new ristoranteValidator();
-                    validator.validateForm(req);
+                    validate(validator.validateForm(req));
                     Ristorante r = new Ristorante();
                     r.setCodice(Integer.parseInt(req.getParameter("id")));
                     r.setNome(req.getParameter("nome"));
@@ -170,7 +179,9 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
                     ristoranteValidator validator = new ristoranteValidator();
-                    validator.validateForm(req);
+                    RequestValidator rr= validator.validateForm(req);
+                    for(String s: rr.getErrors())
+                        System.out.println(s);
                     Ristorante r = new Ristorante();
                     r.setNome(req.getParameter("nome"));
                     r.setProvincia(req.getParameter("provincia"));
@@ -209,7 +220,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/add-disponibilita": {
                     HttpSession session=req.getSession();
                     authorizeUtente(session);
-                    //validate form
+                    validate(disponibilitaValidator.validateForm(req));
                     DisponibilitaDAO service=new DisponibilitaDAO();
                     int codice=Integer.parseInt(req.getParameter("idRis"));
                     for(int i=0;i<Disponibilita.giorni.length;++i){
