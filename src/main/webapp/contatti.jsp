@@ -53,19 +53,19 @@
 
     <div class="content text w100 grid-x justify-center" >
         <div class="content w25">
-            <img src="/FoodOut/icons/call_center.svg" align="center">
+            <img src="icons/call_center.svg" align="center">
             <h3 class="title"> Assistenza per ordini attivi </h3>
             <p class="subtitle"> Assistenza telefonica per ordini attivi 24 ore su 24, 7 giorni su 7 </p>
         </div>
 
         <div class="content text w25">
-            <img src="/FoodOut/icons/time.svg" align="center">
+            <img src="icons/time.svg" align="center">
             <h3 class="title"> Soluzioni rapide </h3>
             <p class="subtitle"> Cerca le risposte alle domande più comuni nella sezione "Aiuto" </p>
         </div>
 
         <div class="content text w25">
-            <img src="/FoodOut/icons/computer.svg" align="center">
+            <img src="icons/computer2.svg" align="center">
             <h3 class="title"> A portata di mano </h3>
             <p class="subtitle"> Utilizza il Restaurant Hub per gestire il tuo account e contattare il nostro team </p>
         </div>
@@ -73,15 +73,15 @@
 
     <div class="content text w100 grid-x justify-center">
 
-        <h2 class="title w100""> Dove trovare assistenza e informazioni</h2>
+        <h2 class="title w100"> Dove trovare assistenza e informazioni</h2>
         <div class="content text w35 justify-center">
-            <img src="/FoodOut/icons/telefono.svg" >
+            <img src="icons/telefono.svg" >
             <h3 class="title"> Chiamaci </h3>
             <p class="subtitle"> Chiama il nostro numero verde 800 800 200 </p>
         </div>
 
         <div class="content text w35 justify-center">
-            <img src="/FoodOut/icons/mail.svg">
+            <img src="icons/mail.svg">
             <h3 class="title"> Scrivici </h3>
             <p class="subtitle"> Scrivi alla nostro mail info@foodout.com </p>
         </div>
