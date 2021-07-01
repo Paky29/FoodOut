@@ -79,7 +79,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     req.getRequestDispatcher(view("ristorante/recensioni")).forward(req, resp);
                     break;
                 case "/add":
-                    req.getRequestDispatcher(view("ristorante/add-ristorante")).forward(req,resp);
+                    req.getRequestDispatcher(view("ristorante/add-disponibilita")).forward(req,resp);
                     break;
                 case "/delete": {
                     authorizeUtente(req.getSession());

@@ -9,65 +9,82 @@
 <html>
 <head>
     <jsp:include page="WEB-INF/views/partials/head.jsp">
-        <jsp:param name="title" value="FAQ"/>
+        <jsp:param name="title" value="Contatti"/>
     </jsp:include>
 </head>
 <body>
 <style>
 
+    body {
+        background-image: url("/FoodOut/images/sfondo.jpg");
+        background-size: cover;
+    }
+
     .content {
         background-color: white;
         transition: all .3s ease-in-out;
-        margin: 20px;
         padding: 10px 40px;
-        border-radius: 10px;
+        margin: 40px;
     }
 
-    .text {
-        position: absolute;
-        left: 10%;
-        top: 30%;
-        width:30%;
+    .title {
+        font-weight: bold;
+        font-family: Myriad;
     }
 
-    .background {
-        position: absolute;
-        right: 0%;
-        top: 0%;
-        z-index: -1;
-        width: 50%;
-        height: 50%;
+    .subtitle {
+        font-style: italic;
+        font-weight: lighter;
+        font-family: Myriad;
     }
 
-    .foreground {
-        position: absolute;
-        right: 0%;
-        top: 0%;
-        width: 40%;
-        height: 40%;
+    #div1  {
+        max-height: 250px;
     }
-
-
-
-
 
 </style>
+
 <div class="app grid-x">
-    <span class=" cell w100">
-        <div class="text">
-            <h3 class="title"> Hai bisogno di aiuto? </h3>
-            <p class="body"> </p> Contattaci. <br> Siamo qui per offrirti il nostro supporto in diversi modi
+    <div id="div1" class="content text w100 cell">
+
+        <h2 class="title"> Contattaci </h2>
+        <p class="subtitle"> Hai una domanda, oppure hai bisogno di consigli o assistenza? </p>
+    </div>
+
+    <div class="content text w100 grid-x justify-center" >
+        <div class="content w25">
+            <img src="/FoodOut/icons/call_center.svg" align="center">
+            <h3 class="title"> Assistenza per ordini attivi </h3>
+            <p class="subtitle"> Assistenza telefonica per ordini attivi 24 ore su 24, 7 giorni su 7 </p>
         </div>
-        <img src="images/sfondo.jpg" class="background">
-        <img src="images/logo.png " class="foreground">
-    </span>
-    <span class="cell">
 
-
-        <div class="topic">
-
+        <div class="content text w25">
+            <img src="/FoodOut/icons/time.svg" align="center">
+            <h3 class="title"> Soluzioni rapide </h3>
+            <p class="subtitle"> Cerca le risposte alle domande più comuni nella sezione "Aiuto" </p>
         </div>
-    </span>
-</div>
+
+        <div class="content text w25">
+            <img src="/FoodOut/icons/computer.svg" align="center">
+            <h3 class="title"> A portata di mano </h3>
+            <p class="subtitle"> Utilizza il Restaurant Hub per gestire il tuo account e contattare il nostro team </p>
+        </div>
+    </div>
+
+    <div class="content text w100 grid-x justify-center">
+
+        <h2 class="title w100""> Dove trovare assistenza e informazioni</h2>
+        <div class="content text w35 justify-center">
+            <img src="/FoodOut/icons/telefono.svg" >
+            <h3 class="title"> Chiamaci </h3>
+            <p class="subtitle"> Chiama il nostro numero verde 800 800 200 </p>
+        </div>
+
+        <div class="content text w35 justify-center">
+            <img src="/FoodOut/icons/mail.svg">
+            <h3 class="title"> Scrivici </h3>
+            <p class="subtitle"> Scrivi alla nostro mail info@foodout.com </p>
+        </div>
+    </div>
 </body>
 </html>

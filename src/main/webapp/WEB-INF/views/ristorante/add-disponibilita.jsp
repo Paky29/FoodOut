@@ -11,6 +11,7 @@
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Aggiungi Disponibilita"/>
         <jsp:param name="styles" value="crm"/>
+        <jsp:param name="scripts" value="add_disponibilita"/>
     </jsp:include>
     <style>
         .app {
@@ -58,13 +59,13 @@
         </label>
         <span>
         <label for="apLunedi" class="field w10 cell">
-            <input type="time" name="apLunedi" id="apLunedi">
+            <input type="time" name="apLunedi" id="apLunedi" class="open">
         </label>
         <label for="cLunedi" class="field w10 cell">
-            <input type="time" name="cLunedi" id="cLunedi">
+            <input type="time" name="cLunedi" id="cLunedi" class="open">
         </label>
         <label for="chiuso_Lunedi" class="cell w10">
-            <input type="checkbox" name="chiusoLunedi" value="Chiuso" id="chiuso_Lunedi">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoLunedi" value="Chiuso" id="chiuso_Lunedi" class="closed">
             CHIUSO
         </label>
         </span>
@@ -74,13 +75,13 @@
         </label>
         <span>
         <label for="apMartedi" class="field w10 cell">
-            <input type="time" name="apMartedi" id="apMartedi">
+            <input type="time" name="apMartedi" id="apMartedi" class="open">
         </label>
         <label for="cMartedi" class="field w10 cell">
-            <input type="time" name="cMartedi" id="cMartedi">
+            <input type="time" name="cMartedi" id="cMartedi" class="open">
         </label>
         <label for="chiuso_Martedi" class="cell w10">
-            <input type="checkbox" name="chiusoMartedi" value="Chiuso" id="chiuso_Martedi">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoMartedi" value="Chiuso" id="chiuso_Martedi" class="closed">
             CHIUSO
         </label>
         </span>
@@ -90,13 +91,13 @@
         </label>
         <span>
         <label for="apMercoledi" class="field w10 cell">
-            <input type="time" name="apMercoledi" id="apMercoledi">
+            <input type="time" name="apMercoledi" id="apMercoledi" class="open">
         </label>
         <label for="cMercoledi" class="field w10 cell">
-            <input type="time" name="cMercoledi" id="cMercoledi">
+            <input type="time" name="cMercoledi" id="cMercoledi" class="open">
         </label>
         <label for="chiuso_Mercoledi" class="cell w10">
-            <input type="checkbox" name="chiusoMercoledi" value="Chiuso" id="chiuso_Mercoledi">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoMercoledi" value="Chiuso" id="chiuso_Mercoledi" class="closed">
             CHIUSO
         </label>
         </span>
@@ -106,13 +107,13 @@
         </label>
         <span>
         <label for="apGiovedi" class="field w10 cell">
-            <input type="time" name="apGiovedi" id="apGiovedi">
+            <input type="time" name="apGiovedi" id="apGiovedi" class="open">
         </label>
         <label for="cGiovedi" class="field w10 cell">
-            <input type="time" name="cGiovedi" id="cGiovedi">
+            <input type="time" name="cGiovedi" id="cGiovedi" class="open">
         </label>
         <label for="chiuso_Giovedi" class="cell w10">
-            <input type="checkbox" name="chiusoGiovedi" value="Chiuso" id="chiuso_Giovedi">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoGiovedi" value="Chiuso" id="chiuso_Giovedi" class="closed">
             CHIUSO
         </label>
         </span>
@@ -122,13 +123,13 @@
         </label>
         <span>
         <label for="apVenerdi" class="field w10 cell">
-            <input type="time" name="apVenerdi" id="apVenerdi">
+            <input type="time" name="apVenerdi" id="apVenerdi" class="open">
         </label>
         <label for="cVenerdi" class="field w10 cell">
-            <input type="time" name="cVenerdi" id="cVenerdi">
+            <input type="time" name="cVenerdi" id="cVenerdi" class="open">
         </label>
         <label for="chiuso_Venerdi" class="cell w10">
-            <input type="checkbox" name="chiusoVenerdi" value="Chiuso" id="chiuso_Venerdi">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoVenerdi" value="Chiuso" id="chiuso_Venerdi" class="closed">
             CHIUSO
         </label>
         </span>
@@ -138,13 +139,13 @@
         </label>
         <span>
         <label for="apSabato" class="field w10 cell">
-            <input type="time" name="apSabato" id="apSabato">
+            <input type="time" name="apSabato" id="apSabato" class="open">
         </label>
         <label for="cSabato" class="field w10 cell">
-            <input type="time" name="cSabato" id="cSabato">
+            <input type="time" name="cSabato" id="cSabato" class="open">
         </label>
         <label for="chiuso_Sabato" class="cell w10">
-            <input type="checkbox" name="chiusoSabato" value="Chiuso" id="chiuso_Sabato">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoSabato" value="Chiuso" id="chiuso_Sabato" class="closed">
             CHIUSO
         </label>
         </span>
@@ -154,13 +155,13 @@
         </label>
         <span>
         <label for="apDomenica" class="field w10 cell">
-            <input type="time" name="apDomenica" id="apDomenica">
+            <input type="time" name="apDomenica" id="apDomenica" class="open">
         </label>
         <label for="cDomenica" class="field w10 cell">
-            <input type="time" name="cDomenica" id="cDomenica">
+            <input type="time" name="cDomenica" id="cDomenica" class="open">
         </label>
         <label for="chiuso_Domenica" class="cell w10">
-            <input type="checkbox" name="chiusoDomenica" value="Chiuso" id="chiuso_Domenica">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoDomenica" value="Chiuso" id="chiuso_Domenica" class="closed">
             CHIUSO
         </label>
         </span>
