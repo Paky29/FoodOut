@@ -58,7 +58,7 @@
     <fieldset
             class="grid-x cell w90 add-disp justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
         <h1 id="title" class="cell"> Scegli il tuo orario </h1>
-        <c:forEach begin="0" end="6" var="day">
+        <c:forEach begin="0" end="${fn:length(ristorante.giorni)-1}" var="day">
         <label for="${ristorante.giorni[day].giorno}" class="field w33 cell">
             <span id="${ristorante.giorni[day].giorno}" style="font-weight: bold"> ● ${fn:toUpperCase(ristorante.giorni[day].giorno)} </span>
         </label>
