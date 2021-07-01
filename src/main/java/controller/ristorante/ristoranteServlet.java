@@ -5,6 +5,8 @@ import model.disponibilita.Disponibilita;
 import model.disponibilita.DisponibilitaDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
+import model.tipologia.Tipologia;
+import model.tipologia.TipologiaDAO;
 import model.utility.Paginator;
 
 import javax.servlet.ServletException;
@@ -68,6 +70,17 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/show-menu-admin": {
                     authorizeUtente(req.getSession());
                     req.getRequestDispatcher(view("ristorante/menu-admin")).forward(req, resp);
+                    break;
+                }
+                case "/add-prodmenu":{
+                    authorizeUtente(req.getSession());
+                    TipologiaDAO serviceTip=new TipologiaDAO();
+                    ArrayList<Tipologia> tipologie=serviceTip.doRetrieveAll();
+                    req.setAttribute("tipologie",tipologie);
+                    RistoranteDAO serviceRis=new RistoranteDAO();
+                    Ristorante r=serviceRis.doRetrieveById(Integer.parseInt(req.getParameter("id")));
+                    req.setAttribute("ristorante",r);
+                    req.getRequestDispatcher(view("ristorante/add-prodmenu")).forward(req, resp);
                     break;
                 }
                 case "/show-info-admin": {// mostrare all'admin info modificabili
@@ -256,8 +269,9 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                         service.doUpdate(d,codice);
                     }
 
-                    if(req.getParameter("button").equals("add"))
-                        resp.sendRedirect("/FoodOut/ristorante/all");
+                    if(req.getParameter("button").equals("add")) {
+                        resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id="+ codice);
+                    }
                     else
                         resp.sendRedirect("/FoodOut/ristorante/show-info-admin?id="+ codice);
                     break;

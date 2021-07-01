@@ -1,13 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
-<%--
-  Created by IntelliJ IDEA.
-  User: User01
-  Date: 22/06/2021
-  Time: 11:21
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="it" dir="ltr">
 <head>

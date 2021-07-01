@@ -63,7 +63,7 @@
         <label for="tassoConsegna" class="field w40 cell">
             <input type="number" name="tassoConsegna" id="tassoConsegna" placeholder="Tasso Consegna (€)" step="0.01">
         </label>
-        <label for="urlImmagine" class="field w40 cell">
+        <label for="urlImmagine" class="field w80 cell">
             <input type="file" name="urlImmagine" id="urlImmagine" placeholder="Immagine del tuo ristorante">
         </label>
         <label for="info" class="field cell w80">
