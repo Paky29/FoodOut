@@ -50,22 +50,21 @@
 </head>
 
 <body>
-<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ristorante/add"
-      method="post">
-    <fieldset class="grid-x cell w100 add-disp justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
+<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ristorante/add-disponibilita" method="post">
+    <fieldset class="grid-x cell w90 add-disp justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
         <h1 id="title" class="cell"> Scegli il tuo orario </h1>
         <label for="lunedi" class="field w33 cell">
             <span id="lunedi" style="font-weight: bold"> ● LUNEDI </span>
         </label>
-        <span>
-        <label for="apLunedi" class="field w10 cell">
-            <input type="time" name="apLunedi" id="apLunedi" class="open">
+        <span class="w50">
+        <label for="apertura0" class="field w10 cell">
+            <input type="time" name="apertura0" id="apertura0" class="open">
         </label>
-        <label for="cLunedi" class="field w10 cell">
-            <input type="time" name="cLunedi" id="cLunedi" class="open">
+        <label for="chiusura0" class="field w10 cell">
+            <input type="time" name="chiusura0" id="chiusura0" class="open">
         </label>
-        <label for="chiuso_Lunedi" class="cell w10">
-            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoLunedi" value="Chiuso" id="chiuso_Lunedi" class="closed">
+        <label for="chiuso0" class="cell w10">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiuso0" value="Chiuso" id="chiuso0" class="closed">
             CHIUSO
         </label>
         </span>
@@ -73,15 +72,15 @@
         <label for="martedi" class="field w33 cell">
             <span id="martedi"> ● MARTEDI </span>
         </label>
-        <span>
-        <label for="apMartedi" class="field w10 cell">
-            <input type="time" name="apMartedi" id="apMartedi" class="open">
+        <span class="w50">
+        <label for="apertura1" class="field w10 cell">
+            <input type="time" name="apertura1" id="apertura1" class="open">
         </label>
-        <label for="cMartedi" class="field w10 cell">
-            <input type="time" name="cMartedi" id="cMartedi" class="open">
+        <label for="chiusura1" class="field w10 cell">
+            <input type="time" name="chiusura1" id="chiusura1" class="open">
         </label>
-        <label for="chiuso_Martedi" class="cell w10">
-            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoMartedi" value="Chiuso" id="chiuso_Martedi" class="closed">
+        <label for="chiuso1" class="cell w10">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiuso1" value="Chiuso" id="chiuso1" class="closed">
             CHIUSO
         </label>
         </span>
@@ -89,15 +88,15 @@
         <label for="mercoledi" class="field w33 cell">
             <span id="mercoledi"> ● MERCOLEDI </span>
         </label>
-        <span>
-        <label for="apMercoledi" class="field w10 cell">
-            <input type="time" name="apMercoledi" id="apMercoledi" class="open">
+        <span class="w50">
+        <label for="apertura2" class="field w10 cell">
+            <input type="time" name="apertura2" id="apertura2" class="open">
         </label>
-        <label for="cMercoledi" class="field w10 cell">
-            <input type="time" name="cMercoledi" id="cMercoledi" class="open">
+        <label for="chiusura2" class="field w10 cell">
+            <input type="time" name="chiusura2" id="chiusura2" class="open">
         </label>
-        <label for="chiuso_Mercoledi" class="cell w10">
-            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoMercoledi" value="Chiuso" id="chiuso_Mercoledi" class="closed">
+        <label for="chiuso2" class="cell w10">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiuso2" value="Chiuso" id="chiuso2" class="closed">
             CHIUSO
         </label>
         </span>
@@ -105,15 +104,15 @@
         <label for="giovedi" class="field w33 cell">
             <span id="giovedi"> ● GIOVEDI </span>
         </label>
-        <span>
-        <label for="apGiovedi" class="field w10 cell">
-            <input type="time" name="apGiovedi" id="apGiovedi" class="open">
+        <span class="w50">
+        <label for="apertura3" class="field w10 cell">
+            <input type="time" name="apertura3" id="apertura3" class="open">
         </label>
-        <label for="cGiovedi" class="field w10 cell">
-            <input type="time" name="cGiovedi" id="cGiovedi" class="open">
+        <label for="chiusura3" class="field w10 cell">
+            <input type="time" name="chiusura3" id="chiusura3" class="open">
         </label>
-        <label for="chiuso_Giovedi" class="cell w10">
-            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoGiovedi" value="Chiuso" id="chiuso_Giovedi" class="closed">
+        <label for="chiuso3" class="cell w10">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiuso3" value="Chiuso" id="chiuso3" class="closed">
             CHIUSO
         </label>
         </span>
@@ -121,15 +120,15 @@
         <label for="venerdi" class="field w33 cell">
             <span id="venerdi"> ● VENERDI </span>
         </label>
-        <span>
-        <label for="apVenerdi" class="field w10 cell">
-            <input type="time" name="apVenerdi" id="apVenerdi" class="open">
+        <span class="w50">
+        <label for="apertura4" class="field w10 cell">
+            <input type="time" name="apertura4" id="apertura4" class="open">
         </label>
-        <label for="cVenerdi" class="field w10 cell">
-            <input type="time" name="cVenerdi" id="cVenerdi" class="open">
+        <label for="chiusura4" class="field w10 cell">
+            <input type="time" name="chiusura4" id="chiusura4" class="open">
         </label>
-        <label for="chiuso_Venerdi" class="cell w10">
-            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoVenerdi" value="Chiuso" id="chiuso_Venerdi" class="closed">
+        <label for="chiuso4" class="cell w10">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiuso4" value="Chiuso" id="chiuso4" class="closed">
             CHIUSO
         </label>
         </span>
@@ -137,15 +136,15 @@
         <label for="sabato" class="field w33 cell">
             <span id="sabato"> ● SABATO </span>
         </label>
-        <span>
-        <label for="apSabato" class="field w10 cell">
-            <input type="time" name="apSabato" id="apSabato" class="open">
+        <span class="w50">
+        <label for="apertura5" class="field w10 cell">
+            <input type="time" name="apertura5" id="apertura5" class="open">
         </label>
-        <label for="cSabato" class="field w10 cell">
-            <input type="time" name="cSabato" id="cSabato" class="open">
+        <label for="chiusura5" class="field w10 cell">
+            <input type="time" name="chiusura5" id="chiusura5" class="open">
         </label>
-        <label for="chiuso_Sabato" class="cell w10">
-            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoSabato" value="Chiuso" id="chiuso_Sabato" class="closed">
+        <label for="chiuso5" class="cell w10">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiuso5" value="Chiuso" id="chiuso5" class="closed">
             CHIUSO
         </label>
         </span>
@@ -153,19 +152,22 @@
         <label for="domenica" class="field w33 cell">
             <span id="domenica"> ● DOMENICA </span>
         </label>
-        <span>
-        <label for="apDomenica" class="field w10 cell">
-            <input type="time" name="apDomenica" id="apDomenica" class="open">
+        <span class="w50">
+        <label for="apertura6" class="field w10 cell">
+            <input type="time" name="apertura6" id="apertura6" class="open">
         </label>
-        <label for="cDomenica" class="field w10 cell">
-            <input type="time" name="cDomenica" id="cDomenica" class="open">
+        <label for="chiusura6" class="field w10 cell">
+            <input type="time" name="chiusura6" id="chiusura6" class="open">
         </label>
-        <label for="chiuso_Domenica" class="cell w10">
-            <input type="checkbox" onclick="disableThisOpens(this)" name="chiusoDomenica" value="Chiuso" id="chiuso_Domenica" class="closed">
+        <label for="chiuso6" class="cell w10">
+            <input type="checkbox" onclick="disableThisOpens(this)" name="chiuso6" value="Chiuso" id="chiuso6" class="closed">
             CHIUSO
         </label>
         </span>
-
+        <input style="display: none" name="idRis" id="idRis" value="${id}" readonly>
+        <span class="grid-x cell justify-center">
+            <button type="submit" class="btn primary">Imposta orario</button>
+        </span>
     </fieldset>
 </form>
 </body>

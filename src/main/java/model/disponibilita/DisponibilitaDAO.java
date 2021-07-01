@@ -22,7 +22,7 @@ public class DisponibilitaDAO {
 
     public boolean doUpdate(Disponibilita d, int codiceRistorante) throws SQLException{
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("UPDATE Disponibilita SET oraApertura=?, oraChiusura=?) WHERE codRis_fk=? AND giorno=?)");
+            PreparedStatement ps=conn.prepareStatement("UPDATE Disponibilita SET oraApertura=?, oraChiusura=? WHERE codRis_fk=? AND giorno=?");
             ps.setTime(1,Time.valueOf(d.getOraApertura()));
             ps.setTime(2,Time.valueOf(d.getOraChiusura()));
             ps.setInt(3,codiceRistorante);

@@ -71,7 +71,6 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     RistoranteDAO ristoranteDAO=new RistoranteDAO();
                     Ristorante r=ristoranteDAO.doRetrieveByIdAdmin(id);
                     req.setAttribute("ristorante", r);
-                    //req.setAttribute("ristoranteUrl", "FoodOut/covers/" + r.getUrlImmagine());
                     req.getRequestDispatcher(view("ristorante/info-admin")).forward(req, resp);
                     break;
                 }
@@ -81,6 +80,13 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/add":
                     req.getRequestDispatcher(view("ristorante/add-ristorante")).forward(req,resp);
                     break;
+                case "/add-disponibilita": {
+                    authorizeUtente(req.getSession());
+                    CommonValidator.validateId(req);
+                    req.setAttribute("id", req.getParameter("id"));
+                    req.getRequestDispatcher(view("ristorante/add-disponibilita")).forward(req, resp);
+                    break;
+                }
                 case "/delete": {
                     authorizeUtente(req.getSession());
                     CommonValidator.validateId(req);
@@ -178,9 +184,15 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
                     r.setUrlImmagine(fileName);
                     RistoranteDAO service = new RistoranteDAO();
-                    int size = service.countAll();
                     if (service.doSave(r)) {
-                        resp.sendRedirect("/FoodOut/ristorante/all");
+                        //resp.sendRedirect("/FoodOut/ristorante/all");
+                        resp.sendRedirect("/FoodOut/ristorante/add-disponibilita?id="+r.getCodice());
+                        String uploadRoot=getUploadPath();
+                        try(InputStream fileStream=filePart.getInputStream()){
+                            File file=new File(uploadRoot+fileName);
+                            Files.copy(fileStream, file.toPath());
+                        }
+
                         DisponibilitaDAO serviceDisp=new DisponibilitaDAO();
                         for(int i = 0; i< Disponibilita.giorni.length; ++i){
                             Disponibilita d=new Disponibilita();
@@ -189,14 +201,31 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                             d.setOraChiusura(LocalTime.of(0,0));
                             serviceDisp.doSave(d,r.getCodice());
                         }
-                        String uploadRoot=getUploadPath();
-                        try(InputStream fileStream=filePart.getInputStream()){
-                            File file=new File(uploadRoot+fileName);
-                            Files.copy(fileStream, file.toPath());
-                        }
                     }
                     else
                         InternalError();
+                    break;
+                }
+                case "/add-disponibilita": {
+                    HttpSession session=req.getSession();
+                    authorizeUtente(session);
+                    //validate form
+                    DisponibilitaDAO service=new DisponibilitaDAO();
+                    int codice=Integer.parseInt(req.getParameter("idRis"));
+                    for(int i=0;i<Disponibilita.giorni.length;++i){
+                        Disponibilita d=new Disponibilita();
+                        d.setGiorno(Disponibilita.giorni[i]);
+                        if(req.getParameter("chiuso"+i)==null){
+                            d.setOraApertura(LocalTime.parse(req.getParameter("apertura"+i)));
+                            d.setOraChiusura(LocalTime.parse(req.getParameter("chiusura"+i)));
+                        }
+                        else{
+                            d.setOraApertura(LocalTime.of(0,0));
+                            d.setOraChiusura(LocalTime.of(0,0));
+                        }
+                        service.doUpdate(d,codice);
+                    }
+                    resp.sendRedirect("/FoodOut/ristorante/all");
                     break;
                 }
                 default:
