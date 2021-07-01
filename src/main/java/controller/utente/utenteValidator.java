@@ -44,4 +44,12 @@ public class utenteValidator {
         return validator;
     }
 
+    static RequestValidator validateLogin(HttpServletRequest request){
+        RequestValidator validator=new RequestValidator(request);
+        validator.assertEmail("email", "Formato email non valido");
+        validator.assertEmail("email", "Formato password non valida");
+
+        return validator;
+    }
+
 }

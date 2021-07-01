@@ -50,7 +50,7 @@
 </head>
 
 <body>
-<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ristorante/add-disponibilita" method="post">
+<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ristorante/disponibilita" method="post">
     <fieldset class="grid-x cell w90 add-disp justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
         <h1 id="title" class="cell"> Scegli il tuo orario </h1>
         <label for="lunedi" class="field w33 cell">
@@ -164,9 +164,9 @@
             CHIUSO
         </label>
         </span>
-        <input style="display: none" name="idRis" id="idRis" value="${id}" readonly>
+        <input style="display: none" name="id" id="id" value="${id}" readonly>
         <span class="grid-x cell justify-center">
-            <button type="submit" class="btn primary">Imposta orario</button>
+            <button type="submit" class="btn primary" name="button" value="add">Imposta orario</button>
         </span>
     </fieldset>
 </form>

@@ -39,6 +39,12 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/all": {
                     authorizeUtente(req.getSession());
                     RistoranteDAO service=new RistoranteDAO();
+                    if(req.getParameter("page")!=null) {
+                        RequestValidator rv = CommonValidator.validatePage(req);
+                        for (String s : rv.getErrors())
+                            System.out.println(s);
+                        validate(CommonValidator.validatePage(req));
+                    }
                     int intPage=parsePage(req);
                     int totRis=service.countAll();
                     Paginator paginator=new Paginator(intPage,2);
@@ -98,7 +104,10 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 }
                 case "/delete": {
                     authorizeUtente(req.getSession());
-                    validate(CommonValidator.validateId(req));
+                    RequestValidator rv=CommonValidator.validateId(req);
+                    validate(rv);
+                    for(String s: rv.getErrors())
+                        System.out.println(s);
                     RistoranteDAO service=new RistoranteDAO();
                     int id=Integer.parseInt(req.getParameter("id"));
                     if(service.doDelete(id)){
@@ -115,11 +124,13 @@ public class ristoranteServlet extends controller implements ErrorHandler {
         }
         catch (SQLException e) {
             log(e.getMessage());
+            System.out.println(e.getMessage());
             e.printStackTrace();
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
         catch (InvalidRequestException e) {
             log(e.getMessage());
+            System.out.println(e.getMessage());
             e.handle(req,resp);
         }
     }
@@ -136,8 +147,13 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/update": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
+                    RequestValidator rv2=CommonValidator.validateId(req);
                     ristoranteValidator validator = new ristoranteValidator();
-                    validate(validator.validateForm(req));
+                    RequestValidator rv= validator.validateForm(req);
+                    for(String s: rv.getErrors())
+                        System.out.println(s);
+                    for(String s: rv2.getErrors())
+                        System.out.println(s);
                     Ristorante r = new Ristorante();
                     r.setCodice(Integer.parseInt(req.getParameter("id")));
                     r.setNome(req.getParameter("nome"));
@@ -178,10 +194,13 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/add": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
-                    ristoranteValidator validator = new ristoranteValidator();
-                    RequestValidator rr= validator.validateForm(req);
-                    for(String s: rr.getErrors())
+                    System.out.println(req.getParameter("spesaMinima"));
+                    System.out.println(req.getParameter("tassoConsegna"));
+                    RequestValidator rv=ristoranteValidator.validateForm(req);
+                    for(String s: rv.getErrors()){
                         System.out.println(s);
+                    }
+                    validate(ristoranteValidator.validateForm(req));
                     Ristorante r = new Ristorante();
                     r.setNome(req.getParameter("nome"));
                     r.setProvincia(req.getParameter("provincia"));
@@ -196,7 +215,6 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     r.setUrlImmagine(fileName);
                     RistoranteDAO service = new RistoranteDAO();
                     if (service.doSave(r)) {
-                        //resp.sendRedirect("/FoodOut/ristorante/all");
                         resp.sendRedirect("/FoodOut/ristorante/add-disponibilita?id="+r.getCodice());
                         String uploadRoot=getUploadPath();
                         try(InputStream fileStream=filePart.getInputStream()){
@@ -217,12 +235,13 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                         InternalError();
                     break;
                 }
-                case "/add-disponibilita": {
+                case "/disponibilita": {
                     HttpSession session=req.getSession();
                     authorizeUtente(session);
                     validate(disponibilitaValidator.validateForm(req));
                     DisponibilitaDAO service=new DisponibilitaDAO();
-                    int codice=Integer.parseInt(req.getParameter("idRis"));
+                    validate(CommonValidator.validateId(req));
+                    int codice=Integer.parseInt(req.getParameter("id"));
                     for(int i=0;i<Disponibilita.giorni.length;++i){
                         Disponibilita d=new Disponibilita();
                         d.setGiorno(Disponibilita.giorni[i]);
@@ -236,7 +255,11 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                         }
                         service.doUpdate(d,codice);
                     }
-                    resp.sendRedirect("/FoodOut/ristorante/all");
+
+                    if(req.getParameter("button").equals("add"))
+                        resp.sendRedirect("/FoodOut/ristorante/all");
+                    else
+                        resp.sendRedirect("/FoodOut/ristorante/show-info-admin?id="+ codice);
                     break;
                 }
                 default:

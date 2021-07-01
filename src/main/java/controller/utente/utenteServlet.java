@@ -19,11 +19,11 @@ import model.utente.UtenteDAO;
 import model.utility.RiderSession;
 import model.utility.UtenteSession;
 
-@WebServlet(name="utenteServlet", value="/utente/*")
+@WebServlet(name = "utenteServlet", value = "/utente/*")
 public class utenteServlet extends controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path=getPath(req);
+        String path = getPath(req);
         try {
             switch (path) {
                 case "/":
@@ -35,7 +35,7 @@ public class utenteServlet extends controller {
                     req.getRequestDispatcher(view("site/login")).forward(req, resp);
                     break;
                 case "/logout":
-                    HttpSession session=req.getSession();
+                    HttpSession session = req.getSession();
                     authenticateUtente(session);
                     session.invalidate();
                     resp.sendRedirect("/FoodOut/index.jsp");
@@ -44,12 +44,12 @@ public class utenteServlet extends controller {
                     req.getRequestDispatcher(view("site/update-pw")).forward(req, resp);
                     break;
                 case "/show":
-                    HttpSession ssn=req.getSession();
+                    HttpSession ssn = req.getSession();
                     authorizeUtente(ssn);
-                    UtenteSession us= (UtenteSession) ssn.getAttribute("utenteSession");
-                    UtenteDAO service=new UtenteDAO();
-                    Utente u= service.doRetrieveById(us.getId());
-                    ssn.setAttribute("profilo",u);
+                    UtenteSession us = (UtenteSession) ssn.getAttribute("utenteSession");
+                    UtenteDAO service = new UtenteDAO();
+                    Utente u = service.doRetrieveById(us.getId());
+                    ssn.setAttribute("profilo", u);
                     req.getRequestDispatcher(view("crm/show")).forward(req, resp);
                     break;
                 case "/profile":
@@ -59,27 +59,25 @@ public class utenteServlet extends controller {
                 default:
                     resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Risorsa non trovata");
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             log(e.getMessage());
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-        catch (InvalidRequestException e) {
+        } catch (InvalidRequestException e) {
             log(e.getMessage());
-            e.handle(req,resp);
+            e.handle(req, resp);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path=getPath(req);
+        String path = getPath(req);
         try {
             switch (path) {
                 case "/":
                     break;
-                case "/signup":{
+                case "/signup": {
                     validate(utenteValidator.validateForm(req));
-                    Utente u=new Utente();
+                    Utente u = new Utente();
                     u.setNome(req.getParameter("nome"));
                     u.setCognome(req.getParameter("cognome"));
                     u.setEmail(req.getParameter("email"));
@@ -88,59 +86,58 @@ public class utenteServlet extends controller {
                     u.setCitta(req.getParameter("citta"));
                     u.setVia(req.getParameter("via"));
                     u.setCivico(Integer.parseInt(req.getParameter("civico")));
-                    UtenteDAO service=new UtenteDAO();
+                    UtenteDAO service = new UtenteDAO();
                     service.doSave(u);
-                    UtenteSession utenteSession=new UtenteSession(u);
-                    HttpSession session=req.getSession();
-                    synchronized (session){
-                        session.setAttribute("utenteSession",utenteSession);
+                    UtenteSession utenteSession = new UtenteSession(u);
+                    HttpSession session = req.getSession();
+                    synchronized (session) {
+                        session.setAttribute("utenteSession", utenteSession);
                     }
-                    if(u.getEmail().contains("@foodout.com"))
+                    if (u.getEmail().contains("@foodout.com"))
                         resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
                     else
                         resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
                     break;
                 }
-                case "/login":{
-                String email=req.getParameter("email");
-                String pw=req.getParameter("pw");
-                if(email.contains("@foodout.rider.com")){
-                    RiderDAO service=new RiderDAO();
-                    Rider rd=service.doRetrievebyEmailAndPassword(email,pw);
-                    if(rd==null)
-                        System.out.println("Credenziali non valide");//cambiare con pagina di errore
-                    else{
-                        RiderSession riderSession=new RiderSession(rd);
-                        HttpSession session=req.getSession();
-                        synchronized (session){
-                            session.setAttribute("riderSession",riderSession);
+                case "/login": {
+                    validate(utenteValidator.validateLogin(req));
+                    String email = req.getParameter("email");
+                    String pw = req.getParameter("pw");
+                    if (email.contains("@foodout.rider.com")) {
+                        RiderDAO service = new RiderDAO();
+                        Rider rd = service.doRetrievebyEmailAndPassword(email, pw);
+                        if (rd == null)
+                            System.out.println("Credenziali non valide");//cambiare con pagina di errore
+                        else {
+                            RiderSession riderSession = new RiderSession(rd);
+                            HttpSession session = req.getSession();
+                            synchronized (session) {
+                                session.setAttribute("riderSession", riderSession);
+                            }
+                            resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare in /rider/profile
                         }
-                        resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare in /rider/profile
-                    }
-                }
-                else
-                {
-                    UtenteDAO service=new UtenteDAO();
-                    Utente u=service.doRetrieveByEmailAndPassword(email,pw);
-                    if(u==null)
-                        System.out.println("Credenziali non valide");
-                    else{
-                        UtenteSession utenteSession=new UtenteSession(u);
-                        HttpSession session=req.getSession();
-                        synchronized (session){
-                            System.out.println(utenteSession.getNome());
-                            session.setAttribute("utenteSession",utenteSession);
+                    } else {
+                        UtenteDAO service = new UtenteDAO();
+                        Utente u = service.doRetrieveByEmailAndPassword(email, pw);
+                        if (u == null)
+                            System.out.println("Credenziali non valide");
+                        else {
+                            UtenteSession utenteSession = new UtenteSession(u);
+                            HttpSession session = req.getSession();
+                            synchronized (session) {
+                                System.out.println(utenteSession.getNome());
+                                session.setAttribute("utenteSession", utenteSession);
+                            }
+                            if (email.contains("@foodout.com"))
+                                resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
+                            else
+                                resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
                         }
-                        if(email.contains("@foodout.com"))
-                            resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
-                        else
-                            resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
                     }
-                }
-                break;
+                    break;
                 }
                 case "/update": {
-                    HttpSession session=req.getSession();
+                    HttpSession session = req.getSession();
                     authenticateUtente(session);
                     validate(utenteValidator.validateUpdate(req));
                     Utente u = new Utente();
@@ -154,39 +151,39 @@ public class utenteServlet extends controller {
                     u.setCivico(Integer.parseInt(req.getParameter("civico")));
                     UtenteDAO service = new UtenteDAO();
                     service.doUpdate(u);
-                    UtenteSession utenteSession=new UtenteSession(u);
-                    synchronized (session){
-                        session.setAttribute("utenteSession",utenteSession);
+                    UtenteSession utenteSession = new UtenteSession(u);
+                    synchronized (session) {
+                        session.setAttribute("utenteSession", utenteSession);
                     }
-                    if(u.getEmail().contains("@foodout.com"))
+                    if (u.getEmail().contains("@foodout.com"))
                         resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
                     else
                         resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
                     break;
                 }
-                case "/update-pw":{
-                    HttpSession session=req.getSession();
+                case "/update-pw": {
+                    HttpSession session = req.getSession();
                     authenticateUtente(session);
                     validate(utenteValidator.validateUpdatePassword(req));
-                    String old_pw=req.getParameter("old_pw");
-                    String new_pw=req.getParameter("new_pw");
-                    String conf_pw=req.getParameter("conf_pw");
-                    String email=req.getParameter("email");
-                    UtenteDAO service=new UtenteDAO();
-                    Utente u=service.doRetrieveByEmailAndPassword(email, old_pw);
-                    if(u==null)
-                        throw new InvalidRequestException("error", List.of("error"),404); // da cambiare
+                    String old_pw = req.getParameter("old_pw");
+                    String new_pw = req.getParameter("new_pw");
+                    String conf_pw = req.getParameter("conf_pw");
+                    String email = req.getParameter("email");
+                    UtenteDAO service = new UtenteDAO();
+                    Utente u = service.doRetrieveByEmailAndPassword(email, old_pw);
+                    if (u == null)
+                        throw new InvalidRequestException("error", List.of("error"), 404); // da cambiare
 
-                    if(!new_pw.equals(conf_pw))
-                        throw new InvalidRequestException("error", List.of("error"),404); // da cambiare
+                    if (!new_pw.equals(conf_pw))
+                        throw new InvalidRequestException("error", List.of("error"), 404); // da cambiare
 
                     u.setPassword(new_pw);
                     service.doUpdatePw(u);
-                    UtenteSession utenteSession=new UtenteSession(u);
-                    synchronized (session){
-                        session.setAttribute("utenteSession",utenteSession);
+                    UtenteSession utenteSession = new UtenteSession(u);
+                    synchronized (session) {
+                        session.setAttribute("utenteSession", utenteSession);
                     }
-                    if(u.getEmail().contains("@foodout.com"))
+                    if (u.getEmail().contains("@foodout.com"))
                         resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
                     else
                         resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
@@ -201,13 +198,11 @@ public class utenteServlet extends controller {
             }
         } catch (SQLException e) {
             log(e.getMessage());
-            System.out.println("non ok");
             e.printStackTrace();
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-        catch (InvalidRequestException e) {
+        } catch (InvalidRequestException e) {
             log(e.getMessage());
-            e.handle(req,resp);
+            e.handle(req, resp);
         }
     }
 }

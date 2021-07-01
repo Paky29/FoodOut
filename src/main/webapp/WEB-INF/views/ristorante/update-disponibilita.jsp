@@ -54,7 +54,7 @@
 
 <body>
 <form class="app grid-x justify-center align-center"
-      action="${pageContext.request.contextPath}/ristorante/update-disponibilita" method="post">
+      action="${pageContext.request.contextPath}/ristorante/disponibilita" method="post">
     <fieldset
             class="grid-x cell w90 add-disp justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
         <h1 id="title" class="cell"> Scegli il tuo orario </h1>
@@ -93,6 +93,10 @@
             </c:choose>
         </span>
         </c:forEach>
+        <input style="display: none" name="id" id="id" value="${ristorante.codice}" readonly>
+        <span class="grid-x cell justify-center">
+            <button type="submit" class="btn primary" name="button" value="update">Imposta orario</button>
+        </span>
     </fieldset>
 </form>
 <%--<script>
