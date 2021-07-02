@@ -14,9 +14,9 @@ public class menuServlet extends controller{
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path=getPath(req);
         switch (path) {
-            case "/create": //mostra form con informazioni menu e prodotti da selezionare
-                break;
             case "/update"://mostra form con informazioni modificabili, bottone modifica prodotti
+                break;
+            case "/delete":
                 break;
             case "/edit-prodotti"://mostra select di prodotti da aggiungere e da togliere
                 break;
@@ -31,6 +31,8 @@ public class menuServlet extends controller{
             case "/create": //crea il menu
                 break;
             case "/update"://mostra form con informazioni modificabili, bottone modifica prodotti
+                break;
+            case "/delete":
                 break;
             case "/edit-prodotti"://mostra select di prodotti da aggiungere e da togliere
                 break;

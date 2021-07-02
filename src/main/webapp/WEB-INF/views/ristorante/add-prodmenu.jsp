@@ -41,17 +41,17 @@
 </head>
 <body>
 <div class="app grid-x justify-center align-center">
-<form class="grid-x justify-center" action="${pageContext.request.contextPath}/ristorante/add-prodotto" method="post" enctype="multipart/form-data">
+<form id="prodotto" class="grid-x justify-center" action="${pageContext.request.contextPath}/prodotto/create" method="post" enctype="multipart/form-data">
     <fieldset class="grid-x cell w90 add-ris justify-center">
         <h2 class="cell"> Aggiungi prodotto</h2>
         <label for="nome" class="field cell w82">
             <input type="text" name="nome" id="nome" placeholder="Nome">
         </label>
         <label for="prezzo" class="field w40 cell">
-            <input type="number" name="prezzo" id="prezzo" placeholder="Prezzo (€)" step="0.01">
+            <input type="number" name="prezzo" id="prezzo" placeholder="Prezzo (€)" min="0" step="0.01">
         </label>
         <label for="sconto" class="field w40 cell">
-            <input type="number" name="sconto" id="sconto" placeholder="Sconto (%)">
+            <input type="number" name="sconto" id="sconto" placeholder="Sconto (%)" max="100" min="0">
         </label>
         <label for="tipologia" class="field w65 cell">
             <span style="margin-right: 10px">
@@ -59,7 +59,7 @@
             </span>
             <select name="tipologia" id="tipologia">
                 <c:forEach items="${tipologie}" var="tipologia">
-                    <option>
+                    <option value="${tipologia.nome}">
                         ${tipologia.nome}
                     </option>
                 </c:forEach>
@@ -69,18 +69,19 @@
             <input type="file" name="urlImmagine" id="urlImmagine" placeholder="Immagine del tuo ristorante">
         </label>
         <label for="ingredienti" class="field cell w80">
-            <textarea rows="4" cols="100" type="text" name="ingredienti" id="ingredienti" maxlength="200" placeholder="Ingredienti del prodotto, separati da ','"></textarea>
+            <textarea rows="4" cols="100" type="text" name="ingredienti" id="ingredienti" maxlength="100" placeholder="Ingredienti del prodotto, separati da ','"></textarea>
         </label>
         <label for="info" class="field cell w80">
-            <textarea rows="4" cols="100" type="text" name="info" id="info" maxlength="200" placeholder="Informazioni extra sul prodotto"></textarea>
+            <textarea rows="4" cols="100" type="text" name="info" id="info" maxlength="100" placeholder="Informazioni extra sul prodotto"></textarea>
         </label>
+        <input style="display: none" name="id" id="id" value="${ristorante.codice}" readonly>
         <span class="grid-x cell justify-center">
             <button type="submit" class="btn primary w30"> Aggiungi </button>
         </span>
     </fieldset>
 </form>
 
-<form class="grid-x justify-center" style="display: none" action="${pageContext.request.contextPath}/ristorante/add-menu" method="post">
+<form id="menu" class="grid-x justify-center" action="${pageContext.request.contextPath}/menu/create" method="post">
     <fieldset class="grid-x cell w90 add-ris justify-center">
         <h2 class="cell"> Aggiungi ristorante</h2>
         <label for="nome" class="field cell w80">
@@ -94,9 +95,9 @@
         </label>
         <label for="prodotti" class="field w65 cell">
             <span style="margin-right: 10px">
-                Tipologia:
+                Prodotti:
             </span>
-            <select name="prodotti" id="prodotti">
+            <select name="prodotti" id="prodotti" multiple>
                 <c:forEach items="${ristorante.prodotti}" var="prodotto">
                     <option value="${prodotto.codice}">
                             ${prodotto.nome}
@@ -104,11 +105,15 @@
                 </c:forEach>
             </select>
         </label>
+        <input style="display: none" name="id" id="id" value="${ristorante.codice}" readonly>
         <span class="grid-x cell justify-center">
             <button type="submit" class="btn primary w30"> Aggiungi </button>
         </span>
     </fieldset>
 </form>
 </div>
+<c:if test="${empty ristorante.prodotti}">
+    <script> document.getElementsByTagName("form")[1].style.display="none";</script>
+</c:if>
 </body>
 </html>

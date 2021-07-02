@@ -3,6 +3,7 @@ package controller.ristorante;
 import controller.http.*;
 import model.disponibilita.Disponibilita;
 import model.disponibilita.DisponibilitaDAO;
+import model.prodotto.ProdottoDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
 import model.tipologia.Tipologia;
@@ -42,9 +43,6 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     authorizeUtente(req.getSession());
                     RistoranteDAO service=new RistoranteDAO();
                     if(req.getParameter("page")!=null) {
-                        RequestValidator rv = CommonValidator.validatePage(req);
-                        for (String s : rv.getErrors())
-                            System.out.println(s);
                         validate(CommonValidator.validatePage(req));
                     }
                     int intPage=parsePage(req);
@@ -74,11 +72,15 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 }
                 case "/add-prodmenu":{
                     authorizeUtente(req.getSession());
+                    validate(CommonValidator.validateId(req));
                     TipologiaDAO serviceTip=new TipologiaDAO();
                     ArrayList<Tipologia> tipologie=serviceTip.doRetrieveAll();
                     req.setAttribute("tipologie",tipologie);
+                    int codiceRis=Integer.parseInt(req.getParameter("id"));
                     RistoranteDAO serviceRis=new RistoranteDAO();
-                    Ristorante r=serviceRis.doRetrieveById(Integer.parseInt(req.getParameter("id")));
+                    Ristorante r=serviceRis.doRetrieveByIdAdmin(codiceRis);
+                    ProdottoDAO serviceProd=new ProdottoDAO();
+                    r.setProdotti(serviceProd.doRetrieveByRistorante(codiceRis));
                     req.setAttribute("ristorante",r);
                     req.getRequestDispatcher(view("ristorante/add-prodmenu")).forward(req, resp);
                     break;
