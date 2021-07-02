@@ -88,7 +88,7 @@
 
 <form id="menu" class="grid-x justify-center" action="${pageContext.request.contextPath}/menu/create" method="post">
     <fieldset class="grid-x cell w90 add-ris justify-center">
-        <h2 class="cell"> Aggiungi ristorante</h2>
+        <h2 class="cell"> Aggiungi menu</h2>
         <label for="nome" class="field cell w80">
             <input type="text" name="nome" id="nome" placeholder="Nome">
         </label>
