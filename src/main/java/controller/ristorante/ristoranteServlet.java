@@ -99,6 +99,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     req.getRequestDispatcher(view("ristorante/recensioni")).forward(req, resp);
                     break;
                 case "/add":
+                    authorizeUtente(req.getSession());
                     req.getRequestDispatcher(view("ristorante/add-ristorante")).forward(req,resp);
                     break;
                 case "/add-disponibilita": {
@@ -209,8 +210,6 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/add": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
-                    System.out.println(req.getParameter("spesaMinima"));
-                    System.out.println(req.getParameter("tassoConsegna"));
                     RequestValidator rv=ristoranteValidator.validateForm(req);
                     for(String s: rv.getErrors()){
                         System.out.println(s);

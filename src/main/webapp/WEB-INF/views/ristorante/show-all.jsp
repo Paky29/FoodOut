@@ -83,7 +83,7 @@
                                     </c:otherwise>
                                 </c:choose>
                             </td>
-                            <td class="delete" data-head="Elimina">
+                            <td class="delete" onclick="deleteRis(this)" data-head="Elimina">
                                 <%@include file="../../../icons/delete.svg" %>
                             </td>
                             <td style="border-bottom: 0" > <a href="/FoodOut/ristorante/show-info-admin?id=${ristorante.codice}" target="_blank"> Vai al profilo </a></td>

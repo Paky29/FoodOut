@@ -9,9 +9,9 @@ public class ordineValidator {
     static RequestValidator validateForm(HttpServletRequest request){
         RequestValidator validator=new RequestValidator(request);
         if(request.getParameter("nota")!=null)
-            validator.assertMatch("nota", Pattern.compile("^(\\w|\\s){1,30}$"), "nota compreso tra 1 e 30 caratteri");
+            validator.assertMatch("nota", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|,|\\.){1,30}$"), "nota compreso tra 1 e 30 caratteri");
         if(request.getParameter("giudizio")!=null)
-            validator.assertMatch("giudizio", Pattern.compile("^(\\w|\\s){1,50}$"), "giudizio compreso tra 1 e 50 caratteri");
+            validator.assertMatch("giudizio", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|,|\\.){1,50}$"), "giudizio compreso tra 1 e 50 caratteri");
         if(request.getParameter("voto")!=null)
         validator.assertMatch("voto",Pattern.compile("^[1-5]$"),"voto deve essere un numero tra 1 e 5");
         return validator;

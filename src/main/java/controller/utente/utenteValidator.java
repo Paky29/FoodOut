@@ -12,11 +12,11 @@ public class utenteValidator {
         validator.checkLength("email", 50, "email deve essere al massimo di 50 caratteri");
         validator.assertEmail("email", "email non valida");
         validator.assertMatch("pw", Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$"), "password deve essere di minimo otto caratteri con almeno una lettere maiuscola, una lettera minuscola, un numero e un carattere speciale");
-        validator.assertMatch("nome", Pattern.compile("^(\\w|\\s){1,30}$"), "nome compreso tra 1 e 30 caratteri");
-        validator.assertMatch("cognome", Pattern.compile("^(\\w|\\s){1,30}$"), "cognome compreso tra 1 e 30 caratteri");
-        validator.assertMatch("provincia", Pattern.compile("^(\\w|\\s){1,30}$"), "provincia compreso tra 1 e 30 caratteri");
-        validator.assertMatch("citta", Pattern.compile("^(\\w|\\s){1,30}$"), "citta compreso tra 1 e 30 caratteri");
-        validator.assertMatch("via", Pattern.compile("^(\\w|\\s){1,50}$"), "via compreso tra 1 e 50 caratteri");
+        validator.assertMatch("nome", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "nome compreso tra 1 e 30 caratteri");
+        validator.assertMatch("cognome", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "cognome compreso tra 1 e 30 caratteri");
+        validator.assertMatch("provincia", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "provincia compreso tra 1 e 30 caratteri");
+        validator.assertMatch("citta", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "citta compreso tra 1 e 30 caratteri");
+        validator.assertMatch("via", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\\.){1,50}$"), "via compreso tra 1 e 50 caratteri");
         validator.assertInt("civico", "via compreso tra 1 e 50 caratteri");
         System.out.println(validator.getErrors());
         return validator;
@@ -26,11 +26,11 @@ public class utenteValidator {
         RequestValidator validator = new RequestValidator(request);
         validator.checkLength("email", 50, "email deve essere al massimo di 50 caratteri");
         validator.assertEmail("email", "email non valida");
-        validator.assertMatch("nome", Pattern.compile("^(\\w|\\s){1,30}$"), "nome compreso tra 1 e 30 caratteri");
-        validator.assertMatch("cognome", Pattern.compile("^(\\w|\\s){1,30}$"), "cognome compreso tra 1 e 30 caratteri");
-        validator.assertMatch("provincia", Pattern.compile("^(\\w|\\s){1,30}$"), "provincia compreso tra 1 e 30 caratteri");
-        validator.assertMatch("citta", Pattern.compile("^(\\w|\\s){1,30}$"), "citta compreso tra 1 e 30 caratteri");
-        validator.assertMatch("via", Pattern.compile("^(\\w|\\s){1,50}$"), "via compreso tra 1 e 50 caratteri");
+        validator.assertMatch("nome", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]){1,30}$"), "nome compreso tra 1 e 30 caratteri");
+        validator.assertMatch("cognome", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "cognome compreso tra 1 e 30 caratteri");
+        validator.assertMatch("provincia", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "provincia compreso tra 1 e 30 caratteri");
+        validator.assertMatch("citta", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "citta compreso tra 1 e 30 caratteri");
+        validator.assertMatch("via", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\\.){1,50}$"), "via compreso tra 1 e 50 caratteri");
         validator.assertInt("civico", "via compreso tra 1 e 50 caratteri");
         System.out.println(validator.getErrors());
         return validator;
@@ -47,8 +47,7 @@ public class utenteValidator {
     static RequestValidator validateLogin(HttpServletRequest request){
         RequestValidator validator=new RequestValidator(request);
         validator.assertEmail("email", "Formato email non valido");
-        validator.assertEmail("email", "Formato password non valida");
-
+        validator.assertMatch("pw", Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$"), "Formato password non valido");
         return validator;
     }
 

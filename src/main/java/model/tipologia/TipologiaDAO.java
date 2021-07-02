@@ -1,6 +1,8 @@
 package model.tipologia;
 
 import model.utility.ConPool;
+import model.utility.Paginator;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,6 +30,23 @@ public class TipologiaDAO {
     public ArrayList<Tipologia> doRetrieveAll() throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT nome, descrizione FROM Tipologia t");
+            ResultSet rs=ps.executeQuery();
+            ArrayList<Tipologia> tipologie=new ArrayList<>();
+            while(rs.next()) {
+                Tipologia t = new Tipologia();
+                t.setNome(rs.getString("nome"));
+                t.setDescrizione(rs.getString("descrizione"));
+                tipologie.add(t);
+            }
+            return tipologie;
+        }
+    }
+
+    public ArrayList<Tipologia> doRetrieveAll(Paginator paginator) throws SQLException {
+        try(Connection conn= ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT nome, descrizione FROM Tipologia t LIMIT ?,?");
+            ps.setInt(1, paginator.getOffset());
+            ps.setInt(2, paginator.getLimit());
             ResultSet rs=ps.executeQuery();
             ArrayList<Tipologia> tipologie=new ArrayList<>();
             while(rs.next()) {
@@ -71,11 +90,12 @@ public class TipologiaDAO {
         }
     }
 
-    public boolean doUpdate(Tipologia t) throws SQLException{
+    public boolean doUpdate(Tipologia t, String nomeVecchio) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("UPDATE Tipologia SET descrizione=? WHERE nome=?");
-            ps.setString(1,t.getDescrizione());
-            ps.setString(2,t.getNome());
+            PreparedStatement ps=conn.prepareStatement("UPDATE Tipologia SET nome=?, descrizione=? WHERE nome=?");
+            ps.setString(1,t.getNome());
+            ps.setString(2,t.getDescrizione());
+            ps.setString(3, nomeVecchio);
             if (ps.executeUpdate() != 1)
                 return false;
             else
