@@ -31,6 +31,10 @@
             line-height: 27px;
         }
 
+        button{
+            margin:5px;
+        }
+
         @media screen and (min-width: 900px) {
             form {
                 max-width: 50%;
@@ -76,7 +80,8 @@
         </label>
         <input style="display: none" name="id" id="id" value="${ristorante.codice}" readonly>
         <span class="grid-x cell justify-center">
-            <button type="submit" class="btn primary w30"> Aggiungi </button>
+            <button type="submit" class="btn primary w30" value="again" name="button"> Aggiungi prodotto </button>
+            <button type="submit" class="btn primary w30" value="stop" name="button">Salva ed esci</button>
         </span>
     </fieldset>
 </form>
@@ -107,12 +112,13 @@
         </label>
         <input style="display: none" name="id" id="id" value="${ristorante.codice}" readonly>
         <span class="grid-x cell justify-center">
-            <button type="submit" class="btn primary w30"> Aggiungi </button>
+            <button type="submit" class="btn primary w30" value="again" name="button"> Aggiungi menu </button>
+            <button type="submit" class="btn primary w30" value="stop" name="button">Salva ed esci</button>
         </span>
     </fieldset>
 </form>
 </div>
-<c:if test="${empty ristorante.prodotti}">
+<c:if test="${empty ristorante.prodotti || fn:length(ristorante.prodotti)<2}">
     <script> document.getElementsByTagName("form")[1].style.display="none";</script>
 </c:if>
 </body>

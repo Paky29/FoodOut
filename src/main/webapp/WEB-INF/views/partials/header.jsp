@@ -3,7 +3,7 @@
 <div class="cell grid-y" id="header">
     <nav class="grid-x navbar align-center">
         <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
-    <div class="" id="links">
+    <div id="links">
         <a href="${pageContext.request.contextPath}/utente/login"> Accedi </a>
         <a href="${pageContext.request.contextPath}/utente/signup"> Registrati </a>
     </div>

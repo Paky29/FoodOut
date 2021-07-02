@@ -47,10 +47,8 @@ public class prodottoServlet extends controller{
             case "/create":
                 HttpSession session=req.getSession();
                 authorizeUtente(session);
-                RequestValidator validator=prodottoValidator.validateForm(req);
-                for(String s:validator.getErrors())
-                    System.out.println(s);
                 validate(prodottoValidator.validateForm(req));
+                validate(CommonValidator.validateId(req));
                 Prodotto pr=new Prodotto();
                 pr.setNome(req.getParameter("nome"));
                 pr.setPrezzo(Float.parseFloat(req.getParameter("prezzo")));
@@ -64,13 +62,15 @@ public class prodottoServlet extends controller{
                 Part filePart = req.getPart("urlImmagine");
                 String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
                 pr.setUrlImmagine(fileName);
-                validate(CommonValidator.validateId(req));
                 Ristorante r=new Ristorante();
                 r.setCodice(Integer.parseInt(req.getParameter("id")));
                 pr.setRistorante(r);
                 ProdottoDAO service = new ProdottoDAO();
                 if (service.doSave(pr)) {
-                    resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id=" + r.getCodice());
+                    if(req.getParameter("button").equals("again"))
+                        resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id=" + r.getCodice());
+                    else
+                        resp.sendRedirect("/FoodOut/ristorante/all");
                     String uploadRoot = getUploadPath();
                     try (InputStream fileStream = filePart.getInputStream()) {
                         File file = new File(uploadRoot + fileName);

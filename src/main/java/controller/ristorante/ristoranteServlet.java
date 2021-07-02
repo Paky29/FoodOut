@@ -47,7 +47,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     }
                     int intPage=parsePage(req);
                     int totRis=service.countAll();
-                    Paginator paginator=new Paginator(intPage,2);
+                    Paginator paginator=new Paginator(intPage,6);
                     int size=service.countAll();
                     req.setAttribute("pages",paginator.getPages(size));
                     ArrayList<Ristorante> ristoranti = service.doRetrieveAll(paginator);
