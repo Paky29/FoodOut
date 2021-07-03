@@ -190,7 +190,7 @@ button.primary:hover{
 }
 
 .notification.danger{
-    background-color: var(--error);
+    background-color: red;
 }
 
 .notification .close{
@@ -198,6 +198,7 @@ button.primary:hover{
     top:10px;
     right: 10px;
     fill:white;
+    cursor: pointer;
 }
 
 @media screen and (min-width: 769px){

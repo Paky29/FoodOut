@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <jsp:include page="../partials/head.jsp">
@@ -19,8 +20,7 @@
     <section class="content grid-y">
         <%@include file="../partials/crm/header.jsp" %>
         <div class="body grid-x justify-center">
-            <form class="grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/update"
-                  method="post">
+            <form class="grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/update" method="post">
                 <fieldset
                         class="grid-x cell justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
                     <legend> Profilo</legend>
