@@ -113,7 +113,7 @@ public class utenteServlet extends controller {
                         RiderDAO service = new RiderDAO();
                         Rider rd = service.doRetrievebyEmailAndPassword(email, pw);
                         if (rd == null)
-                            System.out.println("Credenziali non valide");//cambiare con pagina di errore
+                            notFound();//cambiare con pagina di errore
                         else {
                             RiderSession riderSession = new RiderSession(rd);
                             HttpSession session = req.getSession();
@@ -125,8 +125,11 @@ public class utenteServlet extends controller {
                     } else {
                         UtenteDAO service = new UtenteDAO();
                         Utente u = service.doRetrieveByEmailAndPassword(email, pw);
-                        if (u == null)
-                            System.out.println("Credenziali non valide");//pagina di errore
+                        if (u == null) {
+                            System.out.println("Credenziali non valide");
+                            notFound();
+                        }
+                        //pagina di errore
                         else {
                             UtenteSession utenteSession = new UtenteSession(u);
                             HttpSession session = req.getSession();

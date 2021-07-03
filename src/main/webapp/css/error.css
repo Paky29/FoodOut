@@ -1,0 +1,33 @@
+.cnt{
+    background-color: rgba(0,0,0,0.3);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+
+.text {
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    font-family: Myriad;
+    color: white;
+    margin: auto;
+    text-align: center;
+    background-color: rgba(0,0,0,0.7);
+
+}
+
+.text > * {
+    margin: 15px;
+}
+
+a{
+    font-size: 24px;
+    margin-bottom: 5px;
+    color:white;
+}
+
+.title{
+    font-size: 30px;
+    font-weight: bold;
+}

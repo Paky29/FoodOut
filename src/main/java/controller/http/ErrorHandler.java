@@ -35,7 +35,7 @@ public interface ErrorHandler {
     }
 
     default void notFound() throws InvalidRequestException{
-        throw new InvalidRequestException("Erroe interno", List.of("Risorsa non trovata"),HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        throw new InvalidRequestException("Erroe interno", List.of("Risorsa non trovata"),HttpServletResponse.SC_NOT_FOUND);
     }
 
     default void notAllowed() throws InvalidRequestException{
