@@ -106,6 +106,8 @@ public class utenteServlet extends controller {
                 }
                 case "/login": {
                     req.setAttribute("back",view("site/login"));
+                    req.setAttribute("backError","/FoodOut/utente/login");
+
                     validate(utenteValidator.validateLogin(req));
                     String email = req.getParameter("email");
                     String pw = req.getParameter("pw");
@@ -171,6 +173,7 @@ public class utenteServlet extends controller {
                     break;
                 }
                 case "/update-pw": {
+                    req.setAttribute("backError", "/FoodOut/utente/update-pw");
                     HttpSession session = req.getSession();
                     authenticateUtente(session);
                     validate(utenteValidator.validateUpdatePassword(req));
@@ -181,7 +184,7 @@ public class utenteServlet extends controller {
                     UtenteDAO service = new UtenteDAO();
                     Utente u = service.doRetrieveByEmailAndPassword(email, old_pw);
                     if (u == null)
-                        throw new InvalidRequestException("error", List.of("error"), 404); // da cambiare
+                        notFound();// da cambiare
 
                     if (!new_pw.equals(conf_pw))
                         throw new InvalidRequestException("error", List.of("error"), 404); // da cambiare

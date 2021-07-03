@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: somma
@@ -24,7 +25,14 @@
     <div class="cell text justify-center">
         <p class="title">ALT!</p>
         <p>Non disponi dell'autorizzazione necessaria a questa azione </p>
-        <p> </p><a href="" class="cell"> Torna alla pagina di registrazione</a> </p>
+        <c:choose>
+            <c:when test="${utenteSession==null}">
+                <p> </p><a href="/FoodOut/utente/login" class="cell"> Vai alla pagina di login</a> </p> <%--da vedere--%>
+            </c:when>
+            <c:otherwise>
+                <p> </p><a href="/FoodOut/ristorante/zona" class="cell"> Torna alla pagina principale</a> </p> <%--da vedere--%>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>
 </body>

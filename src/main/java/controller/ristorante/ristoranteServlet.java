@@ -86,11 +86,14 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     break;
                 }
                 case "/show-info-admin": {// mostrare all'admin info modificabili
+                    req.setAttribute("backError", "/FoodOut/ristorante/all?page=1");
                     authorizeUtente(req.getSession());
                     validate(CommonValidator.validateId(req));
                     int id=Integer.parseInt(req.getParameter("id"));
                     RistoranteDAO ristoranteDAO=new RistoranteDAO();
                     Ristorante r=ristoranteDAO.doRetrieveByIdAdmin(id);
+                    if(r==null)
+                        notFound();
                     req.setAttribute("ristorante", r);
                     req.getRequestDispatcher(view("ristorante/info-admin")).forward(req, resp);
                     break;
@@ -110,10 +113,13 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     break;
                 }
                 case "/update-disponibilita" : {
+                    req.setAttribute("backError", "/FoodOut/ristorante/all?page=1");
                     authorizeUtente(req.getSession());
                     validate(CommonValidator.validateId(req));
                     RistoranteDAO service=new RistoranteDAO();
                     Ristorante r=service.doRetrieveByIdAdmin(Integer.parseInt(req.getParameter("id")));
+                    if(r==null)
+                        notFound();
                     req.setAttribute("ristorante", r);
                     req.getRequestDispatcher(view("ristorante/update-disponibilita")).forward(req, resp);
                     break;

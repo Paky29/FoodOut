@@ -24,7 +24,6 @@
     <div class="cell text justify-center">
         <p class="title"> Errore interno </p>
         <p> Siamo spiacenti, si è verificato un problema nel server </p>
-        <p> </p><a href="" class="cell"> Torna indietro</a> </p>
     </div>
 </div>
 </body>

@@ -23,7 +23,7 @@
 <div class="app grid-x justify-center align-center cnt">
 <div class="cell text justify-center">
     <p class="title">Risorsa non trovata </p>
-    <p> </p><a href="${back}" class="cell"> Torna indietro</a> </p>
+    <p> </p><a href="javascript:history.go(-1)" class="cell"> Torna indietro</a> </p>
 </div>
 </div>
 </body>
