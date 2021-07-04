@@ -45,7 +45,7 @@
 </head>
 <body>
 <div class="app grid-x justify-center align-center">
-    <form id="prodotto" class="grid-x justify-center" action="${pageContext.request.contextPath}/prodotto/create" method="post" enctype="multipart/form-data">
+    <form id="prodotto " class="grid-x justify-center" action="${pageContext.request.contextPath}/prodotto/create" method="post" enctype="multipart/form-data">
         <fieldset class="grid-x cell w90 add-ris justify-center">
             <h2 class="cell"> Modifica prodotto</h2>
             <label for="nome" class="field cell w82">

@@ -131,7 +131,7 @@
     <div class="cell grid-x" id="header">
         <nav class="grid-y navbar align-center cell">
             <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
-            <div id="links">
+            <div id="links" >
                 <a href="${pageContext.request.contextPath}/ristorante/show-info-admin?id=${ristorante.codice}"> Info </a>
                 <a href="${pageContext.request.contextPath}/ristorante/show-menu-admin?id=${ristorante.codice}"/> Menu </a>
                 <a href="${pageContext.request.contextPath}/ristorante/show-recensioni?id=${ristorante.codice}"> Recensioni </a>

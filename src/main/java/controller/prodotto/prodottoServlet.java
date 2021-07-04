@@ -32,7 +32,7 @@ public class prodottoServlet extends controller{
         String path=getPath(req);
         try {
             switch (path) {
-                case "/update": {//validare id ristorante
+                case "/update" : {//validare id ristorante
                     validate(CommonValidator.validateId(req));
                     int codice = Integer.parseInt(req.getParameter("id"));
                     int codiceRis = Integer.parseInt(req.getParameter("idRis"));

@@ -15,7 +15,7 @@
 <body>
 <style>
 
-    .index {
+    .index  {
         padding: 1rem;
     <%--dimensione relativa al root--%> background-color: white;
         border-radius: 10px;
