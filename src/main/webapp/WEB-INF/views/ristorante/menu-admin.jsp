@@ -219,7 +219,9 @@
                                 <span style="font-style: italic"> ${tipologia.nome} </span>
                             </a>
                         </c:forEach>
+                        <c:if test="${not empty menus}">
                         <a class="field cell w100 tipologia" href="#Menu"><span style="font-style: italic">Menu</span></a>
+                        </c:if>
                     </div>
                     <h3 class="cell w100 title"> Filtri: </h3>
                     <div class="cell grid-x align-center fitro">
@@ -231,9 +233,11 @@
             <div class="cell w75 grid-x justify-center show-menu">
                 <div class="grid-x justify-center info-ris cell">
                     <fieldset class="grid-x cell w100 index">
+                        <c:choose>
+                            <c:when test="${not empty ristorante.prodotti}">
                         <h2 class="cell"> Prodotti </h2>
                         <c:forEach items="${ristorante.tipologie}" var="tipologia">
-                            <h4 class="cell"><a name="${tipologia.nome}">${tipologia.nome}</a></h4>
+                            <h3 class="cell" style="font-style: italic"><a name="${tipologia.nome}">${tipologia.nome}</a></h3>
                             <c:forEach items="${ristorante.prodotti}" var="prodotto">
                                 <c:if test="${tipologia.nome.equals(prodotto.tipologia.nome)}">
                                 <label class="field cell w100 prodotto grid-x" onclick="showDetails(this)" title="Clicca per modificare">
@@ -246,12 +250,17 @@
                                 </c:if>
                             </c:forEach>
                         </c:forEach>
+                            </c:when>
+                            <c:otherwise> <h2> Non sono presenti prodotti </h2> </c:otherwise>
+                        </c:choose>
+                        <c:if test="${not empty menus}">
                         <h2 class="cell"><a name="Menu"> Menu</a> </h2>
                         <c:forEach items="${menus}" var="menu">
                             <label class="field cell w100 menu" title="Clicca per modificare">
                                 <span style="font-weight: bold"> ${menu.nome} </span>
                             </label>
                         </c:forEach>
+                        </c:if>
                     </fieldset>
                 </div>
             </div>
