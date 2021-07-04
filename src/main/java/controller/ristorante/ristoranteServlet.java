@@ -67,7 +67,6 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/show-info":// mostrare info statiche
                     break;
                 case "/show-menu-admin": {
-                    req.setAttribute("backError", "/FoodOut/ristorante/all?page=1");
                     authorizeUtente(req.getSession());
                     validate(CommonValidator.validateId(req));
                     int id=Integer.parseInt(req.getParameter("id"));
@@ -99,7 +98,6 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     break;
                 }
                 case "/show-info-admin": {// mostrare all'admin info modificabili
-                    req.setAttribute("backError", "/FoodOut/ristorante/all?page=1");
                     authorizeUtente(req.getSession());
                     validate(CommonValidator.validateId(req));
                     int id=Integer.parseInt(req.getParameter("id"));
@@ -126,7 +124,6 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     break;
                 }
                 case "/update-disponibilita" : {
-                    req.setAttribute("backError", "/FoodOut/ristorante/all?page=1");
                     authorizeUtente(req.getSession());
                     validate(CommonValidator.validateId(req));
                     RistoranteDAO service=new RistoranteDAO();

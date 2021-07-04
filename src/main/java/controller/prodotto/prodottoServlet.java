@@ -32,8 +32,9 @@ public class prodottoServlet extends controller{
         String path=getPath(req);
         try {
             switch (path) {
-                case "/update" : {//validare id ristorante
+                case "/update" : {
                     validate(CommonValidator.validateId(req));
+                    validate(prodottoValidator.validateIdRis(req));
                     int codice = Integer.parseInt(req.getParameter("id"));
                     int codiceRis = Integer.parseInt(req.getParameter("idRis"));
                     RistoranteDAO serviceRis = new RistoranteDAO();

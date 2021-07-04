@@ -25,10 +25,6 @@
             border-radius: 3px;
         }
 
-        input {
-            height: auto;
-        }
-
     </style>
 </head>
 

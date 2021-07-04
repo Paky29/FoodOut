@@ -39,11 +39,12 @@ public class tipologiaServlet extends controller {
                     validate(tipologiaValidator.validateFunctionValue(req));
                     int function=Integer.parseInt(req.getParameter("function"));
                     validate(tipologiaValidator.validateForm(req));
-                    String nome=req.getParameter("nome");
-                    String descrizione=req.getParameter("descrizione");
+                    TipologiaDAO service=new TipologiaDAO();
+                    Tipologia t=service.doRetrieveByNome(req.getParameter("nome"));
+                    if(t==null)
+                        notFound();
                     req.setAttribute("function", function);
-                    req.setAttribute("nome", nome);
-                    req.setAttribute("descrizione", descrizione);
+                    req.setAttribute("tipologia", t);
                     req.getRequestDispatcher(view("tipologia/create-edit-tipologia")).forward(req, resp);
                     break;
                 }

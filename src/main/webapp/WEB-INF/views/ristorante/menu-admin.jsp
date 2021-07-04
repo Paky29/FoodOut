@@ -183,7 +183,7 @@
         margin: 5px;
     }
 
-    .prodotto {
+    .prodotto, .menu {
         cursor: pointer;
     }
 
@@ -225,7 +225,7 @@
                     <fieldset class="grid-x cell w100 index">
                         <h2 class="cell"> Prodotti </h2>
                         <c:forEach items="${ristorante.prodotti}" var="prodotto">
-                            <label class="field cell w100 prodotto grid-x" onclick="showDetails(this)">
+                            <label class="field cell w100 prodotto grid-x" onclick="showDetails(this)" title="Clicca per modificare">
                                 <span class="w80" style="font-weight: bold"> ${prodotto.nome} </span>
                                 <img class="w10" src="/FoodOut/covers/${prodotto.urlImmagine}">
                                 <input style="display: none" id="id" name="id" value="${prodotto.codice}"/>
@@ -233,7 +233,7 @@
                         </c:forEach>
                         <h2 class="cell"> Menu </h2>
                         <c:forEach items="${menus}" var="menu">
-                            <label class="field cell w100 menu">
+                            <label class="field cell w100 menu" title="Clicca per modificare">
                                 <span style="font-weight: bold"> ${menu.nome} </span>
                             </label>
                         </c:forEach>

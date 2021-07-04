@@ -16,4 +16,12 @@ final class prodottoValidator {
         validator.assertMatch("tipologia", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){2,20}$"), "tipologia compreso tra 2 e 20 catteri");
         return validator;
     }
+
+    public static RequestValidator validateIdRis(HttpServletRequest request){
+        RequestValidator validator= new RequestValidator(request);
+        validator.assertInt("idRis", "IdRis deve essere un intero");
+        return validator;
+    }
+
+
 }

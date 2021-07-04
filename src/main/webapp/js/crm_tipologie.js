@@ -39,6 +39,6 @@ function editTip(tip){
     var name=parent.getElementsByClassName("nome")[0].getAttribute("value");
     var descrizione=parent.getElementsByClassName("descrizione")[0].getAttribute("value")
 
-    window.location.href = "/FoodOut/tipologia/update?function=1&nome=" + name + "&descrizione=" + descrizione;
+    window.location.href = "/FoodOut/tipologia/update?function=1&nome=" + name;
 
 }

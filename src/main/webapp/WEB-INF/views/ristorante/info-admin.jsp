@@ -173,22 +173,17 @@
                 </label>
                 <label for="tipologie" class="field cell w80">
                     <span style="font-weight: bold"> Tipologie: </span>
-                    <textarea name="tipologie" id="tipologie" rows="4" cols="100" readonly>
-                        <%
-                            Ristorante r= (Ristorante) request.getAttribute("ristorante");
+                    <textarea name="tipologie" id="tipologie" rows="4" cols="100" readonly><%Ristorante r= (Ristorante) request.getAttribute("ristorante");
                             if(!r.getTipologie().isEmpty()){
                                 StringJoiner sj=new StringJoiner(",");
                                 for(Tipologia t: r.getTipologie()){
                                   sj.add(t.getNome());
                                 }
-                        %>
-                        <%=sj.toString()%>
+                        %><%=sj.toString()%>
                         <%}else{
                                 String str="Non ci sono prodotti, quindi tipologie per il ristorante";
-                        %>
-                        <%=str%>
-                        <%}%>
-                    </textarea>
+                        %><%=str%>
+                        <%}%></textarea>
                 </label>
                 <label for="info" class="field cell w80">
                     <span style="font-weight: bold"> Info:</span>

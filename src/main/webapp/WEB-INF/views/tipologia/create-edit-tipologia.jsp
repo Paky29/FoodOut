@@ -45,14 +45,14 @@
         </c:choose> tipologia </h2>
         <span> Nome </span>
         <label for="nome" class="field">
-            <input type="text" name="nome" id="nome" value="${nome}">
+            <input type="text" name="nome" id="nome" value="${tipologia.nome}">
         </label>
         <span> Descrizione </span>
         <label for="descrizione" class="field">
-            <input type="text" name="descrizione" id="descrizione" value="${descrizione}">
+            <input type="text" name="descrizione" id="descrizione" value="${tipologia.descrizione}">
         </label>
         <input type="number" style="display: none" name="function" id="function" value="${function}">
-        <input type="text" style="display: none" name="nomeVecchio" id="nomeVecchio" value="${nome}">
+        <input type="text" style="display: none" name="nomeVecchio" id="nomeVecchio" value="${tipologia.nome}" readonly>
 
         <button type="submit" class="btn primary"> Salva </button>
     </fieldset>
