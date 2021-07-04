@@ -147,7 +147,7 @@
     }
 
     .prodotto > img {
-        max-height: 100px;
+        max-height: 60px;
         max-width: 100px;
         margin-left: 5px;
     }
@@ -185,9 +185,14 @@
         margin: 5px;
     }
 
-    .prodotto, .menu {
+    .prodotto, .menu, .tipologia {
         cursor: pointer;
     }
+
+    .tipologia{
+        text-decoration: none;
+    }
+
 
 
 </style>
@@ -210,9 +215,9 @@
                     <h3 class="cell w100 title" style="color:white"> Tipologie: </h3>
                     <div class="tipologie cell grid-x">
                         <c:forEach items="${ristorante.tipologie}" var="tipologia">
-                            <label class="field cell w100 tipologia">
-                                <span style="font-style: italic"><a href="#${tipologia.nome}"> ${tipologia.nome}</a> </span>
-                            </label>
+                            <a href="#${tipologia.nome}" class="field cell w100 tipologia"><label >
+                                <span style="font-style: italic"> ${tipologia.nome} </span>
+                            </label> </a>
                         </c:forEach>
                     </div>
                     <h3 class="cell w100 title"> Filtri: </h3>
