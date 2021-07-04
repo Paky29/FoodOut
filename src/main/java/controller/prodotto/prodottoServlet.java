@@ -30,11 +30,32 @@ public class prodottoServlet extends controller{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path=getPath(req);
-        switch (path) {
-            case "/update"://mostra form con informazioni modificabili
-                break;
-            case "/delete":
-                break;
+        try {
+            switch (path) {
+                case "/update": {//validare id ristorante
+                    validate(CommonValidator.validateId(req));
+                    int codice = Integer.parseInt(req.getParameter("id"));
+                    int codiceRis = Integer.parseInt(req.getParameter("idRis"));
+                    RistoranteDAO serviceRis = new RistoranteDAO();
+                    ProdottoDAO serviceProd = new ProdottoDAO();
+                    req.setAttribute("ristorante", serviceRis.doRetrieveById(codiceRis));
+                    req.setAttribute("prodotto", serviceProd.doRetrievebyId(codice));
+                    req.getRequestDispatcher(view("prodotto/update-prod")).forward(req, resp);
+                    break;
+                }
+                case "/delete":
+                    break;
+            }
+        }
+        catch (SQLException e) {
+            log(e.getMessage());
+            e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        catch (InvalidRequestException e) {
+            log(e.getMessage());
+            System.out.println(e.getMessage());
+            e.handle(req,resp);
         }
 
     }

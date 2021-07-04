@@ -9,15 +9,15 @@
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Menu"/>
         <jsp:param name="styles" value="info_ris_crm"/>
-        <jsp:param name="scripts" value="info_ris_crm"/>
+        <jsp:param name="scripts" value="menu_admin"/>
     </jsp:include>
 </head>
 <body>
 <style>
 
     .index {
-        padding: 1rem;<%--dimensione relativa al root--%>
-        background-color: white;
+        padding: 1rem;
+    <%--dimensione relativa al root--%> background-color: white;
         border-radius: 10px;
         opacity: revert;
     }
@@ -40,7 +40,7 @@
         line-height: 27px;
     }
 
-    .info{
+    .info {
         text-align: center;
         font-style: normal;
         font-weight: bold;
@@ -57,51 +57,51 @@
     }
 
 
-    .table{
+    .table {
         border-collapse: collapse;
-        background-color:white;
+        background-color: white;
         font-size: large;
         font-weight: normal;
         font-style: normal;
         font-family: Myriad;
     }
 
-    .table > thead{
+    .table > thead {
         visibility: hidden;
     }
 
-    .table tr{
-        border:none;
+    .table tr {
+        border: none;
         margin: .5rem;
         padding: .5rem;
-        display:block;
+        display: block;
     }
 
-    .table > tbody{
-        border:1px solid black;
+    .table > tbody {
+        border: 1px solid black;
         border-radius: 20px;
     }
 
-    .table > tbody td{
+    .table > tbody td {
         display: block;
         border-bottom: 1px solid black;
         text-align: right;
         padding: .5rem;
     }
 
-    .table > tbody td:before{
+    .table > tbody td:before {
         content: attr(data-head);
         float: left;
         font-weight: bold;
         text-transform: uppercase;
     }
 
-    .container{
-        margin:10px;
+    .container {
+        margin: 10px;
     }
 
-    div#header{
-        background-color: rgba(0,0,0,0);
+    div#header {
+        background-color: rgba(0, 0, 0, 0);
         background-image: url("/FoodOut/covers/${ristorante.urlImmagine}");
         background-size: cover;
         background-repeat: no-repeat;
@@ -111,20 +111,20 @@
     }
 
     .search {
-        background-color: rgba(0,0,0,0.53);
+        background-color: rgba(0, 0, 0, 0.53);
         border-radius: 5px;
         max-height: 500px;
         padding: 10px;
         margin-right: 5px;
     }
 
-    .search .tipologia, .search .fitro{
+    .search .tipologia, .search .fitro {
         color: white;
         background-color: var(--primary);
         font-weight: bold;
     }
 
-    .search .title{
+    .search .title {
         color: white;
     }
 
@@ -132,17 +132,26 @@
         padding: 10px;
         border-radius: 5px;
         border: 1px solid black;
-        margin:2px;
+        margin: 2px;
         max-height: 100px;
 
     }
 
+
     .prodotto, .menu {
         color: black;
         background-color: lightgrey;
+        justify-content: space-between;
     }
 
-    .title{
+    .prodotto > img {
+        max-height: 100px;
+        max-width: 100px;
+        margin-left: 5px;
+    }
+
+
+    .title {
         text-align: center;
         padding: 5px;
         height: content-box;
@@ -157,22 +166,26 @@
         outline: none;
     }
 
-    #links{
+    #links {
         background-color: var(--primary);
-        padding:3px;
-        border:1px solid var(--primary);
+        padding: 3px;
+        border: 1px solid var(--primary);
         border-radius: 10px;
-        margin:2px;
-    }
-    #links a{
-        text-decoration: none;
-        color:white;
-        font-family:Myriad;
-        font-weight:bold;
-        font-style:normal;
-        margin:5px;
+        margin: 2px;
     }
 
+    #links a {
+        text-decoration: none;
+        color: white;
+        font-family: Myriad;
+        font-weight: bold;
+        font-style: normal;
+        margin: 5px;
+    }
+
+    .prodotto {
+        cursor: pointer;
+    }
 
 
 </style>
@@ -181,9 +194,12 @@
         <nav class="grid-y navbar align-center cell">
             <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
             <div id="links">
-                <a href="${pageContext.request.contextPath}/ristorante/show-info-admin?id=${ristorante.codice}"> Info </a>
-                <a href="${pageContext.request.contextPath}/ristorante/show-menu-admin?id=${ristorante.codice}"/> Menu </a>
-                <a href="${pageContext.request.contextPath}/ristorante/show-recensioni?id=${ristorante.codice}"> Recensioni </a>
+                <a href="${pageContext.request.contextPath}/ristorante/show-info-admin?id=${ristorante.codice}">
+                    Info </a>
+                <a href="${pageContext.request.contextPath}/ristorante/show-menu-admin?id=${ristorante.codice}"/>
+                Menu </a>
+                <a href="${pageContext.request.contextPath}/ristorante/show-recensioni?id=${ristorante.codice}">
+                    Recensioni </a>
             </div>
         </nav>
         <section class="app grid-x container">
@@ -192,7 +208,7 @@
                     <h3 class="cell w100 title" style="color:white"> Tipologie: </h3>
                     <div class="tipologie cell grid-x">
                         <c:forEach items="${ristorante.tipologie}" var="tipologia">
-                            <label class="field cell w100 tipologia" >
+                            <label class="field cell w100 tipologia">
                                 <span style="font-style: italic"> ${tipologia.nome} </span>
                             </label>
                         </c:forEach>
@@ -209,19 +225,22 @@
                     <fieldset class="grid-x cell w100 index">
                         <h2 class="cell"> Prodotti </h2>
                         <c:forEach items="${ristorante.prodotti}" var="prodotto">
-                        <label class="field cell w100 prodotto" >
-                            <span style="font-weight: bold"> ${prodotto.nome} </span>
-                        </label>
+                            <label class="field cell w100 prodotto grid-x" onclick="showDetails(this)">
+                                <span class="w80" style="font-weight: bold"> ${prodotto.nome} </span>
+                                <img class="w10" src="/FoodOut/covers/${prodotto.urlImmagine}">
+                                <input style="display: none" id="id" name="id" value="${prodotto.codice}"/>
+                            </label>
                         </c:forEach>
                         <h2 class="cell"> Menu </h2>
                         <c:forEach items="${menus}" var="menu">
-                            <label class="field cell w100 menu" >
+                            <label class="field cell w100 menu">
                                 <span style="font-weight: bold"> ${menu.nome} </span>
                             </label>
                         </c:forEach>
                     </fieldset>
                 </div>
             </div>
+            <input type="number" style="display:none;" id="idRis" name="idRis" value="${ristorante.codice}">
 
     </div>
 </div>
