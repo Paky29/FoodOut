@@ -110,11 +110,32 @@
         position: relative;
     }
 
+    #links{
+        background-color: var(--primary);
+        padding:3px;
+        border:1px solid var(--primary);
+        border-radius: 10px;
+        margin:2px;
+    }
+    #links a{
+        text-decoration: none;
+        color:white;
+        font-family:Myriad;
+        font-weight:bold;
+        font-style:normal;
+        margin:5px;
+    }
+
 </style>
 <div class="app">
     <div class="cell grid-x" id="header">
         <nav class="grid-y navbar align-center cell">
             <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
+            <div id="links">
+                <a href="${pageContext.request.contextPath}/ristorante/show-info-admin?id=${ristorante.codice}"> Info </a>
+                <a href="${pageContext.request.contextPath}/ristorante/show-menu-admin?id=${ristorante.codice}"/> Menu </a>
+                <a href="${pageContext.request.contextPath}/ristorante/show-recensioni?id=${ristorante.codice}"> Recensioni </a>
+            </div>
         </nav>
         <form class="grid-x justify-center align-center info-ris cell" action="${pageContext.request.contextPath}/ristorante/update" method="post" enctype="multipart/form-data">
             <fieldset class="grid-x cell w63 index">

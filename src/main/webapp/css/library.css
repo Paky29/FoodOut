@@ -207,10 +207,17 @@ button.primary:hover{
         flex-basis: 10%;
     }
 
+    .w15{
+        flex-basis: 15%;
+    }
+
     .w80{
         flex-basis: 80%;
     }
 
+    .w20{
+        flex-basis: 20%;
+    }
 
     .w25{
         flex-basis: 25%;
@@ -230,6 +237,10 @@ button.primary:hover{
 
     .w65{
         flex-basis: 65%;
+    }
+
+    .w70{
+        flex-basis: 70%;
     }
 
     .w75{

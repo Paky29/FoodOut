@@ -3,6 +3,7 @@ package controller.ristorante;
 import controller.http.*;
 import model.disponibilita.Disponibilita;
 import model.disponibilita.DisponibilitaDAO;
+import model.menu.MenuDAO;
 import model.prodotto.ProdottoDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
@@ -66,7 +67,19 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/show-info":// mostrare info statiche
                     break;
                 case "/show-menu-admin": {
+                    req.setAttribute("backError", "/FoodOut/ristorante/all?page=1");
                     authorizeUtente(req.getSession());
+                    validate(CommonValidator.validateId(req));
+                    int id=Integer.parseInt(req.getParameter("id"));
+                    RistoranteDAO ristoranteDAO=new RistoranteDAO();
+                    Ristorante r=ristoranteDAO.doRetrieveByIdAdmin(id);
+                    if(r==null)
+                        notFound();
+                    ProdottoDAO prodottoDAO=new ProdottoDAO();
+                    MenuDAO menuDAO=new MenuDAO();
+                    r.setProdotti(prodottoDAO.doRetrieveByRistorante(r.getCodice()));
+                    req.setAttribute("menus", menuDAO.doRetrieveByRistorante(r.getCodice()));
+                    req.setAttribute("ristorante", r);
                     req.getRequestDispatcher(view("ristorante/menu-admin")).forward(req, resp);
                     break;
                 }
