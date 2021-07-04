@@ -96,7 +96,7 @@
             <input type="number" name="prezzo" id="prezzo" placeholder="Prezzo (€)" step="0.01">
         </label>
         <label for="sconto" class="field w40 cell">
-            <input type="number" name="sconto" id="sconto" placeholder="Sconto (%)">
+            <input type="number" name="sconto" id="sconto" placeholder="Sconto (%)" max="100" min="0">
         </label>
         <label for="prodotti" class="field w65 cell">
             <span style="margin-right: 10px">
