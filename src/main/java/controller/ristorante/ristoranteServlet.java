@@ -136,14 +136,11 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 }
                 case "/delete": {
                     authorizeUtente(req.getSession());
-                    RequestValidator rv=CommonValidator.validateId(req);
-                    validate(rv);
-                    for(String s: rv.getErrors())
-                        System.out.println(s);
+                    validate(CommonValidator.validateId(req));
                     RistoranteDAO service=new RistoranteDAO();
                     int id=Integer.parseInt(req.getParameter("id"));
                     if(service.doDelete(id)){
-                        resp.sendRedirect("/FoodOut/ristorante/all");//non sicuro
+                        resp.sendRedirect("/FoodOut/ristorante/all");
                     }
                     else {
                         InternalError();
@@ -179,13 +176,8 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/update": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
-                    RequestValidator rv2=CommonValidator.validateId(req);
-                    ristoranteValidator validator = new ristoranteValidator();
-                    RequestValidator rv= validator.validateForm(req);
-                    for(String s: rv.getErrors())
-                        System.out.println(s);
-                    for(String s: rv2.getErrors())
-                        System.out.println(s);
+                    validate(CommonValidator.validateId(req));
+                    validate(ristoranteValidator.validateForm(req));
                     Ristorante r = new Ristorante();
                     r.setCodice(Integer.parseInt(req.getParameter("id")));
                     r.setNome(req.getParameter("nome"));
@@ -226,10 +218,6 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/add": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
-                    RequestValidator rv=ristoranteValidator.validateForm(req);
-                    for(String s: rv.getErrors()){
-                        System.out.println(s);
-                    }
                     validate(ristoranteValidator.validateForm(req));
                     Ristorante r = new Ristorante();
                     r.setNome(req.getParameter("nome"));
@@ -242,6 +230,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     r.setInfo(req.getParameter("info"));
                     Part filePart = req.getPart("urlImmagine");
                     String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                    validate(ristoranteValidator.validateImmagine(req,fileName));
                     r.setUrlImmagine(fileName);
                     RistoranteDAO service = new RistoranteDAO();
                     if (service.doSave(r)) {

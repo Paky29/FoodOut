@@ -83,7 +83,10 @@ public class prodottoServlet extends controller{
                 pr.setValido(true);
                 Part filePart = req.getPart("urlImmagine");
                 String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                pr.setUrlImmagine(fileName);
+                if(fileName.isBlank())
+                    pr.setUrlImmagine(null);
+                else
+                    pr.setUrlImmagine(fileName);
                 Ristorante r=new Ristorante();
                 r.setCodice(Integer.parseInt(req.getParameter("id")));
                 pr.setRistorante(r);
@@ -93,10 +96,12 @@ public class prodottoServlet extends controller{
                         resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id=" + r.getCodice());
                     else
                         resp.sendRedirect("/FoodOut/ristorante/all");
-                    String uploadRoot = getUploadPath();
-                    try (InputStream fileStream = filePart.getInputStream()) {
-                        File file = new File(uploadRoot + fileName);
-                        Files.copy(fileStream, file.toPath());
+                    if(!fileName.isBlank()){
+                        String uploadRoot = getUploadPath();
+                        try (InputStream fileStream = filePart.getInputStream()) {
+                            File file = new File(uploadRoot + fileName);
+                            Files.copy(fileStream, file.toPath());
+                        }
                     }
                 }
                 else

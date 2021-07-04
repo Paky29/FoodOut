@@ -215,10 +215,11 @@
                     <h3 class="cell w100 title" style="color:white"> Tipologie: </h3>
                     <div class="tipologie cell grid-x">
                         <c:forEach items="${ristorante.tipologie}" var="tipologia">
-                            <a href="#${tipologia.nome}" class="field cell w100 tipologia"><label >
+                            <a href="#${tipologia.nome}" class="field cell w100 tipologia">
                                 <span style="font-style: italic"> ${tipologia.nome} </span>
-                            </label> </a>
+                            </a>
                         </c:forEach>
+                        <a class="field cell w100 tipologia" href="#Menu"><span style="font-style: italic">Menu</span></a>
                     </div>
                     <h3 class="cell w100 title"> Filtri: </h3>
                     <div class="cell grid-x align-center fitro">
@@ -237,13 +238,15 @@
                                 <c:if test="${tipologia.nome.equals(prodotto.tipologia.nome)}">
                                 <label class="field cell w100 prodotto grid-x" onclick="showDetails(this)" title="Clicca per modificare">
                                     <span class="w80" style="font-weight: bold"> ${prodotto.nome} </span>
-                                    <img class="w10" src="/FoodOut/covers/${prodotto.urlImmagine}">
+                                    <c:if test="${not empty prodotto.urlImmagine}">
+                                        <img class="w10" src="/FoodOut/covers/${prodotto.urlImmagine}">
+                                    </c:if>
                                     <input style="display: none" id="id" name="id" value="${prodotto.codice}"/>
                                 </label>
                                 </c:if>
                             </c:forEach>
                         </c:forEach>
-                        <h2 class="cell"> Menu </h2>
+                        <h2 class="cell"><a name="Menu"> Menu</a> </h2>
                         <c:forEach items="${menus}" var="menu">
                             <label class="field cell w100 menu" title="Clicca per modificare">
                                 <span style="font-weight: bold"> ${menu.nome} </span>
@@ -253,7 +256,7 @@
                 </div>
             </div>
             <input type="number" style="display:none;" id="idRis" name="idRis" value="${ristorante.codice}">
-
+        </section>
     </div>
 </div>
 

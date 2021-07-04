@@ -19,4 +19,12 @@ public class ristoranteValidator {
         validator.assertPositiveDouble("tassoConsegna","tassoConsegna deve essere un numero con la virgola");
         return validator;
     }
+
+    static RequestValidator validateImmagine(HttpServletRequest request, String fileName){
+        RequestValidator validator=new RequestValidator(request);
+        boolean control=!fileName.isBlank();
+        validator.gatherError(control,"inserire un'immagine");
+        return validator;
+
+    }
 }
