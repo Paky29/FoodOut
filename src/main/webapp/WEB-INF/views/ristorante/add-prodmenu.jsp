@@ -79,6 +79,8 @@
             <textarea rows="4" cols="100" type="text" name="info" id="info" maxlength="100" placeholder="Informazioni extra sul prodotto"></textarea>
         </label>
         <input style="display: none" name="id" id="id" value="${ristorante.codice}" readonly>
+        <input style="display: none" name="function" id="function" value="${function}" readonly>
+
         <span class="grid-x cell justify-center">
             <button type="submit" class="btn primary w30" value="again" name="button"> Aggiungi prodotto </button>
             <button type="submit" class="btn primary w30" value="stop" name="button">Salva ed esci</button>
@@ -113,6 +115,8 @@
             </select>
         </label>
         <input style="display: none" name="id" id="id" value="${ristorante.codice}" readonly>
+        <input style="display: none" name="function" id="function" value="${function}" readonly>
+
         <span class="grid-x cell justify-center">
             <button type="submit" class="btn primary w30" value="again" name="button"> Aggiungi menu </button>
             <button type="submit" class="btn primary w30" value="stop" name="button">Salva ed esci</button>

@@ -6,5 +6,5 @@ function showDetails(element){
 
 function addProdMenu(element){
     idRis= document.getElementById("idRis").value;
-    window.location.href = "/FoodOut/ristorante/add-prodmenu?id=" + idRis;
+    window.location.href = "/FoodOut/ristorante/add-prodmenu?id=" + idRis + "&function=1";
 }

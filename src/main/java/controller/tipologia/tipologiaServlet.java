@@ -29,14 +29,14 @@ public class tipologiaServlet extends controller {
         try {
             switch (path) {
                 case "/create": {
-                    validate(tipologiaValidator.validateFunctionValue(req));
+                    validate(CommonValidator.validateFunctionValue(req));
                     int function = Integer.parseInt(req.getParameter("function"));
                     req.setAttribute("function", function);
                     req.getRequestDispatcher(view("tipologia/create-edit-tipologia")).forward(req, resp);
                     break;
                 }
                 case "/update": {//mostra form con informazioni modificabili
-                    validate(tipologiaValidator.validateFunctionValue(req));
+                    validate(CommonValidator.validateFunctionValue(req));
                     int function=Integer.parseInt(req.getParameter("function"));
                     validate(tipologiaValidator.validateName(req,"nome"));
                     TipologiaDAO service=new TipologiaDAO();
@@ -97,7 +97,7 @@ public class tipologiaServlet extends controller {
                 case "/create-edit": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
-                    validate(tipologiaValidator.validateFunctionValue(req));
+                    validate(CommonValidator.validateFunctionValue(req));
                     int function=Integer.parseInt(req.getParameter("function"));
                     validate(tipologiaValidator.validateForm(req));
                     Tipologia t = new Tipologia();

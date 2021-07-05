@@ -4,6 +4,7 @@ import controller.http.CommonValidator;
 import controller.http.InvalidRequestException;
 import controller.http.RequestValidator;
 import controller.http.controller;
+import controller.tipologia.tipologiaValidator;
 import model.prodotto.Prodotto;
 import model.prodotto.ProdottoDAO;
 import model.ristorante.Ristorante;
@@ -68,8 +69,12 @@ public class prodottoServlet extends controller{
             case "/create": {
                 HttpSession session = req.getSession();
                 authorizeUtente(session);
+
                 validate(prodottoValidator.validateForm(req));
                 validate(CommonValidator.validateId(req));
+                validate(CommonValidator.validateFunctionValue(req));
+
+                int function=Integer.parseInt(req.getParameter("function"));
                 Prodotto pr = new Prodotto();
                 pr.setNome(req.getParameter("nome"));
                 pr.setPrezzo(Float.parseFloat(req.getParameter("prezzo")));
@@ -92,9 +97,15 @@ public class prodottoServlet extends controller{
                 ProdottoDAO service = new ProdottoDAO();
                 if (service.doSave(pr)) {
                     if (req.getParameter("button").equals("again"))
-                        resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id=" + r.getCodice());
-                    else
-                        resp.sendRedirect("/FoodOut/ristorante/all");
+                        resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id=" + r.getCodice() + "&function=" + function);
+                    else {
+                        if(function==1) {
+                            resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id=" + r.getCodice());
+                        }
+                        else
+                            resp.sendRedirect("/FoodOut/ristorante/all");
+                    }
+
                     if (!fileName.isBlank()) {
                         String uploadRoot = getUploadPath();
                         try (InputStream fileStream = filePart.getInputStream()) {
@@ -138,6 +149,7 @@ public class prodottoServlet extends controller{
                             }
                         }
                         else {
+                            System.out.println("errore");
                             InternalError();
                         }
                     }

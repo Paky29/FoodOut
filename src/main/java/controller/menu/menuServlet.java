@@ -3,6 +3,7 @@ package controller.menu;
 import controller.http.CommonValidator;
 import controller.http.InvalidRequestException;
 import controller.http.controller;
+import controller.tipologia.tipologiaValidator;
 import model.menu.Menu;
 import model.menu.MenuDAO;
 import model.prodotto.ProdottoDAO;
@@ -42,6 +43,9 @@ public class menuServlet extends controller{
                     authorizeUtente(session);
                     validate(menuValidator.validateForm(req));
                     validate(CommonValidator.validateId(req));
+                    validate(CommonValidator.validateFunctionValue(req));
+                    int id=Integer.parseInt(req.getParameter("id"));
+                    int function=Integer.parseInt(req.getParameter("function"));
                     Menu m=new Menu();
                     m.setNome(req.getParameter("nome"));
                     m.setPrezzo(Float.parseFloat(req.getParameter("prezzo")));
@@ -55,9 +59,13 @@ public class menuServlet extends controller{
                     MenuDAO serviceMenu=new MenuDAO();
                     if(serviceMenu.doSave(m)) {
                         if (req.getParameter("button").equals("again"))
-                            resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id=" + Integer.parseInt(req.getParameter("id")));
-                        else
-                            resp.sendRedirect("/FoodOut/ristorante/all");
+                            resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id=" + id + "&function=" + function);
+                        else {
+                            if(function==1)
+                                resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id=" + id);
+                            else
+                                resp.sendRedirect("/FoodOut/ristorante/all");
+                        }
                     }
                     else
                         InternalError();

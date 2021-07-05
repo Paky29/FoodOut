@@ -15,4 +15,12 @@ public class CommonValidator {
         validator.assertInt("id", "Id deve essere un intero");
         return validator;
     }
+
+    public static RequestValidator validateFunctionValue(HttpServletRequest request){
+        RequestValidator validator=new RequestValidator(request);
+        String function=request.getParameter("function");
+        boolean value= (function.equals("0")|| function.equals("1"));
+        validator.gatherError(value, "function deve essere 0 o 1");
+        return validator;
+    }
 }

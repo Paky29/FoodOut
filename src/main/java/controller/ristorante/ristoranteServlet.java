@@ -1,6 +1,7 @@
 package controller.ristorante;
 
 import controller.http.*;
+import controller.tipologia.tipologiaValidator;
 import model.disponibilita.Disponibilita;
 import model.disponibilita.DisponibilitaDAO;
 import model.menu.MenuDAO;
@@ -89,15 +90,18 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/add-prodmenu":{
                     authorizeUtente(req.getSession());
                     validate(CommonValidator.validateId(req));
+                    validate(CommonValidator.validateFunctionValue(req));
                     TipologiaDAO serviceTip=new TipologiaDAO();
                     ArrayList<Tipologia> tipologie=serviceTip.doRetrieveAll();
                     req.setAttribute("tipologie",tipologie);
                     int codiceRis=Integer.parseInt(req.getParameter("id"));
+                    int function = Integer.parseInt(req.getParameter("function"));
                     RistoranteDAO serviceRis=new RistoranteDAO();
                     Ristorante r=serviceRis.doRetrieveById(codiceRis,true);
                     ProdottoDAO serviceProd=new ProdottoDAO();
                     r.setProdotti(serviceProd.doRetrieveByRistorante(codiceRis));
                     req.setAttribute("ristorante",r);
+                    req.setAttribute("function", function );
                     req.getRequestDispatcher(view("ristorante/add-prodmenu")).forward(req, resp);
                     break;
                 }
@@ -285,7 +289,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     }
 
                     if(req.getParameter("button").equals("add")) {
-                        resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id="+ codice);
+                        resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id="+ codice + "&function=0");
                     }
                     else
                         resp.sendRedirect("/FoodOut/ristorante/show-info-admin?id="+ codice);
