@@ -23,9 +23,9 @@ public class RistoranteDAO {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps;
             if(isAdmin)
-                ps = conn.prepareStatement("SELECT r.codiceRistorante, r.valido, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE r.codiceRistorante=?");
+                ps = conn.prepareStatement("SELECT r.codiceRistorante, r.valido, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ristorante r LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE r.codiceRistorante=?");
             else
-                ps = conn.prepareStatement("SELECT r.codiceRistorante, r.valido, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ristorante r LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE r.codiceRistorante=?");
+                ps = conn.prepareStatement("SELECT r.codiceRistorante, r.valido, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE r.codiceRistorante=?");
             ps.setInt(1, codice);
 
             ResultSet rs = ps.executeQuery();
@@ -33,10 +33,12 @@ public class RistoranteDAO {
             if(rs.next()) {
                 r = RistoranteExtractor.extract(rs);
                 do {
-                    Tipologia t = new Tipologia();
-                    t.setNome(rs.getString("t.nome"));
-                    t.setDescrizione(rs.getString("t.descrizione"));
-                    r.getTipologie().add(t);
+                    if(rs.getString("t.nome")!=null) {
+                        Tipologia t = new Tipologia();
+                        t.setNome(rs.getString("t.nome"));
+                        t.setDescrizione(rs.getString("t.descrizione"));
+                        r.getTipologie().add(t);
+                    }
                 } while (rs.next());
 
                 ArrayList<Disponibilita> disp=new ArrayList<>();
@@ -472,7 +474,7 @@ public class RistoranteDAO {
 
     public ArrayList<Ristorante> doRetrieveAll(Paginator paginator) throws SQLException{
             try(Connection conn=ConPool.getConnection()){
-                PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ristorante r LIMIT ?,?");
+                PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.valido, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ristorante r LIMIT ?,?");
                 ps.setInt(1,paginator.getOffset());
                 ps.setInt(2,paginator.getLimit());
                 Map<Integer, Ristorante> ristoranti=new LinkedHashMap<>();
@@ -519,7 +521,7 @@ public class RistoranteDAO {
 
     public boolean doSave(Ristorante r) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("INSERT INTO Ristorante (nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna, urlImmagine, rating) VALUES(?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps=conn.prepareStatement("INSERT INTO Ristorante (nome, provincia, citta, via, civico, info, spesaMinima, tassoConsegna, urlImmagine, valido, rating) VALUES(?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1,r.getNome());
             ps.setString(2,r.getProvincia());
             ps.setString(3,r.getCitta());
@@ -529,7 +531,8 @@ public class RistoranteDAO {
             ps.setFloat(7,r.getSpesaMinima());
             ps.setFloat(8,r.getTassoConsegna());
             ps.setString(9,r.getUrlImmagine());
-            ps.setInt(10,1);
+            ps.setBoolean(10,r.isValido());
+            ps.setInt(11,1);
             if(ps.executeUpdate()!=1){
                return false;
             }

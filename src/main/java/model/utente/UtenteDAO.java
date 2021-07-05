@@ -22,7 +22,7 @@ public class UtenteDAO {
 
     public Utente doRetrieveById(int codiceUtente) throws SQLException{
         try(Connection conn = ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, r.valido,t.nome, t.descrizione FROM Utente u LEFT JOIN Preferenza p ON u.codiceUtente=p.codUtente_fk LEFT JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE u.codiceUtente=?");
+            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, r.valido, t.nome, t.descrizione FROM Utente u LEFT JOIN Preferenza p ON u.codiceUtente=p.codUtente_fk LEFT JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE u.codiceUtente=?");
             ps.setInt(1, codiceUtente);
             ResultSet rs = ps.executeQuery();
             Utente u=null;
@@ -57,7 +57,7 @@ public class UtenteDAO {
 
     public Utente doRetrieveByEmailAndPassword(String email, String password) throws SQLException {
         try(Connection conn= ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.pw, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating,t.nome, t.descrizione FROM Utente u LEFT JOIN Preferenza p ON u.codiceUtente=p.codUtente_fk LEFT JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE u.email=? AND u.pw=SHA1(?)");
+            PreparedStatement ps=conn.prepareStatement("SELECT u.codiceUtente, u.nome, u.cognome, u.email, u.pw, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, r.valido, t.nome, t.descrizione FROM Utente u LEFT JOIN Preferenza p ON u.codiceUtente=p.codUtente_fk LEFT JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE u.email=? AND u.pw=SHA1(?)");
             ps.setString(1, email);
             ps.setString(2, password);
 
@@ -129,7 +129,7 @@ public class UtenteDAO {
 
     public ArrayList<Ristorante> doRetrievebyUtentePref(int codiceUtente, Paginator paginator) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Preferenza p INNER JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante WHERE p.codUtente_fk= ? LIMIT ?,?");
+            PreparedStatement ps=conn.prepareStatement("SELECT r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, r.valido FROM Preferenza p INNER JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante WHERE p.codUtente_fk= ? LIMIT ?,?");
             ps.setInt(1,codiceUtente);
             ps.setInt(2,paginator.getOffset());
             ps.setInt(3,paginator.getLimit());

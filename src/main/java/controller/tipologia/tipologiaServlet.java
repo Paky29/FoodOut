@@ -38,7 +38,7 @@ public class tipologiaServlet extends controller {
                 case "/update": {//mostra form con informazioni modificabili
                     validate(tipologiaValidator.validateFunctionValue(req));
                     int function=Integer.parseInt(req.getParameter("function"));
-                    validate(tipologiaValidator.validateForm(req));
+                    validate(tipologiaValidator.validateName(req,"nome"));
                     TipologiaDAO service=new TipologiaDAO();
                     Tipologia t=service.doRetrieveByNome(req.getParameter("nome"));
                     if(t==null)
@@ -97,16 +97,9 @@ public class tipologiaServlet extends controller {
                 case "/create-edit": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
-                    RequestValidator rv=tipologiaValidator.validateFunctionValue(req);
-                    for(String s: rv.getErrors())
-                        System.out.println(s);
                     validate(tipologiaValidator.validateFunctionValue(req));
-
                     int function=Integer.parseInt(req.getParameter("function"));
-                    RequestValidator rv3=tipologiaValidator.validateForm(req);
-                    for(String s: rv3.getErrors())
-                        System.out.println(s);
-                    validate(rv);
+                    validate(tipologiaValidator.validateForm(req));
                     Tipologia t = new Tipologia();
                     t.setNome(req.getParameter("nome"));
                     t.setDescrizione(req.getParameter("descrizione"));
@@ -118,10 +111,7 @@ public class tipologiaServlet extends controller {
                             InternalError();
                     }
                     else{
-                        RequestValidator rv1=tipologiaValidator.validateName(req, "nomeVecchio");
-                        for(String s: rv1.getErrors())
-                            System.out.println(s);
-                        validate(rv);
+                        validate(tipologiaValidator.validateName(req, "nomeVecchio"));
                         String nomeVecchio=req.getParameter("nomeVecchio");
                         if(t.getNome().equals(nomeVecchio)) {
                             if (service.doUpdate(t, nomeVecchio)) {

@@ -228,6 +228,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     r.setSpesaMinima(Float.parseFloat(req.getParameter("spesaMinima")));
                     r.setTassoConsegna(Float.parseFloat(req.getParameter("tassoConsegna")));
                     r.setInfo(req.getParameter("info"));
+                    r.setValido(true);
                     Part filePart = req.getPart("urlImmagine");
                     String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
                     validate(ristoranteValidator.validateImmagine(req,fileName));

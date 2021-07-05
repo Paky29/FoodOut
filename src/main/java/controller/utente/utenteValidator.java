@@ -18,7 +18,6 @@ public class utenteValidator {
         validator.assertMatch("citta", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "citta compreso tra 1 e 30 caratteri");
         validator.assertMatch("via", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\\.){1,50}$"), "via compreso tra 1 e 50 caratteri");
         validator.assertInt("civico", "via compreso tra 1 e 50 caratteri");
-        System.out.println(validator.getErrors());
         return validator;
     }
 
@@ -32,7 +31,6 @@ public class utenteValidator {
         validator.assertMatch("citta", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "citta compreso tra 1 e 30 caratteri");
         validator.assertMatch("via", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\\.){1,50}$"), "via compreso tra 1 e 50 caratteri");
         validator.assertInt("civico", "via compreso tra 1 e 50 caratteri");
-        System.out.println(validator.getErrors());
         return validator;
     }
 

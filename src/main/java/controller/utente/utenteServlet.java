@@ -50,8 +50,6 @@ public class utenteServlet extends controller {
                     UtenteSession us = (UtenteSession) ssn.getAttribute("utenteSession");
                     UtenteDAO service = new UtenteDAO();
                     Utente u = service.doRetrieveById(us.getId());
-                    if(u==null)
-                        notFound();
                     ssn.setAttribute("profilo", u);
                     req.getRequestDispatcher(view("crm/show")).forward(req, resp);
                     break;
@@ -63,7 +61,6 @@ public class utenteServlet extends controller {
                     resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Risorsa non trovata");
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             log(e.getMessage());
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (InvalidRequestException e) {
@@ -98,9 +95,8 @@ public class utenteServlet extends controller {
                         synchronized (session) {
                             session.setAttribute("utenteSession", utenteSession);
                         }
-                        if (u.getEmail().contains("@foodout.com")) {
+                        if (u.getEmail().contains("@foodout.com"))
                             resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
-                        }
                         else
                             resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
                     }else{

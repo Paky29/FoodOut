@@ -225,11 +225,13 @@
                 <section class="grid-x cell w100">
                     <h3 class="cell w100 title" style="color:white"> Tipologie: </h3>
                     <div class="tipologie cell grid-x">
+                        <c:if test="${not empty ristorante.tipologie}">
                         <c:forEach items="${ristorante.tipologie}" var="tipologia">
                             <a href="#${tipologia.nome}" class="field cell w100 tipologia">
                                 <span style="font-style: italic"> ${tipologia.nome} </span>
                             </a>
                         </c:forEach>
+                        </c:if>
                         <c:if test="${not empty menus}">
                         <a class="field cell w100 tipologia" href="#Menu"><span style="font-style: italic">Menu</span></a>
                         </c:if>
