@@ -45,7 +45,7 @@
 </head>
 <body>
 <div class="app grid-x justify-center align-center">
-    <form id="prodotto " class="grid-x justify-center" action="${pageContext.request.contextPath}/prodotto/create" method="post" enctype="multipart/form-data">
+    <form id="prodotto " class="grid-x justify-center" action="${pageContext.request.contextPath}/prodotto/update" method="post" enctype="multipart/form-data">
         <fieldset class="grid-x cell w90 add-ris justify-center">
             <h2 class="cell"> Modifica prodotto</h2>
             <label for="nome" class="field cell w82">
@@ -80,11 +80,11 @@
                 <textarea rows="4" cols="100" type="text" name="info" id="info" maxlength="100" placeholder="Informazioni extra sul prodotto"> ${prodotto.info} </textarea>
             </label>
             <input style="display: none" name="id" id="id" value="${ristorante.codice}" readonly>
-            <input style="display: none" name="id" id="idRis" value="${prodotto.codice}" readonly>
+            <input style="display: none" name="idRis" id="idRis" value="${prodotto.codice}" readonly>
 
             <span class="grid-x cell justify-center">
             <button type="submit" class="btn primary w30" value="again" name="button"> Modifica </button>
-                <button type="submit" class="btn primary w30" name="button" value="${!prodotto.valido}" formaction="${pageContext.request.contextPath}/prodotto/update-validita">
+                <button type="submit" class="btn primary w30" name="id" value="${prodotto.codice}" formaction="${pageContext.request.contextPath}/prodotto/update-validita">
                     <c:choose>
                         <c:when test="${prodotto.valido}">
                             Invalida

@@ -44,8 +44,7 @@ public class prodottoServlet extends controller{
                     req.getRequestDispatcher(view("prodotto/update-prod")).forward(req, resp);
                     break;
                 }
-                case "/delete":
-                    break;
+                default:notFound();
             }
         }
         catch (SQLException e) {
@@ -65,17 +64,17 @@ public class prodottoServlet extends controller{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path=getPath(req);
         try{
-        switch(path){
-            case "/create":
-                HttpSession session=req.getSession();
+        switch(path) {
+            case "/create": {
+                HttpSession session = req.getSession();
                 authorizeUtente(session);
                 validate(prodottoValidator.validateForm(req));
                 validate(CommonValidator.validateId(req));
-                Prodotto pr=new Prodotto();
+                Prodotto pr = new Prodotto();
                 pr.setNome(req.getParameter("nome"));
                 pr.setPrezzo(Float.parseFloat(req.getParameter("prezzo")));
                 pr.setSconto(Integer.parseInt(req.getParameter("sconto")));
-                Tipologia t=new Tipologia();
+                Tipologia t = new Tipologia();
                 t.setNome(req.getParameter("tipologia"));
                 pr.setTipologia(t);
                 pr.setInfo(req.getParameter("info"));
@@ -83,35 +82,93 @@ public class prodottoServlet extends controller{
                 pr.setValido(true);
                 Part filePart = req.getPart("urlImmagine");
                 String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                if(fileName.isBlank())
+                if (fileName.isBlank())
                     pr.setUrlImmagine(null);
                 else
                     pr.setUrlImmagine(fileName);
-                Ristorante r=new Ristorante();
+                Ristorante r = new Ristorante();
                 r.setCodice(Integer.parseInt(req.getParameter("id")));
                 pr.setRistorante(r);
                 ProdottoDAO service = new ProdottoDAO();
                 if (service.doSave(pr)) {
-                    if(req.getParameter("button").equals("again"))
+                    if (req.getParameter("button").equals("again"))
                         resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id=" + r.getCodice());
                     else
                         resp.sendRedirect("/FoodOut/ristorante/all");
-                    if(!fileName.isBlank()){
+                    if (!fileName.isBlank()) {
                         String uploadRoot = getUploadPath();
                         try (InputStream fileStream = filePart.getInputStream()) {
                             File file = new File(uploadRoot + fileName);
                             Files.copy(fileStream, file.toPath());
                         }
                     }
+                } else
+                    InternalError();
+                break;
+        }
+            case "/update": {
+                authorizeUtente(req.getSession());
+                validate(prodottoValidator.validateForm(req));
+                validate(CommonValidator.validateId(req));
+                int codiceProd=Integer.parseInt(req.getParameter("id"));
+                validate(prodottoValidator.validateIdRis(req));
+                int codiceRis=Integer.parseInt(req.getParameter("idRis"));
+                ProdottoDAO service=new ProdottoDAO();
+                if(service.doRetrievebyId(codiceProd)!=null) {
+                    Prodotto pr = new Prodotto();
+                    pr.setCodice(codiceProd);
+                    pr.setNome(req.getParameter("nome"));
+                    pr.setPrezzo(Float.parseFloat(req.getParameter("prezzo")));
+                    pr.setSconto(Integer.parseInt(req.getParameter("sconto")));
+                    Tipologia t = new Tipologia();
+                    t.setNome(req.getParameter("tipologia"));
+                    pr.setTipologia(t);
+                    pr.setInfo(req.getParameter("info"));
+                    pr.setIngredienti(req.getParameter("ingredienti"));
+                    Part filePart = req.getPart("urlImmagine");
+                    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                    if (!fileName.isBlank()) {
+                        pr.setUrlImmagine(fileName);
+                        if(service.doUpdateWithUrl(pr)){
+                            resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id="+codiceRis);
+                            String uploadRoot = getUploadPath();
+                            try (InputStream fileStream = filePart.getInputStream()) {
+                                File file = new File(uploadRoot + fileName);
+                                Files.copy(fileStream, file.toPath());
+                            }
+                        }
+                        else {
+                            System.out.println("errore");
+                            InternalError();
+                        }
+                    }
+                    else {
+                        if (service.doUpdate(pr))
+                            resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id=" + codiceRis);
+                        else
+                            InternalError();
+                    }
                 }
                 else
-                    InternalError();
-
-                    break;
-            case "/update"://modifica prodotto
+                    notFound();
                 break;
-            case "/delete":
+            }
+            case "/update-validita": {
+                authorizeUtente(req.getSession());
+                validate(CommonValidator.validateId(req));
+                ProdottoDAO service=new ProdottoDAO();
+                Prodotto p=service.doRetrievebyId(Integer.parseInt(req.getParameter("id")));
+                if(p!=null) {
+                    if(service.updateValidita(p, !p.isValido()))
+                        resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id="+p.getRistorante().getCodice());
+                    else
+                        InternalError();
+                }
+                else
+                    notFound();
                 break;
+                }
+            default:notFound();
             }
         } catch (SQLException e) {
             log(e.getMessage());

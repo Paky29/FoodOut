@@ -9,7 +9,7 @@
 <html>
 <head>
     <jsp:include page="../partials/head.jsp">
-        <jsp:param name="title" value="Risorsa non trovata"/>
+        <jsp:param name="title" value="Errore interno"/>
         <jsp:param name="styles" value="error"/>
     </jsp:include>
     <style>
