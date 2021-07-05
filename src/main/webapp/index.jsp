@@ -1,3 +1,6 @@
+<%@ page import="model.tipologia.TipologiaDAO" %>
+<%@ page import="model.tipologia.Tipologia" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -10,15 +13,9 @@
 </head>
 <body>
 <style>
-
-    .top {
-        position: relative;
-    }
-
-
     .index {
-        padding: 1rem;
-    <%--dimensione relativa al root--%> background-color: white;
+        padding: 1rem;<%--dimensione relativa al root--%>
+        background-color: white;
         border-radius: 10px;
         opacity: revert;
     }
@@ -33,7 +30,7 @@
 
     .tipologie {
         padding: 1rem;
-    <%--dimensione relativa al root--%> background-color: white;
+        background-color: white;
         opacity: revert;
         margin-top:10vh;
     }
@@ -91,14 +88,17 @@
         <jsp:param name="title" value="Header"/>
     </jsp:include>
 
+    <%
+        TipologiaDAO service=new TipologiaDAO();
+        ArrayList<Tipologia> tipologie=service.doRetrieveByVendite();
+    %>
 
     <div class="content">
         <div class="tipologie app grid-x justify-center align-center">
-            <c:forEach items="${tipologieVendute}" var="tipologia">
-                <span class="cell w10 tipologia">
-                <p class="box"> ${tipologia.nome} </p>
-                </span>
-            </c:forEach>
+            <%if(tipologie!=null){for(int i=0;i<tipologie.size() && i<4;++i){%>
+                <span class="cell w20 tipologia">
+                <p class="box"><%=tipologie.get(i).getNome()%></p>
+                </span><%}}%>
         </div>
     </div>
     <footer class="info grid-x cell justify-center align-center">

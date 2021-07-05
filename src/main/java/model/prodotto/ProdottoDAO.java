@@ -1,6 +1,5 @@
 package model.prodotto;
 
-import model.menu.Menu;
 import model.menu.MenuDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteExtractor;
@@ -14,7 +13,7 @@ public class ProdottoDAO {
 
     public Prodotto doRetrievebyId(int codiceProdotto) throws SQLException{
         try(Connection conn=ConPool.getConnection()) {
-            PreparedStatement ps= conn.prepareStatement("SELECT p.codiceProdotto, p.nome, p.ingredienti, p.info, p.prezzo, p.sconto, p.valido, p.urlImmagine, p.codRis_fk, p.nomeTip_fk, t1.nome, t1.descrizione,  r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, r.valido,  t2.nome, t2.descrizione FROM Prodotto p INNER JOIN Tipologia t1 ON p.nomeTip_fk=t1.nome INNER JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t2 ON art.nomeTip_fk=t2.nome WHERE codiceProdotto=?");
+            PreparedStatement ps= conn.prepareStatement("SELECT p.codiceProdotto, p.nome, p.ingredienti, p.info, p.prezzo, p.sconto, p.valido, p.urlImmagine, p.codRis_fk, p.nomeTip_fk, t1.nome, t1.descrizione,  r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, r.valido,  t2.nome, t2.descrizione FROM Prodotto p INNER JOIN Tipologia t1 ON p.nomeTip_fk=t1.nome INNER JOIN Ristorante r ON p.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t2 ON art.nomeTip_fk=t2.nome WHERE codiceProdotto=?");
             ps.setInt(1, codiceProdotto);
             ResultSet rs=ps.executeQuery();
             Prodotto p=null;
@@ -174,13 +173,7 @@ public class ProdottoDAO {
                             ps=conn.prepareStatement("DELETE FROM AppartenenzaRT WHERE codRis_fk=? AND nomeTip_fk=?");
 
                             MenuDAO menuDAO=new MenuDAO();
-                            ArrayList<Menu> menuForProdotto=menuDAO.doRetrieveByProdotto(p.getCodice());
-                            int tot_menu;
-                            if(menuForProdotto!=null)
-                                tot_menu=menuForProdotto.size();
-                            else {
-                                tot_menu = 0;
-                            }
+                            int tot_menu=menuDAO.doRetrieveByProdotto(p.getCodice()).size();
                             PreparedStatement ps2=conn.prepareStatement("UPDATE AppartenenzaPM, Menu SET valido=false WHERE codMenu_fk=codiceMenu AND codProd_fk=?");
                             ps2.setInt(1,p.getCodice());
                             if(ps2.executeUpdate()!=tot_menu) {
