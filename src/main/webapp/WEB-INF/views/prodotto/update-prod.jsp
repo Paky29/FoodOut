@@ -48,39 +48,35 @@
     <form id="prodotto " class="grid-x justify-center" action="${pageContext.request.contextPath}/prodotto/update" method="post" enctype="multipart/form-data">
         <fieldset class="grid-x cell w90 add-ris justify-center">
             <h2 class="cell"> Modifica prodotto</h2>
-            <label for="nome" class="field cell w82">
-                <input type="text" name="nome" id="nome" value="${prodotto.nome}" placeholder="Nome">
+            <label for="nome" class="grid-x field cell w82">
+                <span style="font-weight: bold" class="field cell w20"> Nome: </span>
+                <input class="cell w80" type="text" name="nome" id="nome" value="${prodotto.nome}" placeholder="Nome">
             </label>
-            <label for="prezzo" class="field w40 cell">
+            <label for="prezzo" class="grid-x field w40 cell">
+                <span class="field cell" style="font-weight: bold;margin-bottom: 3px;">Prezzo: </span>
                 <input type="number" name="prezzo" id="prezzo" value="${prodotto.prezzo}" placeholder="Prezzo (€)" min="0" step="0.01">
             </label>
-            <label for="sconto" class="field w40 cell">
+            <label for="sconto" class="grid-x field w40 cell">
+                <span class="field cell" style="font-weight: bold;margin-bottom: 3px;">Sconto: </span>
                 <input type="number" name="sconto" id="sconto" value="${prodotto.sconto}" placeholder="Sconto (%)" max="100" min="0">
             </label>
-            <label for="tipologia" class="field w65 cell">
-            <span style="margin-right: 10px">
-                Tipologia:
-            </span>
-                <select name="tipologia" id="tipologia">
-                    <c:forEach items="${ristorante.tipologie}" var="tipologia">
-                        <option value="${tipologia.nome}"
-                                <c:if test="${tipologia.nome.equals(prodotto.tipologia.nome)}"> selected </c:if>
-                        > ${tipologia.nome}
-                        </option>
-                    </c:forEach>
-                </select>
+            <label for="tipologia" class="grid-x field w82 cell">
+                <span class="field cell w20" style="font-weight: bold;"> Tipologia: </span>
+                <input class="cell w80" name="tipologia" id="tipologia" value="${prodotto.tipologia.nome}" readonly>
             </label>
             <label for="urlImmagine" class="field w80 cell">
                 <input type="file" name="urlImmagine" id="urlImmagine" placeholder="Immagine del tuo ristorante" value="${prodotto.urlImmagine}">
             </label>
-            <label for="ingredienti" class="field cell w80">
+            <label for="ingredienti" class="grid-x field cell w82">
+                <span class="field cell" style="font-weight: bold;margin-bottom: 3px;">Ingredienti: </span>
                 <textarea rows="4" cols="100" type="text" name="ingredienti" id="ingredienti" maxlength="100" placeholder="Ingredienti del prodotto, separati da ','"> ${prodotto.ingredienti} </textarea>
             </label>
-            <label for="info" class="field cell w80">
+            <label for="info" class="grid-x field cell w82">
+                <span class="field cell" style="font-weight: bold;margin-bottom: 3px;">Info extra: </span>
                 <textarea rows="4" cols="100" type="text" name="info" id="info" maxlength="100" placeholder="Informazioni extra sul prodotto"> ${prodotto.info} </textarea>
             </label>
-            <input style="display: none" name="id" id="id" value="${ristorante.codice}" readonly>
-            <input style="display: none" name="idRis" id="idRis" value="${prodotto.codice}" readonly>
+            <input style="display: none" name="id" id="id" value="${prodotto.codice}" readonly>
+            <input style="display: none" name="idRis" id="idRis" value="${ristorante.codice}" readonly>
 
             <span class="grid-x cell justify-center">
             <button type="submit" class="btn primary w30" value="again" name="button"> Modifica </button>

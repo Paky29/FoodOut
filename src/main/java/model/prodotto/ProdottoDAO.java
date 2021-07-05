@@ -114,15 +114,14 @@ public class ProdottoDAO {
 
     public boolean doUpdateWithUrl(Prodotto p) throws SQLException{
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("UPDATE Prodotto p SET nome=?, ingredienti=?, info=?, prezzo=?, sconto=?, urlImmagine=?,nomeTip_fk=? WHERE codiceProdotto=?");
+            PreparedStatement ps = conn.prepareStatement("UPDATE Prodotto p SET nome=?, ingredienti=?, info=?, prezzo=?, sconto=?, urlImmagine=? WHERE codiceProdotto=?");
             ps.setString(1, p.getNome());
             ps.setString(2, p.getIngredienti());
             ps.setString(3, p.getInfo());
             ps.setFloat(4, p.getPrezzo());
             ps.setInt(5, p.getSconto());
             ps.setString(6, p.getUrlImmagine());
-            ps.setString();
-            ps.setInt(8, p.getCodice());
+            ps.setInt(7, p.getCodice());
 
             if (ps.executeUpdate() != 1)
                 return false;

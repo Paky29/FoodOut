@@ -34,12 +34,22 @@ public class RistoranteDAO {
                     r.getTipologie().add(t);
                 } while (rs.next());
 
+                ArrayList<Disponibilita> disp=new ArrayList<>();
                 PreparedStatement calendario = conn.prepareStatement("SELECT giorno, oraApertura, oraChiusura FROM Disponibilita d WHERE d.codRis_fk=?");
                 calendario.setInt(1, codice);
                 rs = calendario.executeQuery();
                 while (rs.next()) {
                     Disponibilita d = DisponibilitaExtractor.extract(rs);
-                    r.getGiorni().add(d);
+                    disp.add(d);
+                }
+
+                for(int i=0;i<Disponibilita.giorni.length;++i) {
+                    for (Disponibilita d : disp) {
+                        if (d.getGiorno().compareToIgnoreCase(Disponibilita.giorni[i]) == 0) {
+                            r.getGiorni().add(d);
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -88,9 +98,13 @@ public class RistoranteDAO {
         }
     }
 
-    public ArrayList<Ristorante> doRetrieveByScontoDisp(String citta, Paginator paginator) throws SQLException {
+    public ArrayList<Ristorante> doRetrieveByScontoDisp(String citta, Paginator paginator,boolean isAdmin) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT distinct r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ristorante r INNER JOIN Prodotto p ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaPM apm ON p.codiceProdotto=apm.codProd_fk LEFT JOIN Menu m ON apm.codMenu_fk=m.codiceMenu WHERE r.citta=? AND (p.sconto>0 OR m.sconto>0) LIMIT ?,?");
+            PreparedStatement ps;
+            if(isAdmin)
+                ps = conn.prepareStatement("SELECT distinct r.codiceRistorante, r.valido, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ristorante r INNER JOIN Prodotto p ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaPM apm ON p.codiceProdotto=apm.codProd_fk LEFT JOIN Menu m ON apm.codMenu_fk=m.codiceMenu WHERE r.citta=? AND (p.sconto>0 OR m.sconto>0) LIMIT ?,?");
+            else
+                ps = conn.prepareStatement("SELECT distinct r.codiceRistorante, r.valido, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ristorante r INNER JOIN Prodotto p ON p.codRis_fk=r.codiceRistorante LEFT JOIN AppartenenzaPM apm ON p.codiceProdotto=apm.codProd_fk LEFT JOIN Menu m ON apm.codMenu_fk=m.codiceMenu WHERE r.citta=? AND (p.sconto>0 OR m.sconto>0) AND r.valido=true LIMIT ?,?");
             ps.setString(1, citta);
             ps.setInt(2, paginator.getOffset());
             ps.setInt(3, paginator.getLimit());
@@ -120,7 +134,12 @@ public class RistoranteDAO {
                 ristoranti.get(codiceRistorante).getGiorni().add(d);
             }
 
-            PreparedStatement tip = conn.prepareStatement("SELECT art.codRis_fk, t.nome, t.descrizione FROM AppartenenzaRT art INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE art.codRis_fk IN " + sj.toString());
+            PreparedStatement tip;
+            if(isAdmin)
+                tip= conn.prepareStatement("SELECT art.codRis_fk, t.nome, t.descrizione FROM AppartenenzaRT art LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE art.codRis_fk IN " + sj.toString());
+            else
+                tip= conn.prepareStatement("SELECT art.codRis_fk, t.nome, t.descrizione FROM AppartenenzaRT art INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE art.codRis_fk IN " + sj.toString());
+
             ResultSet setTip = tip.executeQuery();
 
             while (setTip.next()) {
@@ -138,14 +157,18 @@ public class RistoranteDAO {
         }
     }
 
-    public ArrayList<Ristorante> doRetrieveByTipologieCitta(ArrayList<String> tipologie, String citta, Paginator paginator) throws SQLException{
+    public ArrayList<Ristorante> doRetrieveByTipologieCitta(ArrayList<String> tipologie, String citta, Paginator paginator,boolean isAdmin) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
             StringJoiner sj_tipologie=new StringJoiner(",", "(", ")");
             for(String tipologia : tipologie){
                 tipologia="'" + tipologia + "'";
                 sj_tipologie.add(tipologia);
             }
-            PreparedStatement ps=conn.prepareStatement("SELECT distinct r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE art.nomeTip_fk IN " + sj_tipologie.toString() + " AND r.citta=? LIMIT ?,?");
+            PreparedStatement ps;
+            if(isAdmin)
+                ps=conn.prepareStatement("SELECT distinct r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE art.nomeTip_fk IN " + sj_tipologie.toString() + " AND r.citta=? LIMIT ?,?");
+            else
+                ps=conn.prepareStatement("SELECT distinct r.codiceRistorante, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE art.nomeTip_fk IN " + sj_tipologie.toString() + " AND r.citta=? LIMIT ?,?");
             ps.setString(1,citta);
             ps.setInt(2,paginator.getOffset());
             ps.setInt(3,paginator.getLimit());

@@ -118,6 +118,10 @@ public class Ristorante {
         this.urlImmagine=urlImmagine;
     }
 
+    public boolean isValido() { return valido; }
+
+    public void setValido(boolean valido) { this.valido = valido; }
+
     private int codice, civico;
     private String nome, provincia, citta, via, info;
     private float spesaMinima, tassoConsegna;
@@ -126,4 +130,5 @@ public class Ristorante {
     private ArrayList<Tipologia> tipologie;
     private int rating;
     private String urlImmagine;
+    private boolean valido;
 }
