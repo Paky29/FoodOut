@@ -84,6 +84,16 @@
 
             <span class="grid-x cell justify-center">
             <button type="submit" class="btn primary w30" value="again" name="button"> Modifica </button>
+                <button type="submit" class="btn primary w30" name="button" value="${!prodotto.valido}" formaction="${pageContext.request.contextPath}/prodotto/update-validita">
+                    <c:choose>
+                        <c:when test="${prodotto.valido}">
+                            Invalida
+                        </c:when>
+                        <c:otherwise>
+                            Valida
+                        </c:otherwise>
+                    </c:choose>
+                </button>
         </span>
         </fieldset>
     </form>
