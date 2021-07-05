@@ -39,7 +39,7 @@ public class prodottoServlet extends controller{
                     int codiceRis = Integer.parseInt(req.getParameter("idRis"));
                     RistoranteDAO serviceRis = new RistoranteDAO();
                     ProdottoDAO serviceProd = new ProdottoDAO();
-                    req.setAttribute("ristorante", serviceRis.doRetrieveById(codiceRis));
+                    req.setAttribute("ristorante", serviceRis.doRetrieveById(codiceRis,true));
                     req.setAttribute("prodotto", serviceProd.doRetrievebyId(codice));
                     req.getRequestDispatcher(view("prodotto/update-prod")).forward(req, resp);
                     break;
