@@ -17,7 +17,7 @@
             border-bottom: 0 !important;
         }
 
-        .delete>svg{
+        .valid>svg{
             cursor: pointer;
         }
     </style>
@@ -52,14 +52,14 @@
                         <th> Civico </th>
                         <th> Rating </th>
                         <th> Tipologie </th>
-                        <th> Elimina</th>
+                        <th> Validita</th>
                         <th> </th>
                         <th> </th>
                     </tr>
                     </thead>
                     <tbody>
                     <c:forEach items="${ristoranti}" var="ristorante">
-                        <tr>
+                        <tr <c:if test="${!ristorante.valido}"> style="background-color: lightgrey;"</c:if> >
                             <td data-head="Nome">${ristorante.nome} </td> <%--link a pagina con prodotti--%>
                             <td data-head="Provincia">${ristorante.provincia}</td>
                             <td data-head="Citta">${ristorante.citta}</td>
@@ -83,8 +83,16 @@
                                     </c:otherwise>
                                 </c:choose>
                             </td>
-                            <td class="delete" onclick="deleteRis(this)" data-head="Elimina">
-                                <%@include file="../../../icons/delete.svg" %>
+                            <td class="valid" onclick="changeValidita(this)" data-head="Validita">
+                                <c:choose>
+                                    <c:when test="${!ristorante.valido}">
+                                        <%@include file="../../../icons/valid.svg" %>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <%@include file="../../../icons/delete.svg" %>
+                                    </c:otherwise>
+                                </c:choose>
+
                             </td>
                             <td style="border-bottom: 0" > <a href="/FoodOut/ristorante/show-info-admin?id=${ristorante.codice}" target="_blank"> Vai al profilo </a></td>
                             <td class="blank" value="${ristorante.codice}"></td>

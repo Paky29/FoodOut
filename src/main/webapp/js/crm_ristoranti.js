@@ -21,12 +21,12 @@ for(var i=0; i<dels.length; ++i)
     });
 }*/
 
-function deleteRis(ris){
+function changeValidita(ris){
     var parent=ris.parentElement;
-    var id=parent.getElementsByClassName("blank")[0].getAttribute("value")
+    var id=parent.getElementsByClassName("blank")[0].getAttribute("value");
 
-    var conferma = confirm("Sicuro di voler eliminare il ristorante?");
+    var conferma = confirm("Sicuro di voler cambiare la validità del ristorante?");
     if(conferma){
-        window.location.href = "/FoodOut/ristorante/delete?id=" + id;
+        window.location.href = "/FoodOut/ristorante/update-validita?id=" + id;
     }
 };

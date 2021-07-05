@@ -134,16 +134,20 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     req.getRequestDispatcher(view("ristorante/update-disponibilita")).forward(req, resp);
                     break;
                 }
-                case "/delete": {
+                case "/update-validita": {
                     authorizeUtente(req.getSession());
                     validate(CommonValidator.validateId(req));
                     RistoranteDAO service=new RistoranteDAO();
                     int id=Integer.parseInt(req.getParameter("id"));
-                    if(service.doDelete(id)){
-                        resp.sendRedirect("/FoodOut/ristorante/all");
-                    }
+                    Ristorante r=service.doRetrieveById(id, true);
+                    if(r==null)
+                        notFound();
                     else {
-                        InternalError();
+                        if (service.updateValidita(id, !r.isValido())) {
+                            resp.sendRedirect("/FoodOut/ristorante/all");
+                        } else {
+                            InternalError();
+                        }
                     }
                     break;
                 }

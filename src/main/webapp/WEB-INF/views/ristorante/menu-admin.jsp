@@ -256,20 +256,15 @@
                             <h3 class="cell" style="font-style: italic"><a name="${tipologia.nome}">${tipologia.nome}</a></h3>
                             <c:forEach items="${ristorante.prodotti}" var="prodotto">
                                 <c:if test="${tipologia.nome.equals(prodotto.tipologia.nome)}">
-                                <label class="field cell w100 prodotto grid-x" onclick="showDetails(this)" title="Clicca per modificare">
-                                          <c:choose>
-                                              <c:when test="${!prodotto.valido}">
-                                                  <span class="w80" style="font-weight: bold; color: red;">${prodotto.nome}</span>
-                                              </c:when>
-                                              <c:otherwise>
-                                                  <span class="w80" style="font-weight: bold;">${prodotto.nome}</span>
-                                              </c:otherwise>
-                                          </c:choose>
-                                    <c:if test="${not empty prodotto.urlImmagine}">
-                                        <img class="w10" src="/FoodOut/covers/${prodotto.urlImmagine}">
-                                    </c:if>
-                                    <input style="display: none" id="id" name="id" value="${prodotto.codice}"/>
-                                </label>
+                                <c:if test="${prodotto.valido}">
+                                    <label class="field cell w100 prodotto grid-x" onclick="showDetails(this)" title="Clicca per modificare">
+                                    <span class="w80" style="font-weight: bold;">${prodotto.nome}</span>
+                                        <c:if test="${not empty prodotto.urlImmagine}">
+                                            <img class="w10" src="/FoodOut/covers/${prodotto.urlImmagine}">
+                                        </c:if>
+                                        <input style="display: none" id="id" name="id" value="${prodotto.codice}"/>
+                                    </label>
+                                </c:if>
                                 </c:if>
                             </c:forEach>
                         </c:forEach>
@@ -284,6 +279,19 @@
                             </label>
                         </c:forEach>
                         </c:if>
+                        <c:forEach items="${ristorante.prodotti}" var="prodotto">
+                                <c:if test="${!prodotto.valido}">
+                                    <label class="field cell w100 prodotto grid-x" onclick="showDetails(this)" title="Clicca per modificare">
+                                    <span class="w80" style="font-weight: bold; color:red;">${prodotto.nome}</span>
+                                        <c:if test="${not empty prodotto.urlImmagine}">
+                                            <img class="w10" src="/FoodOut/covers/${prodotto.urlImmagine}">
+                                        </c:if>
+                                        <input style="display: none" id="id" name="id" value="${prodotto.codice}"/>
+                                    </label>
+                                </c:if>
+
+                        </c:forEach>
+
                     </fieldset>
                 </div>
             </div>

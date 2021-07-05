@@ -731,4 +731,16 @@ public class RistoranteDAO {
         }
     }
 
+    public boolean updateValidita(int id, boolean valido) throws SQLException {
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("UPDATE Ristorante SET valido=? WHERE codiceRistorante=? ");
+            ps.setBoolean(1, valido);
+            ps.setInt(2, id);
+
+            if(ps.executeUpdate()!=1)
+                return false;
+            else
+                return true;
+        }
+    }
 }

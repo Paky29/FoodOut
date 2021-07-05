@@ -1,5 +1,6 @@
 package model.prodotto;
 
+import model.menu.Menu;
 import model.menu.MenuDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteExtractor;
@@ -173,7 +174,13 @@ public class ProdottoDAO {
                             ps=conn.prepareStatement("DELETE FROM AppartenenzaRT WHERE codRis_fk=? AND nomeTip_fk=?");
 
                             MenuDAO menuDAO=new MenuDAO();
-                            int tot_menu=menuDAO.doRetrieveByProdotto(p.getCodice()).size();
+                            ArrayList<Menu> menuForProdotto=menuDAO.doRetrieveByProdotto(p.getCodice());
+                            int tot_menu;
+                            if(menuForProdotto!=null)
+                                tot_menu=menuForProdotto.size();
+                            else {
+                                tot_menu = 0;
+                            }
                             PreparedStatement ps2=conn.prepareStatement("UPDATE AppartenenzaPM, Menu SET valido=false WHERE codMenu_fk=codiceMenu AND codProd_fk=?");
                             ps2.setInt(1,p.getCodice());
                             if(ps2.executeUpdate()!=tot_menu) {

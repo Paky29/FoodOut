@@ -104,9 +104,11 @@
             </span>
             <select name="prodotti" id="prodotti" multiple>
                 <c:forEach items="${ristorante.prodotti}" var="prodotto">
+                    <c:if test="${prodotto.valido}">
                     <option value="${prodotto.codice}">
                             ${prodotto.nome}
                     </option>
+                    </c:if>
                 </c:forEach>
             </select>
         </label>
