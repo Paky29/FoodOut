@@ -731,6 +731,20 @@ public class RistoranteDAO {
         }
     }
 
+    public int countProdottiValidita(int id, boolean valido) throws SQLException{
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT COUNT(p.codiceProdotto) as numProd FROM Prodotto p WHERE p.codRis_fk=? AND p.valido=?");
+            ps.setInt(1,id);
+            ps.setBoolean(2,valido);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numProd");
+            }
+            else
+                return 0;
+        }
+    }
+
     public boolean updateValidita(int id, boolean valido) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("UPDATE Ristorante SET valido=? WHERE codiceRistorante=? ");

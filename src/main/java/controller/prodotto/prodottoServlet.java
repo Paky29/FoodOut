@@ -138,7 +138,6 @@ public class prodottoServlet extends controller{
                             }
                         }
                         else {
-                            System.out.println("errore");
                             InternalError();
                         }
                     }
@@ -155,6 +154,10 @@ public class prodottoServlet extends controller{
             }
             case "/update-validita": {
                 authorizeUtente(req.getSession());
+                RequestValidator rv=CommonValidator.validateId(req);
+                System.out.println(req.getParameter("id"));
+                for(String s: rv.getErrors())
+                    System.out.println(s);
                 validate(CommonValidator.validateId(req));
                 ProdottoDAO service=new ProdottoDAO();
                 Prodotto p=service.doRetrievebyId(Integer.parseInt(req.getParameter("id")));

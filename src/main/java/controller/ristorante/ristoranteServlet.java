@@ -79,6 +79,10 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     r.setProdotti(prodottoDAO.doRetrieveByRistorante(r.getCodice()));
                     req.setAttribute("menus", menuDAO.doRetrieveByRistorante(r.getCodice()));
                     req.setAttribute("ristorante", r);
+                    System.out.println(ristoranteDAO.countProdottiValidita(r.getCodice(), true));
+                    System.out.println(ristoranteDAO.countProdottiValidita(r.getCodice(), false));
+                    req.setAttribute("countValidi", ristoranteDAO.countProdottiValidita(r.getCodice(), true));
+                    req.setAttribute("countNonValidi", ristoranteDAO.countProdottiValidita(r.getCodice(), false));
                     req.getRequestDispatcher(view("ristorante/menu-admin")).forward(req, resp);
                     break;
                 }

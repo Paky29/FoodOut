@@ -251,6 +251,7 @@
                         </span>
                         <c:choose>
                             <c:when test="${not empty ristorante.prodotti}">
+                                <c:if test="${countValidi>0}">
                         <h2 class="cell"> Prodotti </h2>
                         <c:forEach items="${ristorante.tipologie}" var="tipologia">
                             <h3 class="cell" style="font-style: italic"><a name="${tipologia.nome}">${tipologia.nome}</a></h3>
@@ -268,6 +269,7 @@
                                 </c:if>
                             </c:forEach>
                         </c:forEach>
+                                </c:if>
                             </c:when>
                             <c:otherwise> <h2> Non sono presenti prodotti </h2> </c:otherwise>
                         </c:choose>
@@ -279,7 +281,9 @@
                             </label>
                         </c:forEach>
                         </c:if>
-                        <c:forEach items="${ristorante.prodotti}" var="prodotto">
+                        <c:if test="${countNonValidi>0}">
+                            <h2 class="cell"> Prodotti non validi </h2>
+                            <c:forEach items="${ristorante.prodotti}" var="prodotto">
                                 <c:if test="${!prodotto.valido}">
                                     <label class="field cell w100 prodotto grid-x" onclick="showDetails(this)" title="Clicca per modificare">
                                     <span class="w80" style="font-weight: bold; color:red;">${prodotto.nome}</span>
@@ -291,6 +295,7 @@
                                 </c:if>
 
                         </c:forEach>
+                        </c:if>
 
                     </fieldset>
                 </div>
