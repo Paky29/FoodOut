@@ -193,6 +193,17 @@
         text-decoration: none;
     }
 
+    .show-menu {
+        position: relative;
+    }
+
+    #plus{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+    }
+
 
 
 </style>
@@ -233,6 +244,9 @@
             <div class="cell w75 grid-x justify-center show-menu">
                 <div class="grid-x justify-center info-ris cell">
                     <fieldset class="grid-x cell w100 index">
+                        <span class="cell" id="plus" onclick="addProdMenu(this)">
+                            <%@include file="../../../icons/plus.svg" %>
+                        </span>
                         <c:choose>
                             <c:when test="${not empty ristorante.prodotti}">
                         <h2 class="cell"> Prodotti </h2>
