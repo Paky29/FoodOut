@@ -257,7 +257,14 @@
                             <c:forEach items="${ristorante.prodotti}" var="prodotto">
                                 <c:if test="${tipologia.nome.equals(prodotto.tipologia.nome)}">
                                 <label class="field cell w100 prodotto grid-x" onclick="showDetails(this)" title="Clicca per modificare">
-                                    <span class="w80" style="font-weight: bold"> ${prodotto.nome} </span>
+                                          <c:choose>
+                                              <c:when test="${!prodotto.valido}">
+                                                  <span class="w80" style="font-weight: bold; color: red;">${prodotto.nome}</span>
+                                              </c:when>
+                                              <c:otherwise>
+                                                  <span class="w80" style="font-weight: bold;">${prodotto.nome}</span>
+                                              </c:otherwise>
+                                          </c:choose>
                                     <c:if test="${not empty prodotto.urlImmagine}">
                                         <img class="w10" src="/FoodOut/covers/${prodotto.urlImmagine}">
                                     </c:if>
