@@ -71,7 +71,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     validate(CommonValidator.validateId(req));
                     int id=Integer.parseInt(req.getParameter("id"));
                     RistoranteDAO ristoranteDAO=new RistoranteDAO();
-                    Ristorante r=ristoranteDAO.doRetrieveByIdAdmin(id);
+                    Ristorante r=ristoranteDAO.doRetrieveById(id,true);
                     if(r==null)
                         notFound();
                     ProdottoDAO prodottoDAO=new ProdottoDAO();
@@ -90,7 +90,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     req.setAttribute("tipologie",tipologie);
                     int codiceRis=Integer.parseInt(req.getParameter("id"));
                     RistoranteDAO serviceRis=new RistoranteDAO();
-                    Ristorante r=serviceRis.doRetrieveByIdAdmin(codiceRis);
+                    Ristorante r=serviceRis.doRetrieveById(codiceRis,true);
                     ProdottoDAO serviceProd=new ProdottoDAO();
                     r.setProdotti(serviceProd.doRetrieveByRistorante(codiceRis));
                     req.setAttribute("ristorante",r);
@@ -102,7 +102,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     validate(CommonValidator.validateId(req));
                     int id=Integer.parseInt(req.getParameter("id"));
                     RistoranteDAO ristoranteDAO=new RistoranteDAO();
-                    Ristorante r=ristoranteDAO.doRetrieveByIdAdmin(id);
+                    Ristorante r=ristoranteDAO.doRetrieveById(id,true);
                     if(r==null)
                         notFound();
                     req.setAttribute("ristorante", r);
@@ -127,7 +127,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     authorizeUtente(req.getSession());
                     validate(CommonValidator.validateId(req));
                     RistoranteDAO service=new RistoranteDAO();
-                    Ristorante r=service.doRetrieveByIdAdmin(Integer.parseInt(req.getParameter("id")));
+                    Ristorante r=service.doRetrieveById(Integer.parseInt(req.getParameter("id")),true);
                     if(r==null)
                         notFound();
                     req.setAttribute("ristorante", r);
