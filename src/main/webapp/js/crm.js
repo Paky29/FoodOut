@@ -14,3 +14,10 @@ home.addEventListener('click', function (){
 home.addEventListener('mouseover', function (){
    home.style.cursor="pointer";
 });
+
+function confirmDelete(){
+    var conferma = confirm("Sicuro di voler eliminare il profilo?");
+    if(conferma){
+        window.location.href = "/FoodOut/utente/delete";
+    }
+}

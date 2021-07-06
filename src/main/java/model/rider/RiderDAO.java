@@ -27,10 +27,10 @@ public class RiderDAO {
             Rider rd=null;
             if(rs.next()){
                 rd = RiderExtractor.extract(rs);
-                do{
+               /* do{
                     Turno t= TurnoExtractor.extract(rs);
                     rd.getTurni().add(t);
-                }while(rs.next());
+                }while(rs.next());*/
 
                 ArrayList<Ordine> ordini=service.doRetrieveByRider(rd);
                 rd.setOrdini(ordini);

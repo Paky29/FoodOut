@@ -122,6 +122,24 @@ public class Ordine {
 
     public void setRistorante(Ristorante ristorante) { this.ristorante = ristorante; }
 
+    public boolean removeOrdineItem(int id, String tipo){
+        int pos=-1;
+        int i=0;
+            for(OrdineItem oi : ordineItems) {
+                if (oi.getClass().getName().contains(tipo) && oi.getOff().getCodice() == id)
+                    pos = i;
+                i++;
+            }
+            if(pos!=-1) {
+                ordineItems.remove(pos);
+                return true;
+            }
+            else
+                return false;
+
+
+    }
+
     private int codice,voto;
     private LocalDate dataOrdine;
     private float totale;

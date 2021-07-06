@@ -7,20 +7,6 @@ add.addEventListener('mouseover', function (){
     add.style.cursor="pointer";
 })
 
-/*const dels=document.getElementsByTagName("tbody")[0].getElementsByClassName("delete");
-for(var i=0; i<dels.length; ++i)
-{
-    var del=dels[i].firstElementChild;
-    var elem = document.getElementsByTagName("tbody")[0].getElementsByClassName("blank")[i].getAttribute("value");
-
-    del.addEventListener('click', function () {
-        var conferma = confirm("Sicuro di voler eliminare il ristorante?");
-        if (conferma) {
-            window.location.href = "/FoodOut/ristorante/delete?id=" + elem;
-        }
-    });
-}*/
-
 function changeValidita(ris){
     var parent=ris.parentElement;
     var id=parent.getElementsByClassName("blank")[0].getAttribute("value");
