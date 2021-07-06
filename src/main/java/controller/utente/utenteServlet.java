@@ -44,7 +44,7 @@ public class utenteServlet extends controller {
                 case "/update-pw":
                     req.getRequestDispatcher(view("site/update-pw")).forward(req, resp);
                     break;
-                case "/show":
+                case "/show":{
                     HttpSession ssn = req.getSession(false);
                     authorizeUtente(ssn);
                     UtenteSession us = (UtenteSession) ssn.getAttribute("utenteSession");
@@ -53,12 +53,26 @@ public class utenteServlet extends controller {
                     ssn.setAttribute("profilo", u);
                     req.getRequestDispatcher(view("crm/show")).forward(req, resp);
                     break;
+                }
                 case "/profile":
                     break;
                 case "/ristoranti-pref":
                     break;
+                case "/delete": {
+                    HttpSession ssn = req.getSession();
+                    authenticateUtente(ssn);
+                    UtenteSession us= (UtenteSession) ssn.getAttribute("utenteSession");
+                    UtenteDAO service=new UtenteDAO();
+                    if(service.doDelete(us.getId())) {
+                        ssn.invalidate();
+                        resp.sendRedirect("/FoodOut/index.jsp");
+                    }
+                    else
+                        InternalError();
+                    break;
+                }
                 default:
-                    resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Risorsa non trovata");
+                    notFound();
             }
         } catch (SQLException e) {
             log(e.getMessage());
@@ -200,10 +214,8 @@ public class utenteServlet extends controller {
                 }
                 case "/deposit":
                     break;
-                case "/delete":
-                    break;
                 default:
-                    resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, "Operazione non consentita");
+                    notAllowed();
             }
         } catch (SQLException e) {
             log(e.getMessage());

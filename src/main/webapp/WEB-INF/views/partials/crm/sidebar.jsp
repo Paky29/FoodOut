@@ -7,5 +7,6 @@
         <a href="/FoodOut/tipologia/all?page=1"> Gestione tipologie</a>
         <a href="/FoodOut/utente/show"> Profilo</a>
         <a href="/FoodOut/utente/logout"> Logout</a>
+        <a href="/FoodOut/utente/delete">Elimina account</a>
     </nav>
 </aside>
