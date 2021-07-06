@@ -64,7 +64,7 @@
                 <input type="number" name="sconto" id="sconto" value="${menu.sconto}" placeholder="Sconto (%)" max="100"
                        min="0">
             </label>
-            <label for="prodotti" class="field w65 cell">
+            <label for="prodotti" class="field w70 cell">
             <span style="margin-right: 10px; font-weight: bold;">
                 Prodotti:
             </span>

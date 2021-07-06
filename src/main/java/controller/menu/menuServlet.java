@@ -148,10 +148,32 @@ public class menuServlet extends controller{
                     break;
                 }
                 case "/update-validita": {
+                    authorizeUtente(req.getSession());
+                    validate(CommonValidator.validateId(req));
+                    int codiceMenu=Integer.parseInt(req.getParameter("id"));
+                    validate(menuValidator.validateIdRis(req));
+                    int codiceRis=Integer.parseInt(req.getParameter("idRis"));
+                    MenuDAO serviceMenu=new MenuDAO();
+                    Menu m=serviceMenu.doRetrieveById(codiceMenu);
+                    if(m==null)
+                        notFound();
+                    else
+                    {
+                        if(!serviceMenu.updateValidita(codiceMenu,!m.isValido()))
+                            InternalError();
+                        else
+                        {
+                            RistoranteDAO serviceRis=new RistoranteDAO();
+                            if(serviceRis.doRetrieveById(codiceRis,true)==null) {
+                                notFound();
+                            }
+                            else{
+                                resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id="+codiceRis);
+                            }
+                        }
+                    }
                     break;
                 }
-                case "/edit-prodotti"://mostra select di prodotti da aggiungere e da togliere
-                    break;
 
             }
         }catch (SQLException e) {

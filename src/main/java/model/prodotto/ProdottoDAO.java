@@ -166,58 +166,46 @@ public class ProdottoDAO {
                 ResultSet rs=ps.executeQuery();
                 if(rs.next()){
                     int count=rs.getInt(1);
-                    if(count==0){
-                        if(valido){
-                            ps=conn.prepareStatement("INSERT INTO AppartenenzaRT(codRis_fk, nomeTip_fk) VALUES(?,?)");
-                        }
-                        else{
-                            ps=conn.prepareStatement("DELETE FROM AppartenenzaRT WHERE codRis_fk=? AND nomeTip_fk=?");
-
-                            MenuDAO menuDAO=new MenuDAO();
-                            ArrayList<Menu> menuWithProd=menuDAO.doRetrieveByProdotto(p.getCodice());
-                            int tot_menu;
-                            if(menuWithProd!=null)
-                                tot_menu=menuWithProd.size();
-                            else {
-                                tot_menu = 0;
-                            }
-
-
-                            PreparedStatement ps2=conn.prepareStatement("UPDATE AppartenenzaPM, Menu SET valido=false WHERE codMenu_fk=codiceMenu AND codProd_fk=?");
-                            ps2.setInt(1,p.getCodice());
-                            if(ps2.executeUpdate()!=tot_menu) {
-                                conn.rollback();
-                                conn.setAutoCommit(true);
-                                return false;
-                            }
+                    if(count==0) {
+                        if (valido) {
+                            ps = conn.prepareStatement("INSERT INTO AppartenenzaRT(codRis_fk, nomeTip_fk) VALUES(?,?)");
+                        } else {
+                            ps = conn.prepareStatement("DELETE FROM AppartenenzaRT WHERE codRis_fk=? AND nomeTip_fk=?");
                         }
 
                         ps.setInt(1, p.getRistorante().getCodice());
                         ps.setString(2, p.getTipologia().getNome());
-                        if(ps.executeUpdate()!=1) {
+                        if (ps.executeUpdate() != 1) {
                             conn.rollback();
                             conn.setAutoCommit(true);
                             return false;
                         }
+                    }
+                }
 
-
-
-                        conn.commit();
-                        conn.setAutoCommit(true);
-                        return true;
-
+                    if(!valido){
+                        MenuDAO menuDAO=new MenuDAO();
+                        ArrayList<Menu> menuWithProd=menuDAO.doRetrieveByProdotto(p.getCodice());
+                        int tot_menu;
+                        if(menuWithProd!=null)
+                            tot_menu=menuWithProd.size();
+                        else {
+                            tot_menu = 0;
+                        }
+                        PreparedStatement ps2=conn.prepareStatement("UPDATE AppartenenzaPM, Menu SET valido=false WHERE codMenu_fk=codiceMenu AND codProd_fk=?");
+                        ps2.setInt(1,p.getCodice());
+                        if(ps2.executeUpdate()!=tot_menu) {
+                            conn.rollback();
+                            conn.setAutoCommit(true);
+                            return false;
+                        }
                     }
 
                     conn.commit();
                     conn.setAutoCommit(true);
                     return true;
 
-                }
-                conn.rollback();
-                conn.setAutoCommit(true);
-                return false;
             }
         }
     }
-
 }
