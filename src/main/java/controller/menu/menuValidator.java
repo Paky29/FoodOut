@@ -17,5 +17,11 @@ public class menuValidator {
         validator.assertInts("prodotti","errore nei codici dei prodotti");
         return validator;
     }
+
+    public static RequestValidator validateIdRis(HttpServletRequest request){
+        RequestValidator validator= new RequestValidator(request);
+        validator.assertInt("idRis", "IdRis deve essere un intero");
+        return validator;
+    }
 }
 

@@ -26,6 +26,16 @@ public class RequestValidator {
         return errors;
     }
 
+    public String toString() {
+        String s="";
+        for(String err: errors){
+            s=s+err + "\n";
+        }
+
+        return s;
+
+    }
+
     public boolean gatherError(boolean condition, String message){
         if(condition)
             return true;

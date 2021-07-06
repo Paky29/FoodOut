@@ -4,7 +4,7 @@
 <html>
 <head>
     <jsp:include page="../partials/head.jsp">
-        <jsp:param name="title" value="Aggiungi Disponibilita"/>
+        <jsp:param name="title" value="Aggiungi prodotto-menu"/>
     </jsp:include>
 
     <style>

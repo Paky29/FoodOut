@@ -42,6 +42,7 @@ public class prodottoServlet extends controller{
                     ProdottoDAO serviceProd = new ProdottoDAO();
                     req.setAttribute("ristorante", serviceRis.doRetrieveById(codiceRis,true));
                     req.setAttribute("prodotto", serviceProd.doRetrievebyId(codice));
+                    System.out.println(serviceProd.doRetrievebyId(codice).getCodice());
                     req.getRequestDispatcher(view("prodotto/update-prod")).forward(req, resp);
                     break;
                 }

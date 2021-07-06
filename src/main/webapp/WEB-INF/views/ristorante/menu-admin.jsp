@@ -258,7 +258,7 @@
                             <c:forEach items="${ristorante.prodotti}" var="prodotto">
                                 <c:if test="${tipologia.nome.equals(prodotto.tipologia.nome)}">
                                 <c:if test="${prodotto.valido}">
-                                    <label class="field cell w100 prodotto grid-x" onclick="showDetails(this)" title="Clicca per modificare">
+                                    <label class="field cell w100 prodotto grid-x" onclick="showProdDetails(this)" title="Clicca per modificare">
                                     <span class="w80" style="font-weight: bold;">${prodotto.nome}</span>
                                         <c:if test="${not empty prodotto.urlImmagine}">
                                             <img class="w10" src="/FoodOut/covers/${prodotto.urlImmagine}">
@@ -276,8 +276,9 @@
                         <c:if test="${not empty menus}">
                         <h2 class="cell"><a name="Menu"> Menu</a> </h2>
                         <c:forEach items="${menus}" var="menu">
-                            <label class="field cell w100 menu" title="Clicca per modificare">
+                            <label class="field cell w100 menu" onclick="showMenuDetails(this)" title="Clicca per modificare" >
                                 <span style="font-weight: bold"> ${menu.nome} </span>
+                                <input style="display: none" id="id" name="id" value="${menu.codice}"/>
                             </label>
                         </c:forEach>
                         </c:if>
@@ -285,7 +286,7 @@
                             <h2 class="cell"> Prodotti non validi </h2>
                             <c:forEach items="${ristorante.prodotti}" var="prodotto">
                                 <c:if test="${!prodotto.valido}">
-                                    <label class="field cell w100 prodotto grid-x" onclick="showDetails(this)" title="Clicca per modificare">
+                                    <label class="field cell w100 prodotto grid-x" onclick="showProdDetails(this)" title="Clicca per modificare">
                                     <span class="w80" style="font-weight: bold; color:red;">${prodotto.nome}</span>
                                         <c:if test="${not empty prodotto.urlImmagine}">
                                             <img class="w10" src="/FoodOut/covers/${prodotto.urlImmagine}">
