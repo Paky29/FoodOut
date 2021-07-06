@@ -146,7 +146,7 @@ public class MenuDAO {
                         prod+=i+". "+rs.getString("p.nome")+"\n";
                         ++i;
                     }while(rs.next());
-                    throw new InvalidRequestException("Errore modifica", List.of("Impossibile settare il menu valido. Sono presenti prodotti non validi:\n"+prod), HttpServletResponse.SC_FORBIDDEN);
+                    throw new InvalidRequestException("Errore modifica", List.of("Impossibile settare il menu valido. Sono presenti prodotti non validi:\n"+prod), HttpServletResponse.SC_BAD_REQUEST);
                 }
             }
             PreparedStatement ps = conn.prepareStatement("UPDATE Menu SET valido=? WHERE codiceMenu=?");
@@ -172,18 +172,16 @@ public class MenuDAO {
             if(ps.executeUpdate()!=prodotti.size())
                 return false;
             else {
-                System.out.println("sono quiiii4");
                 ps=conn.prepareStatement("SELECT COUNT(*) as prod FROM Menu m INNER JOIN AppartenenzaPM apm ON m.codiceMenu=apm.codMenu_fk INNER JOIN Prodotto p ON apm.codProd_fk=p.codiceProdotto WHERE apm.codMenu_fk=? AND p.valido=false");
                 ps.setInt(1,codiceMenu);
                 ResultSet rs=ps.executeQuery();
                 if(rs.next()){
                     int count=rs.getInt("prod");
                     if(count==0){
-                        System.out.println("sono quiiii");
                         ps = conn.prepareStatement("UPDATE Menu SET valido=true WHERE codiceMenu=?");
                         ps.setInt(1,codiceMenu);
                         if(ps.executeUpdate()!=1)
-                            throw new InvalidRequestException("Internal error",List.of("Menu non e' stato posto a valido"),HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                            throw new InvalidRequestException("Internal error",List.of("Menu non e' stato posto a valido"),HttpServletResponse.SC_BAD_REQUEST);
                     }
                     return true;
                 }

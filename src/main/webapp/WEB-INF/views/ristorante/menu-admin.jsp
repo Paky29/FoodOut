@@ -276,8 +276,8 @@
                         <c:if test="${not empty menus}">
                         <h2 class="cell"><a name="Menu"> Menu</a> </h2>
                         <c:forEach items="${menus}" var="menu">
-                            <label class="field cell w100 menu" onclick="showMenuDetails(this)" title="Clicca per modificare" >
-                                <span style="font-weight: bold"> ${menu.nome} </span>
+                            <label class="field cell w100 menu" style="font-weight: bold" onclick="showMenuDetails(this)" title="Clicca per modificare" >
+                                <span  <c:if test="${!menu.valido}"> style="color:red;"</c:if>> ${menu.nome} </span>
                                 <input style="display: none" id="id" name="id" value="${menu.codice}"/>
                             </label>
                         </c:forEach>
