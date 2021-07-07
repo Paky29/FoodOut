@@ -61,7 +61,7 @@
                     <tbody>
                     <c:forEach items="${ordini}" var="ordine">
                         <tr>
-                            <td data-head="Codice">${ordine.codice}</td>
+                            <td data-head="Codice" id="id">${ordine.codice}</td>
                             <td data-head="Data">${ordine.dataOrdine}</td>
                             <td data-head="Ora Partenza">
                                 <c:choose>
@@ -95,7 +95,7 @@
                                     </c:otherwise>
                                 </c:choose>
                             </td>
-                            <td class="delete" onclick="deleteRid(this)" data-head="Elimina">
+                            <td class="delete" onclick="deleteOrd(this)" data-head="Elimina">
                                 <%@include file="../../../icons/delete.svg" %>
                             </td>
                             <td style="border-bottom: 0" > <a href="/FoodOut/ordine/dettagli?id=${ordine.codice}"> Dettagli ordine </a></td>

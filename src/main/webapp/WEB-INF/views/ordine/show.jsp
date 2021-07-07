@@ -139,11 +139,16 @@
                     <span style="font-weight: bold"> Codice: </span>
                     <input type="text" name="id" id="id" value="${ordine.codice}" readonly>
                 </label>
+                <label for="cliente" class="field cell w80" >
+                    <span style="font-weight: bold"> Cliente: </span>
+                    <span id="cliente"> ${ordine.utente.nome} ${ordine.utente.cognome} </span>
+                </label>
                 <label class="field cell w40 grid-x">
+                    <span style="font-weight: bold" class="field cell w40"> Ristorante:
+                    <a style="font-weight: normal" href="/FoodOut/ristorante/show-info-admin?id=${ordine.ristorante.codice}" id="dettagliRis">  ${ordine.ristorante.nome} </a>
+                    </span>
                     <span style="font-weight: bold" class="field cell w40"> Data: </span>
                     <input type="date" name="data" id="data" value="${ordine.dataOrdine}" readonly>
-                    <span style="font-weight: bold" class="field cell w40"> Ristorante: </span>
-                    <a href="/FoodOut/ristorante/show-info-admin?id=${ordine.ristorante.codice}" id="dettagliRis">  ${ordine.ristorante.nome} </a>
                 </label>
                 <label class="field cell w40 grid-x">
                     <span style="font-weight: bold" class="field cell w40"> Ora partenza: </span>
@@ -200,9 +205,11 @@
                     <span style="font-weight: bold"> Nota:</span>
                     <textarea rows="4" cols="100" type="text" name="nota" id="nota" maxlength="200" readonly>${ordine.nota}</textarea>
                 </label>
-                <span class="grid-x cell justify-center">
-                <button type="submit" class="btn primary"> Modifica </button>
-                </span>
+                <c:if test="${ordine.consegnato==false}">
+                    <span class="grid-x cell justify-center">
+                    <button type="submit" class="btn primary"> Modifica </button>
+                    </span>
+                </c:if>
             </fieldset>
         </form>
     <div class="disponibilita grid-x justify-center align-center cell">

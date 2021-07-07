@@ -611,7 +611,7 @@ public class OrdineDAO {
         }
     }
 
-    public boolean updateRider(int codiceOrdine, int codiceRider) throws SQLException {
+    /*public boolean updateRider(int codiceOrdine, int codiceRider) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("UPDATE Ordine SET codRider_fk=? WHERE codiceOrdine=?");
             ps.setInt(1,codiceRider);
@@ -622,7 +622,7 @@ public class OrdineDAO {
             else
                 return true;
         }
-    }
+    }*/
 
     public boolean doDelete(int codiceOrdine) throws SQLException{
         try(Connection conn=ConPool.getConnection()) {
