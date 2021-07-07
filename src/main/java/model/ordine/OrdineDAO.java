@@ -552,8 +552,14 @@ public class OrdineDAO {
             ps.setDate(1,Date.valueOf(o.getDataOrdine()));
             ps.setFloat(2, o.getTotale());
             ps.setString(3, o.getNota());
-            ps.setTime(4, Time.valueOf(o.getOraPartenza()));
-            ps.setTime(5, Time.valueOf(o.getOraArrivo()));
+            if(o.getOraPartenza()!=null)
+                ps.setTime(4, Time.valueOf(o.getOraPartenza()));
+            else
+                ps.setTime(4, null);
+            if(o.getOraArrivo()!=null)
+                ps.setTime(5, Time.valueOf(o.getOraArrivo()));
+            else
+                ps.setTime(5, null);
             ps.setString(6, o.getMetodoPagamento());
             ps.setBoolean(7, o.isConsegnato());
             ps.setInt(8, o.getUtente().getCodice());

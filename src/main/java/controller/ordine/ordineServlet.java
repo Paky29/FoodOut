@@ -5,8 +5,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import controller.http.CommonValidator;
 import controller.http.InvalidRequestException;
@@ -95,10 +98,44 @@ public class ordineServlet extends controller {
                     break;
                 case "/ordine-pagamento":
                     break;
+                case "/update": {
+                    authorizeUtente(req.getSession());
+                    validate(CommonValidator.validateId(req));
+                    validate(ordineValidator.validateFormAdmin(req));
+                    OrdineDAO service=new OrdineDAO();
+                    int id=Integer.parseInt(req.getParameter("id"));
+                    Ordine o=service.doRetrieveById(id);
+                    if(o==null)
+                        notFound();
+                    else {
+                        if(!o.isConsegnato()) {
+                            String oraPartenza = req.getParameter("oraPartenza");
+                            String oraArrivo = req.getParameter("oraArrivo");
+                            if (!oraPartenza.isBlank())
+                                o.setOraPartenza(LocalTime.parse(oraPartenza));
+                            if (!oraArrivo.isBlank()) {
+                                o.setConsegnato(true);
+                                o.setOraArrivo(LocalTime.parse(oraArrivo));
+                            }
+                        }
+                        if(service.doUpdate(o))
+                            resp.sendRedirect("/FoodOut/ordine/dettagli?id=" + o.getCodice());
+                    }
+                    break;
+                }
                 default:
                     notAllowed();
             }
-        }catch (InvalidRequestException e) {
+        }
+
+        catch (SQLException e) {
+            log(e.getMessage());
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+
+        catch (InvalidRequestException e) {
             log(e.getMessage());
             System.out.println(e.getMessage());
             e.handle(req,resp);

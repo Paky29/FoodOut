@@ -6,10 +6,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Dettagli ordine"/>
         <jsp:param name="styles" value="info_ord_crm"/>
     </jsp:include>
+    <script>
+        $(document).ready(function(){
+            $("#mock-button").click(function (){
+                $("#sliding-table").slideToggle("slow");
+            })
+        })
+
+        function goBack(){
+            window.location.href="/FoodOut/ordine/all";
+        }
+    </script>
 </head>
 <body>
 <style>
@@ -95,19 +107,37 @@
         margin: 0 2px;
     }
 
+    #mock-button{
+        background-color: var(--primary);
+        color: white;
+        font-weight: bold;
+        font-style: normal;
+        font-family:Myriad;
+        padding: 5px;
+        text-align: center;
+    }
+
+    th {
+        background-color: lightcoral;
+    }
+
+    #logo {
+        cursor: pointer;
+    }
+
 
 </style>
 <div class="app">
     <div class="cell grid-x" id="header">
         <nav class="grid-y navbar align-center cell">
-            <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
+            <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo" onclick="goBack()">
         </nav>
         <form class="grid-x justify-center align-center info-ord cell" action="${pageContext.request.contextPath}/ordine/update" method="post">
             <fieldset class="grid-x cell w63 index">
                 <h2 class="cell"> Dettagli </h2>
-                <label for="codice" class="field cell w80" >
+                <label for="id" class="field cell w80" >
                     <span style="font-weight: bold"> Codice: </span>
-                    <input type="text" name="codice" id="codice" value="${ordine.codice}" readonly>
+                    <input type="text" name="id" id="id" value="${ordine.codice}" readonly>
                 </label>
                 <label class="field cell w40 grid-x">
                     <span style="font-weight: bold" class="field cell w40"> Data: </span>
@@ -117,9 +147,23 @@
                 </label>
                 <label class="field cell w40 grid-x">
                     <span style="font-weight: bold" class="field cell w40"> Ora partenza: </span>
-                    <input type="time" name="oraPartenza" id="oraPartenza" value="${ordine.oraPartenza}">
+                    <c:choose>
+                        <c:when test="${empty ordine.oraPartenza}">
+                            <input type="time" name="oraPartenza" id="oraPartenza" value="${ordine.oraPartenza}">
+                        </c:when>
+                        <c:otherwise>
+                            <input type="time" name="oraPartenza" id="oraPartenza" value="${ordine.oraPartenza}" readonly>
+                        </c:otherwise>
+                    </c:choose>
                     <span style="font-weight: bold" class="field cell w40"> Ora arrivo: </span>
-                    <input type="time" name="oraArrivo" id="oraArrivo" value="${ordine.oraArrivo}">
+                    <c:choose>
+                        <c:when test="${empty ordine.oraArrivo}">
+                            <input type="time" name="oraArrivo" id="oraArrivo" value="${ordine.oraArrivo}">
+                        </c:when>
+                        <c:otherwise>
+                            <input type="time" name="oraArrivo" id="oraArrivo" value="${ordine.oraArrivo}" readonly>
+                        </c:otherwise>
+                    </c:choose>
                 </label>
                 <label class="field cell w80 grid-x">
                     <span style="font-weight: bold" class="field cell w25"> Totale: </span>
@@ -163,7 +207,11 @@
         </form>
     <div class="disponibilita grid-x justify-center align-center cell">
         <section class="grid-y cell w63">
-            <table class="table">
+            <div class="cell justify-center" id="mock-button">
+                Elenco prodotti
+            </div>
+            <div class="grid-x cell " id="sliding-table">
+            <table class="table cell ">
                 <thead>
                     <tr>
                         <th> Prodotto</th>
@@ -173,11 +221,11 @@
                 </thead>
                 <tbody>
                     <c:forEach items="${ordine.ordineItems}" var="item">
-                        <tr>
+                        <tr class="w100">
                             <td data-head="Prodotto">
                                 ${item.off.nome}
                             </td>
-                            <td data-head="Prezzo">
+                            <td data-head="Prezzo" >
                                 ${item.off.prezzo}
                             </td>
                             <td data-head="Quantità">
@@ -187,6 +235,7 @@
                     </c:forEach>
                 </tbody>
             </table>
+            </div>
         </section>
     </div>
     </div>
