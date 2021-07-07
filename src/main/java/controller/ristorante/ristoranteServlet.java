@@ -56,10 +56,26 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     req.getRequestDispatcher(view("ristorante/show-all")).forward(req, resp);
                     break;
                 }
-                case "/zona"://controllare se i parametri sono null per capire se è per l'admin o un utente
+                case "/zona": {//controllare se i parametri sono null per capire se è per l'admin o un utente
                     //req.getRequestDispatcher(view("ristorante/zona")).forward(req,resp);
-                    req.getRequestDispatcher("/index.jsp").forward(req, resp);
+                    RistoranteDAO serviceRis= new RistoranteDAO();
+                    TipologiaDAO serviceTip=new TipologiaDAO();
+                    String citta;
+                    if(req.getParameter("page")!=null) {
+                        validate(CommonValidator.validatePage(req));
+                    }
+                    int intPage=parsePage(req);
+                    Paginator paginator=new Paginator(intPage,6);
+                    int size=serviceRis.countCitta("Milano");
+                    req.setAttribute("pages",paginator.getPages(size));
+
+                    ArrayList<Ristorante> ristoranti=serviceRis.doRetrieveByCitta("Milano", paginator, false);
+                    ArrayList<Tipologia> tipologie=serviceTip.doRetriveByCitta("Milano");
+                    req.setAttribute("ristoranti", ristoranti);
+                    req.setAttribute("tipologie", tipologie);
+                    req.getRequestDispatcher(view("ristorante/show-zona")).forward(req, resp);
                     break;
+                }
                 case "/show-menu"://possibilità di aggiungere al carrello i prodotti
                     break;
                 case "/show-info":// mostrare info statiche

@@ -261,7 +261,7 @@ public class RistoranteDAO {
                 sj.add(Integer.toString(key));
             }
 
-            PreparedStatement disp=conn.prepareStatement("SELECT d,codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN "+sj.toString());
+            PreparedStatement disp=conn.prepareStatement("SELECT d.codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN "+sj.toString());
             ResultSet setDisp=disp.executeQuery();
 
             while(setDisp.next()){
