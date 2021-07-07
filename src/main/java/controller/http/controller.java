@@ -1,6 +1,5 @@
 package controller.http;
 
-import model.utility.RiderSession;
 import model.utility.UtenteSession;
 
 import javax.servlet.http.HttpServlet;
@@ -41,7 +40,7 @@ public class controller extends HttpServlet implements ErrorHandler {
         return (UtenteSession) session.getAttribute("utenteSession");
     }
 
-    protected RiderSession getRiderSession(HttpSession session){
+    /*protected RiderSession getRiderSession(HttpSession session){
         return (RiderSession) session.getAttribute("riderSession");
-    }
+    }*/
 }

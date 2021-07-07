@@ -1,6 +1,5 @@
 package controller.http;
 
-import model.utility.RiderSession;
 import model.utility.UtenteSession;
 
 import javax.servlet.http.HttpServletResponse;
