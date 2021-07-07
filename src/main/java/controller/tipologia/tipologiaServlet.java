@@ -77,6 +77,8 @@ public class tipologiaServlet extends controller {
                     req.getRequestDispatcher(view("tipologia/show-all")).forward(req, resp);
                     break;
                 }
+                default:
+                    notFound();
             }
         } catch (SQLException e) {
             log(e.getMessage());
@@ -134,9 +136,9 @@ public class tipologiaServlet extends controller {
                     }
                     break;
                 }
-
+                default:
+                    notAllowed();
             }
-
         } catch (SQLException e) {
             log(e.getMessage());
             e.printStackTrace();

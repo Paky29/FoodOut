@@ -1,14 +1,11 @@
 package model.ordine;
 
-import model.rider.Rider;
 import model.ristorante.Ristorante;
 import model.utente.Utente;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.sql.Date;
 
 public class Ordine {
 
@@ -94,13 +91,13 @@ public class Ordine {
         this.oraArrivo = oraArrivo;
     }
 
-    public Rider getRider() {
+   /* public Rider getRider() {
         return rider;
     }
 
     public void setRider(Rider rider) {
         this.rider = rider;
-    }
+    }*/
 
     public boolean isConsegnato() {
         return consegnato;
@@ -145,7 +142,7 @@ public class Ordine {
     private float totale;
     private String nota,metodoPagamento,giudizio;
     private LocalTime oraPartenza, oraArrivo;
-    private Rider rider;
+    //private Rider rider;
     private Utente utente;
     private boolean consegnato;
     private ArrayList<OrdineItem> ordineItems;

@@ -57,7 +57,8 @@ public class menuServlet extends controller{
                     break;
                 case "/edit-prodotti"://mostra select di prodotti da aggiungere e da togliere
                     break;
-
+                default:
+                    notFound();
             }
         }
         catch (SQLException e) {
@@ -110,12 +111,8 @@ public class menuServlet extends controller{
                 }
                 case "/update": {
                     authorizeUtente(req.getSession());
-                    System.out.println(req.getParameter("id"));
-                    System.out.println(CommonValidator.validateId(req).toString());
                     validate(CommonValidator.validateId(req));
-                    System.out.println(menuValidator.validateIdRis(req).toString());
                     validate(menuValidator.validateIdRis(req));
-                    System.out.println(menuValidator.validateForm(req).toString());
                     validate(menuValidator.validateForm(req));
                     int id = Integer.parseInt(req.getParameter("id"));
                     int idRis = Integer.parseInt(req.getParameter("idRis"));
@@ -174,7 +171,8 @@ public class menuServlet extends controller{
                     }
                     break;
                 }
-
+                default:
+                    notAllowed();
             }
         }catch (SQLException e) {
             log(e.getMessage());

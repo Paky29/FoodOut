@@ -39,8 +39,6 @@ public class ristoranteServlet extends controller implements ErrorHandler {
         System.out.println((path));
         try {
             switch (path) {
-                case "/":
-                    break;
                 case "/all": {
                     authorizeUtente(req.getSession());
                     RistoranteDAO service=new RistoranteDAO();
@@ -59,7 +57,6 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     break;
                 }
                 case "/zona"://controllare se i parametri sono null per capire se è per l'admin o un utente
-                    System.out.println("sono qui");
                     //req.getRequestDispatcher(view("ristorante/zona")).forward(req,resp);
                     req.getRequestDispatcher("/index.jsp").forward(req, resp);
                     break;
@@ -158,7 +155,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     break;
                 }
                 default:
-                    resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Risorsa non trovata");
+                    notFound();
             }
         }
         catch (SQLException e) {
@@ -179,8 +176,6 @@ public class ristoranteServlet extends controller implements ErrorHandler {
         String path = getPath(req);
         try {
             switch (path) {
-                case "/":
-                    break;
                 case "/add-pref":
                     break;
                 case "/update": {
@@ -294,7 +289,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     break;
                 }
                 default:
-                    resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, "Operazione non consentita");
+                    notAllowed();
             }
         }catch (SQLException e) {
             log(e.getMessage());

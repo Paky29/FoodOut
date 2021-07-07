@@ -2,7 +2,6 @@ package controller.utente;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -12,12 +11,9 @@ import java.util.List;
 
 import controller.http.InvalidRequestException;
 import controller.http.controller;
-import model.rider.Rider;
-import model.rider.RiderDAO;;
+;
 import model.utente.Utente;
 import model.utente.UtenteDAO;
-import model.utility.Alert;
-import model.utility.RiderSession;
 import model.utility.UtenteSession;
 
 @WebServlet(name = "utenteServlet", value = "/utente/*")
@@ -27,8 +23,6 @@ public class utenteServlet extends controller {
         String path = getPath(req);
         try {
             switch (path) {
-                case "/":
-                    break;
                 case "/signup":
                     req.getRequestDispatcher(view("site/signup")).forward(req, resp);
                     break;
@@ -123,7 +117,7 @@ public class utenteServlet extends controller {
                     validate(utenteValidator.validateLogin(req));
                     String email = req.getParameter("email");
                     String pw = req.getParameter("pw");
-                    if (email.contains("@foodout.rider.com")) {
+                    /*if (email.contains("@foodout.rider.com")) {
                         RiderDAO service = new RiderDAO();
                         Rider rd = service.doRetrievebyEmailAndPassword(email, pw);
                         if (rd == null)
@@ -136,14 +130,12 @@ public class utenteServlet extends controller {
                             }
                             resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare in /rider/profile
                         }
-                    } else {
+                    } else {*/
                         UtenteDAO service = new UtenteDAO();
                         Utente u = service.doRetrieveByEmailAndPassword(email, pw);
                         if (u == null) {
-                            System.out.println("Credenziali non valide");
                             notFound();
                         }
-                        //pagina di errore
                         else {
                             UtenteSession utenteSession = new UtenteSession(u);
                             HttpSession session = req.getSession();
@@ -156,7 +148,7 @@ public class utenteServlet extends controller {
                             else
                                 resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
                         }
-                    }
+                    //}
                     break;
                 }
                 case "/update": {
@@ -195,7 +187,7 @@ public class utenteServlet extends controller {
                     UtenteDAO service = new UtenteDAO();
                     Utente u = service.doRetrieveByEmailAndPassword(email, old_pw);
                     if (u == null)
-                        notFound();// da cambiare
+                        notFound();
 
                     if (!new_pw.equals(conf_pw))
                         throw new InvalidRequestException("error", List.of("error"), 404); // da cambiare

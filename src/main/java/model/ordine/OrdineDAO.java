@@ -4,8 +4,6 @@ import model.menu.Menu;
 import model.menu.MenuExtractor;
 import model.prodotto.Prodotto;
 import model.prodotto.ProdottoExtractor;
-import model.rider.Rider;
-import model.rider.RiderExtractor;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
 import model.ristorante.RistoranteExtractor;
@@ -23,14 +21,14 @@ public class OrdineDAO {
 
     public Ordine doRetrieveById(int codiceOrdine) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, rd.codiceRider, rd.email, rd.citta, rd.veicolo, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.valido,r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o LEFT JOIN Rider rd ON o.codRider_fk= rd.codiceRider INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE o.codiceOrdine=?");
+            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.valido,r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE o.codiceOrdine=?"); //LEFT JOIN Rider rd ON o.codRider_fk= rd.codiceRider
             ps.setInt(1, codiceOrdine);
             ResultSet rs = ps.executeQuery();
             Ordine o = null;
             if (rs.next()) {
                 o = OrdineExtractor.extract(rs);
-                Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);
+                /*Rider rd = RiderExtractor.extract(rs);
+                o.setRider(rd);*/
                 Utente u = UtenteExtractor.extract(rs);
                 o.setUtente(u);
                 Ristorante r = RistoranteExtractor.extract(rs);
@@ -63,7 +61,7 @@ public class OrdineDAO {
 
     public ArrayList<Ordine> doRetrieveAll(Paginator paginator) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, rd.codiceRider, rd.email, rd.citta, rd.veicolo, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ordine o LEFT JOIN Rider rd ON o.codRider_fk= rd.codiceRider INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante  LIMIT ?,?");
+            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante  LIMIT ?,?");
             ps.setInt(1, paginator.getOffset());
             ps.setInt(2, paginator.getLimit());
             ResultSet rs = ps.executeQuery();
@@ -75,8 +73,8 @@ public class OrdineDAO {
                 o.setUtente(u);
                 Ristorante r = RistoranteExtractor.extract(rs);
                 o.setRistorante(r);
-                Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);
+                /*Rider rd = RiderExtractor.extract(rs);
+                o.setRider(rd);*/
                 ordini.put(codiceOrdine, o);
             }
 
@@ -107,7 +105,7 @@ public class OrdineDAO {
 
     public ArrayList<Ordine> doRetrieveByUtente(Utente u) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, rd.codiceRider, rd.email, rd.citta, rd.veicolo, r.codiceRistorante, r.nome, r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o LEFT JOIN Rider rd On o.codRider_fk=rd.codiceRider INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE o.codUtente_fk=?");
+            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, r.codiceRistorante, r.nome, r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE o.codUtente_fk=?");
             ps.setInt(1, u.getCodice());
             ResultSet rs = ps.executeQuery();
             Map<Integer, Ordine> ordini = new LinkedHashMap<>();
@@ -118,8 +116,8 @@ public class OrdineDAO {
                     o.setUtente(u);
                     Ristorante r = RistoranteExtractor.extract(rs);
                     o.setRistorante(r);
-                    Rider rd = RiderExtractor.extract(rs);
-                    o.setRider(rd);
+                    /*Rider rd = RiderExtractor.extract(rs);
+                    o.setRider(rd);*/
                     ordini.put(codiceOrdine, o);
                 }
                 Tipologia t = new Tipologia();
@@ -155,7 +153,7 @@ public class OrdineDAO {
 
     public ArrayList<Ordine> doRetrieveByUtentePaginated(Utente u, Paginator paginator) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, rd.codiceRider, rd.email, rd.citta, rd.veicolo, r.codiceRistorante, r.nome, r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ordine o LEFT JOIN Rider rd On o.codRider_fk=rd.codiceRider INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante WHERE o.codUtente_fk=? LIMIT ?,?");
+            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, r.codiceRistorante, r.nome, r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ordine o INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante WHERE o.codUtente_fk=? LIMIT ?,?");
             ps.setInt(1, u.getCodice());
             ps.setInt(2, paginator.getOffset());
             ps.setInt(3, paginator.getLimit());
@@ -167,8 +165,8 @@ public class OrdineDAO {
                 o.setUtente(u);
                 Ristorante r = RistoranteExtractor.extract(rs);
                 o.setRistorante(r);
-                Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);
+                /*Rider rd = RiderExtractor.extract(rs);
+                o.setRider(rd);*/
                 ordini.put(codiceOrdine, o);
             }
 
@@ -199,7 +197,7 @@ public class OrdineDAO {
 
     public ArrayList<Ordine> doRetrieveByRistorante(Ristorante r, Paginator paginator) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, rd.codiceRider, rd.email, rd.citta, rd.veicolo, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore FROM Ordine o LEFT JOIN Rider rd On o.codRider_fk=rd.codiceRider INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente WHERE o.codRis_fk=? LIMIT ?,?");
+            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente WHERE o.codRis_fk=? LIMIT ?,?");
             ps.setInt(1, r.getCodice());
             ps.setInt(2, paginator.getOffset());
             ps.setInt(3, paginator.getLimit());
@@ -210,8 +208,8 @@ public class OrdineDAO {
                 o.setRistorante(r);
                 Utente u = UtenteExtractor.extract(rs);
                 o.setUtente(u);
-                Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);
+                /*Rider rd = RiderExtractor.extract(rs);
+                o.setRider(rd);*/
                 ordini.add(o);
             }
 
@@ -253,7 +251,7 @@ public class OrdineDAO {
         }
     }
 
-    public ArrayList<Ordine> doRetrieveByRider(Rider rd) throws SQLException {
+    /*public ArrayList<Ordine> doRetrieveByRider(Rider rd) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente LEFT JOIN Rider rd On o.codRider_fk=rd.codiceRider INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE o.codRider_fk=?");
             ps.setInt(1, rd.getCodice());
@@ -345,10 +343,10 @@ public class OrdineDAO {
             return new ArrayList<>(ordini.values());
         }
     }
-
+*/
     public ArrayList<Ordine> doRetrieveByCittaPaginated(String citta, boolean consegnato, Paginator paginator) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, rd.codiceRider, rd.email, rd.citta, rd.veicolo, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ordine o LEFT JOIN Rider rd ON o.codRider_fk= rd.codiceRider INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante WHERE r.citta=? AND o.consegnato=? LIMIT ?,?  ");
+            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante WHERE r.citta=? AND o.consegnato=? LIMIT ?,?  ");
             ps.setString(1, citta);
             ps.setBoolean(2, consegnato);
             ps.setInt(3, paginator.getOffset());
@@ -362,8 +360,8 @@ public class OrdineDAO {
                 o.setUtente(u);
                 Ristorante r = RistoranteExtractor.extract(rs);
                 o.setRistorante(r);
-                Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);
+                /*Rider rd = RiderExtractor.extract(rs);
+                o.setRider(rd);*/
                 ordini.put(codiceOrdine, o);
             }
 
@@ -410,7 +408,7 @@ public class OrdineDAO {
                     sign = "=";
             }
 
-            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, rd.codiceRider, rd.email, rd.citta, rd.veicolo, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.valido, r.provincia,r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ordine o LEFT JOIN Rider rd ON o.codRider_fk= rd.codiceRider INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante WHERE o.dataOrdine" + sign + "? LIMIT ?,?  ");
+            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.valido, r.provincia,r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante WHERE o.dataOrdine" + sign + "? LIMIT ?,?  ");
             ps.setDate(1, Date.valueOf(ld));
             ps.setInt(2, paginator.getOffset());
             ps.setInt(3, paginator.getLimit());
@@ -423,8 +421,8 @@ public class OrdineDAO {
                 o.setUtente(u);
                 Ristorante r = RistoranteExtractor.extract(rs);
                 o.setRistorante(r);
-                Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);
+                /*Rider rd = RiderExtractor.extract(rs);
+                o.setRider(rd);*/
                 ordini.put(codiceOrdine, o);
             }
 
@@ -456,7 +454,7 @@ public class OrdineDAO {
     public ArrayList<Ordine> doRetrieveBetweenData(LocalDate ldInizio, LocalDate ldFine, Paginator paginator) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
 
-            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, rd.codiceRider, rd.email, rd.citta, rd.veicolo, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome,  r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ordine o LEFT JOIN Rider rd ON o.codRider_fk= rd.codiceRider INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante WHERE o.dataOrdine>=? AND o.dataOrdine<=? LIMIT ?,?  ");
+            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome,  r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante WHERE o.dataOrdine>=? AND o.dataOrdine<=? LIMIT ?,?  ");
             ps.setDate(1, Date.valueOf(ldInizio));
             ps.setDate(2, Date.valueOf(ldFine));
             ps.setInt(3, paginator.getOffset());
@@ -470,8 +468,8 @@ public class OrdineDAO {
                 o.setUtente(u);
                 Ristorante r = RistoranteExtractor.extract(rs);
                 o.setRistorante(r);
-                Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);
+                /*Rider rd = RiderExtractor.extract(rs);
+                o.setRider(rd);*/
                 ordini.put(codiceOrdine, o);
             }
 
@@ -727,7 +725,7 @@ public class OrdineDAO {
         }
     }
 
-    public int countRider(Rider rd) throws SQLException {
+    /*public int countRider(Rider rd) throws SQLException {
         try(Connection conn=ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT count(*) as numOrdini FROM Ordine o WHERE o.codRider_fk=?");
             ps.setInt(1, rd.getCodice());
@@ -738,7 +736,7 @@ public class OrdineDAO {
             else
                 return 0;
         }
-    }
+    }*/
 
     public int countBeetwenData(LocalDate ldInizio, LocalDate ldFine) throws SQLException {
         try(Connection conn=ConPool.getConnection()) {
