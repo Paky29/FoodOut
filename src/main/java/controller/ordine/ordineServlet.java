@@ -25,7 +25,7 @@ public class ordineServlet extends controller {
         String path=getPath(req);
         try {
             switch (path) {
-                case "/ordini-utente":
+                case "/utente":
                     break;
                 case "/dettagli": {
                     authorizeUtente(req.getSession());
@@ -41,9 +41,9 @@ public class ordineServlet extends controller {
                     }
                     break;
                 }
-                case "/ordini-rider"://passare come parametro lo stato della consegna
-                    break;
-                case "/ordini-ristorante":
+                /*case "/rider"://passare come parametro lo stato della consegna
+                    break;*/
+                case "/ristorante":
                     break;
                 case "/all": {//possibile inviare date come parametri per filtrare gli ordini
                     authorizeUtente(req.getSession());
@@ -69,16 +69,29 @@ public class ordineServlet extends controller {
                     req.getRequestDispatcher(view("ordine/show-all")).forward(req, resp);
                     break;
                 }
-                case "/ordine-pagamento":
+                case "/pagamento":
                     break;
-                case "/ordine-recensione":
+                case "/recensione":
                     break;
+                case "/delete":{
+                    authorizeUtente(req.getSession());
+                    validate(CommonValidator.validateId(req));
+                    int codice=Integer.parseInt(req.getParameter("id"));
+                    OrdineDAO serviceOrd=new OrdineDAO();
+                    if(serviceOrd.doRetrieveById(codice)==null)
+                        notFound();
+                    if(serviceOrd.doDelete(codice)){
+                        resp.sendRedirect("/FoodOut/ordine/all");
+                    }
+                    else
+                        InternalError();
+                    break;
+                }
                 default:
                     notFound();
             }
         }catch (SQLException e) {
             log(e.getMessage());
-            System.out.println(e.getMessage());
             e.printStackTrace();
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -132,7 +145,6 @@ public class ordineServlet extends controller {
 
         catch (SQLException e) {
             log(e.getMessage());
-            System.out.println(e.getMessage());
             e.printStackTrace();
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
