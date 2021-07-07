@@ -91,6 +91,7 @@ public class prodottoServlet extends controller{
                 Tipologia t = serviceTip.doRetrieveByNome(req.getParameter("tipologia"));
                 if(t==null)
                     notFound();
+                pr.setTipologia(t);
                 pr.setInfo(req.getParameter("info"));
                 pr.setIngredienti(req.getParameter("ingredienti"));
                 pr.setValido(true);
