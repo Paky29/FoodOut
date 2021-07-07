@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import controller.http.CommonValidator;
 import controller.http.InvalidRequestException;
 import controller.http.controller;
 ;
@@ -32,7 +33,9 @@ public class utenteServlet extends controller {
                 case "/logout":
                     HttpSession session = req.getSession(false);
                     authenticateUtente(session);
-                    session.invalidate();
+                    synchronized (session) {
+                        session.invalidate();
+                    }
                     resp.sendRedirect("/FoodOut/index.jsp");
                     break;
                 case "/update-pw":
@@ -44,7 +47,12 @@ public class utenteServlet extends controller {
                     UtenteSession us = (UtenteSession) ssn.getAttribute("utenteSession");
                     UtenteDAO service = new UtenteDAO();
                     Utente u = service.doRetrieveById(us.getId());
-                    ssn.setAttribute("profilo", u);
+                    if(u==null) {
+                        InternalError();
+                    }
+                    synchronized (ssn) {
+                        ssn.setAttribute("profilo", u);
+                    }
                     req.getRequestDispatcher(view("crm/show")).forward(req, resp);
                     break;
                 }
@@ -58,7 +66,9 @@ public class utenteServlet extends controller {
                     UtenteSession us= (UtenteSession) ssn.getAttribute("utenteSession");
                     UtenteDAO service=new UtenteDAO();
                     if(service.doDelete(us.getId())) {
-                        ssn.invalidate();
+                        synchronized (ssn) {
+                            ssn.invalidate();
+                        }
                         resp.sendRedirect("/FoodOut/index.jsp");
                     }
                     else
@@ -70,6 +80,7 @@ public class utenteServlet extends controller {
             }
         } catch (SQLException e) {
             log(e.getMessage());
+            e.printStackTrace();
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (InvalidRequestException e) {
             log(e.getMessage());
@@ -138,9 +149,9 @@ public class utenteServlet extends controller {
                         }
                         else {
                             UtenteSession utenteSession = new UtenteSession(u);
+                            System.out.println(utenteSession.getId());
                             HttpSession session = req.getSession();
                             synchronized (session) {
-                                System.out.println(utenteSession.getNome());
                                 session.setAttribute("utenteSession", utenteSession);
                             }
                             if (email.contains("@foodout.com"))
@@ -155,8 +166,13 @@ public class utenteServlet extends controller {
                     HttpSession session = req.getSession();
                     authenticateUtente(session);
                     validate(utenteValidator.validateUpdate(req));
+                    validate(CommonValidator.validateId(req));
+                    int codice=Integer.parseInt(req.getParameter("id"));
+                    UtenteDAO serviceUtente=new UtenteDAO();
+                    if(serviceUtente.doRetrieveById(codice)==null)
+                        notFound();
                     Utente u = new Utente();
-                    u.setCodice(Integer.parseInt(req.getParameter("id")));
+                    u.setCodice(codice);
                     u.setNome(req.getParameter("nome"));
                     u.setCognome(req.getParameter("cognome"));
                     u.setEmail(req.getParameter("email"));
@@ -190,7 +206,7 @@ public class utenteServlet extends controller {
                         notFound();
 
                     if (!new_pw.equals(conf_pw))
-                        throw new InvalidRequestException("error", List.of("error"), 404); // da cambiare
+                        throw new InvalidRequestException("error", List.of("La nuova password non combacia con la password di conferma"), 404); // da cambiare
 
                     u.setPassword(new_pw);
                     service.doUpdatePw(u);

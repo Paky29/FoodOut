@@ -10,6 +10,7 @@ import model.prodotto.ProdottoDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
 import model.tipologia.Tipologia;
+import model.tipologia.TipologiaDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -40,12 +41,19 @@ public class prodottoServlet extends controller{
                     int codiceRis = Integer.parseInt(req.getParameter("idRis"));
                     RistoranteDAO serviceRis = new RistoranteDAO();
                     ProdottoDAO serviceProd = new ProdottoDAO();
-                    req.setAttribute("ristorante", serviceRis.doRetrieveById(codiceRis,true));
-                    req.setAttribute("prodotto", serviceProd.doRetrievebyId(codice));
-                    req.getRequestDispatcher(view("prodotto/update-prod")).forward(req, resp);
+                    Prodotto p=serviceProd.doRetrievebyId(codice);
+                    Ristorante r=serviceRis.doRetrieveById(codiceRis,true);
+                    if(p!=null && r!=null) {
+                        req.setAttribute("ristorante", r);
+                        req.setAttribute("prodotto", p);
+                        req.getRequestDispatcher(view("prodotto/update-prod")).forward(req, resp);
+                    }
+                    else
+                        notFound();
                     break;
                 }
-                default:notFound();
+                default:
+                    notFound();
             }
         }
         catch (SQLException e) {
@@ -79,9 +87,10 @@ public class prodottoServlet extends controller{
                 pr.setNome(req.getParameter("nome"));
                 pr.setPrezzo(Float.parseFloat(req.getParameter("prezzo")));
                 pr.setSconto(Integer.parseInt(req.getParameter("sconto")));
-                Tipologia t = new Tipologia();
-                t.setNome(req.getParameter("tipologia"));
-                pr.setTipologia(t);
+                TipologiaDAO serviceTip=new TipologiaDAO();
+                Tipologia t = serviceTip.doRetrieveByNome(req.getParameter("tipologia"));
+                if(t==null)
+                    notFound();
                 pr.setInfo(req.getParameter("info"));
                 pr.setIngredienti(req.getParameter("ingredienti"));
                 pr.setValido(true);
@@ -131,8 +140,10 @@ public class prodottoServlet extends controller{
                     pr.setNome(req.getParameter("nome"));
                     pr.setPrezzo(Float.parseFloat(req.getParameter("prezzo")));
                     pr.setSconto(Integer.parseInt(req.getParameter("sconto")));
-                    Tipologia t = new Tipologia();
-                    t.setNome(req.getParameter("tipologia"));
+                    TipologiaDAO serviceTip=new TipologiaDAO();
+                    Tipologia t = serviceTip.doRetrieveByNome(req.getParameter("tipologia"));
+                    if(t==null)
+                        notFound();
                     pr.setTipologia(t);
                     pr.setInfo(req.getParameter("info"));
                     pr.setIngredienti(req.getParameter("ingredienti"));

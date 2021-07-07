@@ -86,13 +86,15 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     authorizeUtente(req.getSession());
                     validate(CommonValidator.validateId(req));
                     validate(CommonValidator.validateFunctionValue(req));
-                    TipologiaDAO serviceTip=new TipologiaDAO();
-                    ArrayList<Tipologia> tipologie=serviceTip.doRetrieveAll();
-                    req.setAttribute("tipologie",tipologie);
                     int codiceRis=Integer.parseInt(req.getParameter("id"));
                     int function = Integer.parseInt(req.getParameter("function"));
                     RistoranteDAO serviceRis=new RistoranteDAO();
                     Ristorante r=serviceRis.doRetrieveById(codiceRis,true);
+                    if(r==null)
+                        notFound();
+                    TipologiaDAO serviceTip=new TipologiaDAO();
+                    ArrayList<Tipologia> tipologie=serviceTip.doRetrieveAll();
+                    req.setAttribute("tipologie",tipologie);
                     ProdottoDAO serviceProd=new ProdottoDAO();
                     r.setProdotti(serviceProd.doRetrieveByRistorante(codiceRis));
                     req.setAttribute("ristorante",r);
@@ -183,8 +185,12 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     authorizeUtente(session);
                     validate(CommonValidator.validateId(req));
                     validate(ristoranteValidator.validateForm(req));
+                    int codRis=Integer.parseInt(req.getParameter("id"));
+                    RistoranteDAO service = new RistoranteDAO();
+                    if(service.doRetrieveById(codRis,true)==null)
+                        notFound();
                     Ristorante r = new Ristorante();
-                    r.setCodice(Integer.parseInt(req.getParameter("id")));
+                    r.setCodice(codRis);
                     r.setNome(req.getParameter("nome"));
                     r.setProvincia(req.getParameter("provincia"));
                     r.setCitta(req.getParameter("citta"));
@@ -196,7 +202,6 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     r.setRating(Integer.parseInt(req.getParameter("rating")));
                     Part filePart = req.getPart("urlImmagine");
                     String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                    RistoranteDAO service = new RistoranteDAO();
                     if (!fileName.isBlank()) {
                         r.setUrlImmagine(fileName);
                         if (service.doUpdateWithUrl(r)) {
@@ -264,9 +269,12 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     HttpSession session=req.getSession();
                     authorizeUtente(session);
                     validate(disponibilitaValidator.validateForm(req));
-                    DisponibilitaDAO service=new DisponibilitaDAO();
                     validate(CommonValidator.validateId(req));
                     int codice=Integer.parseInt(req.getParameter("id"));
+                    RistoranteDAO serviceRis=new RistoranteDAO();
+                    if(serviceRis.doRetrieveById(codice,true)==null)
+                        notFound();
+                    DisponibilitaDAO serviceTip=new DisponibilitaDAO();
                     for(int i=0;i<Disponibilita.giorni.length;++i){
                         Disponibilita d=new Disponibilita();
                         d.setGiorno(Disponibilita.giorni[i]);
@@ -278,7 +286,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                             d.setOraApertura(LocalTime.of(0,0));
                             d.setOraChiusura(LocalTime.of(0,0));
                         }
-                        service.doUpdate(d,codice);
+                        serviceTip.doUpdate(d,codice);
                     }
 
                     if(req.getParameter("button").equals("add")) {
