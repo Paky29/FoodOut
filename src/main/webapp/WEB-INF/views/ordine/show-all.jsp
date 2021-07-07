@@ -86,14 +86,19 @@
                             <td data-head="Totale">${ordine.totale}</td>
                             <td data-head="Metodo pagamento">${ordine.metodoPagamento}</td>
                             <td data-head="Consegnato">
-                                <c:if test="${ordine.consegnato}">
-                                    <%@include file="../../../icons/valid.svg" %>
-                                </c:if>
+                                <c:choose>
+                                    <c:when test="${ordine.consegnato}">
+                                        <%@include file="../../../icons/valid.svg" %>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <%@include file="../../../icons/wait.svg" %>
+                                    </c:otherwise>
+                                </c:choose>
                             </td>
                             <td class="delete" onclick="deleteRid(this)" data-head="Elimina">
                                 <%@include file="../../../icons/delete.svg" %>
                             </td>
-                            <td style="border-bottom: 0" > <a href="/FoodOut/ordine/show?id=${ordine.codice}" target="_blank"> Vai al profilo </a></td>
+                            <td style="border-bottom: 0" > <a href="/FoodOut/ordine/dettagli?id=${ordine.codice}"> Dettagli ordine </a></td>
                             <td class="blank" value="${ordine.codice}"></td>
                         </tr>
                     </c:forEach>

@@ -2,6 +2,7 @@ package controller.ordine;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -13,19 +14,33 @@ import controller.http.InvalidRequestException;
 import controller.http.controller;
 import model.ordine.Ordine;
 import model.ordine.OrdineDAO;
+import model.ordine.OrdineItem;
 import model.utility.Paginator;
 
 @WebServlet(name="ordineServlet", value="/ordine/*")
 public class ordineServlet extends controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path=getPath(req);
+        String path = getPath(req);
         try {
             switch (path) {
                 case "/ordini-utente":
                     break;
-                case "ordine-dettagli":
+                case "/dettagli": {
+                    authorizeUtente(req.getSession());
+                    OrdineDAO service = new OrdineDAO();
+                    validate(CommonValidator.validateId(req));
+                    int id = Integer.parseInt(req.getParameter("id"));
+                    Ordine o = service.doRetrieveById(id);
+                    if (o == null)
+                        notFound();
+                    else {
+                        req.setAttribute("ordine", o);
+                        req.getRequestDispatcher(view("ordine/show")).forward(req, resp);
+                        System.out.println("mandata alla jsp");
+                    }
                     break;
+                }
                 case "/ordini-rider"://passare come parametro lo stato della consegna
                     break;
                 case "/ordini-ristorante":
@@ -38,13 +53,13 @@ public class ordineServlet extends controller {
                     }
                     int intPage = parsePage(req);
                     int totOrd = service.countAll();
-                    int incasso=0;
+                    int incasso = 0;
                     Paginator paginator = new Paginator(intPage, 6);
                     int size = service.countAll();
                     req.setAttribute("pages", paginator.getPages(size));
                     ArrayList<Ordine> ordini = service.doRetrieveAll(paginator);
-                    for(Ordine o: ordini)
-                        incasso+=o.getTotale();
+                    for (Ordine o : ordini)
+                        incasso += o.getTotale();
 
                     req.setAttribute("ordini", ordini);
                     req.setAttribute("totOrd", totOrd);
@@ -59,24 +74,25 @@ public class ordineServlet extends controller {
                 default:
                     notFound();
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             log(e.getMessage());
             System.out.println(e.getMessage());
             e.printStackTrace();
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-        }
-        catch (InvalidRequestException e) {
+        } catch (InvalidRequestException e) {
             log(e.getMessage());
             System.out.println(e.getMessage());
-            e.handle(req,resp);
+            e.handle(req, resp);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String path=getPath(req);
+        String path = getPath(req);
         try {
             switch (path) {
+                case "/":
+                    break;
                 case "/ordine-recensione-utente":
                     break;
                 case "/ordine-update-rider":
@@ -86,10 +102,11 @@ public class ordineServlet extends controller {
                 default:
                     notAllowed();
             }
-        }catch (InvalidRequestException e) {
+
+        } catch (InvalidRequestException e) {
             log(e.getMessage());
             System.out.println(e.getMessage());
-            e.handle(req,resp);
+            e.handle(req, resp);
         }
     }
 }
