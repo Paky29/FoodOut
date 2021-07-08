@@ -57,7 +57,7 @@
                             <c:when test="${not empty ristoranti}">
                                     <h2 class="cell"> Ristoranti </h2>
                                         <c:forEach items="${ristoranti}" var="ristorante">
-                                                    <label class="field cell w100 ristorante grid-x" onclick="showRisDetails()" title="Clicca per visitare">
+                                                    <label class="field cell w100 ristorante grid-x" onclick="showRisDetails(this)" title="Clicca per visitare">
                                                         <div class="w70">
                                                         <div class="w80" style="font-weight: bold;">${ristorante.nome}</div>
                                                         <c:forEach begin="0" end="2" var="counter">

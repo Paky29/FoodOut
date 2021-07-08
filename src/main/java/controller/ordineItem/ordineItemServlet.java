@@ -30,8 +30,20 @@ public class ordineItemServlet extends controller {
         String path=getPath(req);
         try {
             switch (path) {
-                case "/insert-amount"://inserisci la quantità del prodotto o menu, visualizza per i prodotti i menu dove si trova, mentre per i menu i nomi dei prodtti da cui è composto
+                case "/insert-amount-prodotto": {//inserisci la quantità del prodotto o menu, visualizza per i prodotti i menu dove si trova, mentre per i menu i nomi dei prodtti da cui è composto
+                    validate(CommonValidator.validateId(req));
+                    validate(prodottoValidator.validateIdRis(req));
+                    int id=Integer.parseInt(req.getParameter("id"));
+                    int idRis=Integer.parseInt(req.getParameter("idRis"));
+                    ProdottoDAO service=new ProdottoDAO();
+                    Prodotto p=service.doRetrievebyId(id);
+                    if(p==null)
+                        notFound();
+                    req.setAttribute("prodotto", p);
+                    req.setAttribute("idRis", idRis);
+                    req.getRequestDispatcher(view("prodotto/amount")).forward(req, resp);
                     break;
+                }
                 case "/remove-prodotto-item": {
                     HttpSession session=req.getSession(false);
                     validate(CommonValidator.validateId(req));
@@ -43,9 +55,17 @@ public class ordineItemServlet extends controller {
                     synchronized (session){
                         if(session.getAttribute("cart")!=null){
                             Ordine cart=(Ordine) session.getAttribute("cart");
-                            if(!cart.removeOrdineItem(id, "Prodotto"))
-                                InternalError();
-                        }
+                                if (!cart.removeOrdineItem(id, "Prodotto"))
+                                    InternalError();
+
+                                float totale=0;
+                                for(OrdineItem oi: cart.getOrdineItems()){
+                                    for(int i=1; i<=oi.getQuantita(); i++){
+                                        totale+=oi.getOff().getPrezzo() - (oi.getOff().getPrezzo()*oi.getOff().getSconto())/100;
+                                    }
+                                }
+                                cart.setTotale(totale);
+                            }
                     }
 
                     resp.sendRedirect("/FoodOut/ristorante/show-menu?id=" + r.getCodice());
@@ -63,7 +83,7 @@ public class ordineItemServlet extends controller {
                     synchronized (session){
                         if(session.getAttribute("cart")!=null){
                             Ordine cart=(Ordine) session.getAttribute("cart");
-                            if(!cart.removeOrdineItem(id, "Prodotto"))
+                            if(!cart.removeOrdineItem(id, "Menu"))
                                 InternalError();
                         }
                     }
@@ -116,13 +136,32 @@ public class ordineItemServlet extends controller {
                         }
 
                         Ordine cart=(Ordine) session.getAttribute("cart");
-                        OrdineItem oi=new OrdineItem();
-                        oi.setOff(p);
-                        oi.setQuantita(q);
-                        cart.getOrdineItems().add(oi);
+                        boolean isPresent=false;
+                        for(OrdineItem oc: cart.getOrdineItems()){
+                            if(oc.getOff().getCodice()==p.getCodice()){
+                                oc.setQuantita(oc.getQuantita()+q);
+                                isPresent=true;
+                                break;
+                            }
+                        }
+                        if(!isPresent) {
+                            OrdineItem oi = new OrdineItem();
+                            oi.setOff(p);
+                            oi.setQuantita(q);
+                            cart.getOrdineItems().add(oi);
+                        }
+                        float totale=cart.getTotale();
+                        for(int i=1; i<=q; i++){
+                            totale+=p.getPrezzo() - (p.getPrezzo()*p.getSconto())/100;
+                        }
+
+                        cart.setTotale(totale);
                         session.setAttribute("cart", cart);
                     }
 
+                    Ordine oo=(Ordine) session.getAttribute("cart");
+                    for(OrdineItem oii : oo.getOrdineItems())
+                        System.out.println(oii.getOff().getNome());
                     resp.sendRedirect("/FoodOut/ristorante/show-menu?id=" + p.getRistorante().getCodice());
                     break;
                 }
@@ -140,6 +179,7 @@ public class ordineItemServlet extends controller {
                     Menu m=serviceMenu.doRetrieveById(id);
                     if(m==null)
                         notFound();
+                    System.out.println("Codp" + m.getProdotti().get(0).getCodice());
                     Prodotto p=serviceProd.doRetrievebyId(m.getProdotti().get(0).getCodice());
 
                     if(p.getRistorante().getCodice()!=idRis)
@@ -152,10 +192,25 @@ public class ordineItemServlet extends controller {
                         }
 
                         Ordine cart=(Ordine) session.getAttribute("cart");
-                        OrdineItem oi=new OrdineItem();
-                        oi.setOff(m);
-                        oi.setQuantita(q);
-                        cart.getOrdineItems().add(oi);
+                        boolean isPresent=false;
+                        for(OrdineItem oc: cart.getOrdineItems()){
+                            if(oc.getOff().getCodice()==m.getCodice()){
+                                oc.setQuantita(oc.getQuantita()+q);
+                                isPresent=true;
+                                break;
+                            }
+                        }
+                        if(!isPresent) {
+                            OrdineItem oi = new OrdineItem();
+                            oi.setOff(m);
+                            oi.setQuantita(q);
+                            cart.getOrdineItems().add(oi);
+                        }
+                        float totale=cart.getTotale();
+                        for(int i=1; i<=q; i++){
+                            totale+=m.getPrezzo() - (m.getPrezzo()*m.getSconto())/100;
+                        }
+                        cart.setTotale(totale);
                         session.setAttribute("cart", cart);
                     }
 

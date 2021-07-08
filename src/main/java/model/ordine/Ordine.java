@@ -123,7 +123,8 @@ public class Ordine {
         int pos=-1;
         int i=0;
             for(OrdineItem oi : ordineItems) {
-                if (oi.getClass().getName().contains(tipo) && oi.getOff().getCodice() == id)
+                System.out.println("Articolo id: "+ oi.getOff().getCodice() + ", idcerco:" + id);
+                if (oi.getOff().getClass().getName().contains(tipo) && oi.getOff().getCodice() == id)
                     pos = i;
                 i++;
             }

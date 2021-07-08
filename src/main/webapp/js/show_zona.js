@@ -1,6 +1,7 @@
-function showRisDetails(){
-    var id= document.getElementById("id").value;
+function showRisDetails(element){
+    var id= element.lastElementChild.value;
     window.location.href = "/FoodOut/ristorante/show-menu?id="+id;
+
 }
 
 function toProfile(){

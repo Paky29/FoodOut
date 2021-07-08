@@ -72,6 +72,12 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     int size = serviceRis.countCitta("Milano");
                     req.setAttribute("pages", paginator.getPages(size));
 
+                    HttpSession session=req.getSession(false);
+                    Ordine cart=(Ordine) session.getAttribute("cart");
+                    if(cart!=null){
+                        session.removeAttribute("cart");
+                    }
+
                     ArrayList<Ristorante> ristoranti = serviceRis.doRetrieveByCitta("Milano", paginator, false);
                     ArrayList<Tipologia> tipologie = serviceTip.doRetriveByCitta("Milano");
                     req.setAttribute("ristoranti", ristoranti);
@@ -91,7 +97,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     MenuDAO menuDAO = new MenuDAO();
                     HttpSession session=req.getSession(true);
                     synchronized (session){
-                            if(session.getAttribute("cart")!=null) {
+                            if(session.getAttribute("cart")==null) {
                                 Ordine cart = new Ordine();
                                 cart.setRistorante(r);
                                 session.setAttribute("cart", cart);
