@@ -20,9 +20,12 @@
     <section class="content grid-y">
         <%@include file="../partials/crm/header.jsp" %>
         <div class="body grid-x justify-center">
+            <c:if test="${not empty alert}">
+                <%@ include file="../partials/alert.jsp"%>
+            </c:if>
             <form class="grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/update" method="post">
                 <fieldset
-                        class="grid-x cell justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
+                        class="grid-x cell justify-center">
                     <legend> Profilo</legend>
                     <label for="nome" class="field cell w40">
                         <span style="font-weight: bold"> Nome: </span>

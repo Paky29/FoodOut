@@ -75,6 +75,7 @@ public class prodottoServlet extends controller{
         try{
         switch(path) {
             case "/create": {
+                req.setAttribute("back",view("ristorante/add-prodmenu"));
                 HttpSession session = req.getSession();
                 authorizeUtente(session);
 

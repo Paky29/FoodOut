@@ -1,12 +1,12 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Aggiungi prodotto-menu"/>
     </jsp:include>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         .app {
             background: linear-gradient(var(--primary), white);
@@ -45,6 +45,10 @@
 </head>
 <body>
 <div class="app grid-x justify-center align-center">
+    <c:if test="${not empty alert}">
+        <%@ include file="../partials/alert.jsp"%>
+    </c:if>
+    <div class="grid-x justify-center align-center">
 <form id="prodotto" class="grid-x justify-center" action="${pageContext.request.contextPath}/prodotto/create" method="post" enctype="multipart/form-data">
     <fieldset class="grid-x cell w90 add-ris justify-center">
         <h2 class="cell"> Aggiungi prodotto</h2>
@@ -123,6 +127,7 @@
         </span>
     </fieldset>
 </form>
+    </div>
 </div>
 <c:if test="${empty ristorante.prodotti || fn:length(ristorante.prodotti)<2}">
     <script> document.getElementsByTagName("form")[1].style.display="none";</script>

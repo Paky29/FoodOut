@@ -1,11 +1,5 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: User01
-  Date: 22/06/2021
-  Time: 11:21
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="it" dir="ltr">
 <head>
     <jsp:include page="../partials/head.jsp">
@@ -13,6 +7,7 @@
         <jsp:param name="styles" value="crm"/>
         <jsp:param name="scripts" value="add_disponibilita"/>
     </jsp:include>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         .app {
             background: linear-gradient(var(--primary), white);
@@ -51,6 +46,9 @@
 
 <body>
 <form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ristorante/disponibilita" method="post">
+    <c:if test="${not empty alert}">
+        <%@ include file="../partials/alert.jsp"%>
+    </c:if>
     <fieldset class="grid-x cell w90 add-disp justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
         <h1 id="title" class="cell"> Scegli il tuo orario </h1>
         <label for="lunedi" class="field w33 cell">

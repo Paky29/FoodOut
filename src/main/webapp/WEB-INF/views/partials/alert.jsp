@@ -6,7 +6,7 @@
         });
     });
 </script>
-<div class="notification ${alert.type} cell w50">
+<div class="notification ${alert.type} cell w80">
         <ol class="cell">
             <c:forEach var="msg" items="${alert.messages}">
                 <li>${msg}</li>

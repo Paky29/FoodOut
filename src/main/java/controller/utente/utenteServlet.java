@@ -149,7 +149,6 @@ public class utenteServlet extends controller {
                         }
                         else {
                             UtenteSession utenteSession = new UtenteSession(u);
-                            System.out.println(utenteSession.getId());
                             HttpSession session = req.getSession();
                             synchronized (session) {
                                 session.setAttribute("utenteSession", utenteSession);
@@ -163,6 +162,7 @@ public class utenteServlet extends controller {
                     break;
                 }
                 case "/update": {
+                    //req.setAttribute("back","FoodOut/utente/show");
                     HttpSession session = req.getSession();
                     authenticateUtente(session);
                     validate(utenteValidator.validateUpdate(req));
@@ -230,6 +230,7 @@ public class utenteServlet extends controller {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (InvalidRequestException e) {
             log(e.getMessage());
+            System.out.println(e.getErrors());
             e.handle(req, resp);
         }
     }

@@ -97,9 +97,11 @@ public class tipologiaServlet extends controller {
         try {
             switch (path) {
                 case "/create-edit": {
+                    req.setAttribute("back",view("tipologia/create-edit-tipologia"));
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
                     validate(CommonValidator.validateFunctionValue(req));
+                    req.setAttribute("function",req.getParameter("function"));
                     int function=Integer.parseInt(req.getParameter("function"));
                     validate(tipologiaValidator.validateForm(req));
                     Tipologia t = new Tipologia();
