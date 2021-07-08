@@ -82,6 +82,10 @@ input:focus, textarea:focus, select:focus{
     align-items: center;
 }
 
+.justify-right{
+    justify-content: flex-end;
+}
+
 .cell{
     flex-basis: 100%;
 }

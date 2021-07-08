@@ -3,7 +3,6 @@ function showRisDetails(){
     window.location.href = "/FoodOut/ristorante/show-menu?id="+id;
 }
 
-function toProfile(element){
-    var id=element.lastElementChild.getAttribute("value");
-    window.location.href = "/FoodOut/utente/show?id="+id;
+function toProfile(){
+    window.location.href = "/FoodOut/utente/profile";
 }

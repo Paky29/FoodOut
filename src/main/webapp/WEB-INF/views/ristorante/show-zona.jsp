@@ -21,7 +21,7 @@
                 <span class="account" style="color: white" onclick="toProfile(this)">
                     <%@include file="../../../icons/user.svg"%> <%--cambiare con icona user--%>
                     Benvenuto, ${utenteSession.nome}
-                    <input style="display: none" type="number" name="idUtente" id="idUtente" value="${utenteSession.id}"
+                    <input style="display: none" type="number" name="idUtente" id="idUtente" value="${utenteSession.id}">
                 </span>
             </div>
             <label class="field command w100 justify-center">

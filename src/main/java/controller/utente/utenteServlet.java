@@ -56,9 +56,24 @@ public class utenteServlet extends controller {
                     req.getRequestDispatcher(view("crm/show")).forward(req, resp);
                     break;
                 }
-                case "/profile":
+                case "/profile": {
+                    HttpSession ssn = req.getSession(false);
+                    authenticateUtente(ssn);
+                    UtenteSession us = (UtenteSession) ssn.getAttribute("utenteSession");
+                    UtenteDAO service = new UtenteDAO();
+                    Utente u = service.doRetrieveById(us.getId());
+                    if (u == null) {
+                        InternalError();
+                    }
+                    synchronized (ssn) {
+                        ssn.setAttribute("profilo", u);
+                    }
+                    req.getRequestDispatcher(view("customer/profile")).forward(req, resp);
                     break;
+                }
                 case "/ristoranti-pref":
+                    break;
+                case "/saldo":
                     break;
                 case "/delete": {
                     HttpSession ssn = req.getSession();

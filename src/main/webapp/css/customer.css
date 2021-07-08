@@ -1,0 +1,116 @@
+.app{
+    display: flex;
+    flex-float: row nowrap;
+}
+
+.topbar, .sidebar{
+    background-color: white;
+    padding: .5rem;
+}
+
+.menu > a{
+    text-decoration: none;
+    color: black;
+    padding: 1rem;
+}
+
+.sidebar{
+    flex-basis: 270px;
+    transition: all .3s ease-in-out;
+    background-color: lightgrey;
+}
+
+.content{
+    background-color: white;
+    flex:1;
+    transition: all .3s ease-in-out;
+    flex-wrap: nowrap;
+}
+
+.sidebar.collapse {
+    transform: translate3d(-270px, 0, 0);
+}
+
+.content.full-width {
+    margin-left: -270px;
+}
+
+.body{
+    flex-grow: 1;
+}
+
+.topbar > svg {
+    cursor: pointer;
+}
+
+.info{
+    text-align: center;
+    font-style: normal;
+    font-weight: bold;
+    padding: 1rem;
+    border-top: 1px solid black;
+    background-color: lightgrey;
+    max-height: 10%;
+}
+
+.info > a {
+    text-decoration: none;
+    color: black;
+    margin-right: 25px;
+    margin-left: 25px;
+}
+
+.topbar > .account{
+    display: none;
+}
+
+.topbar > .command {
+    flex: 1;
+}
+
+.topbar > *{
+    color:black;
+    margin-right: 8px;
+}
+
+.show{
+    padding: 1rem;
+    background-color:white;
+}
+
+.show > * {
+    margin:10px;
+}
+
+
+fieldset {
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    margin-right: 5vw;
+    margin-left: 5vw;
+    padding: 5vh 5vw ;
+
+}
+
+legend{
+    font-weight: bold;
+    font-style: italic;
+    color: var(--primary)
+}
+
+label{
+    margin: 10px;
+}
+
+span{
+    margin-right: 4px;
+}
+
+@media screen and (min-width:769px){
+    .topbar > .account{
+        display: block;
+    }
+}
+
+
+
