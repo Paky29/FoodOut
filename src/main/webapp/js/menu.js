@@ -27,3 +27,10 @@ function goBack(){
     window.location.href = "/FoodOut/ristorante/zona"
 }
 
+function addToPrefs(idRis, idUtente){
+    window.location.href="/FoodOut/ristorante/add-pref?id=" + idUtente + "&idRis=" + idRis;
+}
+
+function removeFromPrefs(idRis, idUtente){
+    window.location.href="/FoodOut/ristorante/remove-pref?id=" + idUtente + "&idRis=" + idRis;
+}

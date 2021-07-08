@@ -15,6 +15,7 @@ import controller.http.InvalidRequestException;
 import controller.http.RequestValidator;
 import controller.http.controller;
 ;
+import controller.prodotto.prodottoValidator;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
 import model.utente.Utente;
@@ -121,6 +122,7 @@ public class utenteServlet extends controller {
                         InternalError();
                     break;
                 }
+
                 default:
                     notFound();
             }

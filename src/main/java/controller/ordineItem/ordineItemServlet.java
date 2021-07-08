@@ -85,6 +85,13 @@ public class ordineItemServlet extends controller {
                             Ordine cart=(Ordine) session.getAttribute("cart");
                             if(!cart.removeOrdineItem(id, "Menu"))
                                 InternalError();
+                            float totale=0;
+                            for(OrdineItem oi: cart.getOrdineItems()){
+                                for(int i=1; i<=oi.getQuantita(); i++){
+                                    totale+=oi.getOff().getPrezzo() - (oi.getOff().getPrezzo()*oi.getOff().getSconto())/100;
+                                }
+                            }
+                            cart.setTotale(totale);
                         }
                     }
 

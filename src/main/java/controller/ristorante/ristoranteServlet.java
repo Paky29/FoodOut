@@ -1,6 +1,7 @@
 package controller.ristorante;
 
 import controller.http.*;
+import controller.prodotto.prodottoValidator;
 import controller.tipologia.tipologiaValidator;
 import model.disponibilita.Disponibilita;
 import model.disponibilita.DisponibilitaDAO;
@@ -13,7 +14,10 @@ import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
 import model.tipologia.Tipologia;
 import model.tipologia.TipologiaDAO;
+import model.utente.Utente;
+import model.utente.UtenteDAO;
 import model.utility.Paginator;
+import model.utility.UtenteSession;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -88,6 +92,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/show-menu": {//possibilità di aggiungere al carrello i prodotti
                     validate(CommonValidator.validateId(req));
                     int id = Integer.parseInt(req.getParameter("id"));
+                    UtenteDAO utenteDAO=new UtenteDAO();
                     RistoranteDAO ristoranteDAO = new RistoranteDAO();
                     Ristorante r = ristoranteDAO.doRetrieveById(id, true);
                     if (r == null)
@@ -103,12 +108,32 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                                 session.setAttribute("cart", cart);
                             }
                     }
+                    UtenteSession us=(UtenteSession) session.getAttribute("utenteSession");
+                    Utente u=new Utente();
+                    boolean pref = false;
+                    if(us!=null) {
+                        u.setCodice(us.getId());
+                        int count = utenteDAO.countRistPref(u);
+                        ArrayList<Ristorante> prefs = utenteDAO.doRetrievebyUtentePref(us.getId(), new Paginator(1, count));
+                        if (prefs != null) {
+                            for (Ristorante rp : prefs) {
+                                System.out.println(rp.getNome());
+                                if (rp.getCodice() == r.getCodice()) {
+                                    pref = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     r.setProdotti(prodottoDAO.doRetrieveByRistorante(r.getCodice()));
                     req.setAttribute("menus", menuDAO.doRetrieveByRistorante(r.getCodice()));
                     req.setAttribute("countMenuValidi", ristoranteDAO.countMenuValidita(r.getCodice(), true));
                     req.setAttribute("ristorante", r);
+                    System.out.println("pref:" + pref);
+                    req.setAttribute("pref", pref);
                     req.setAttribute("countProdValidi", ristoranteDAO.countProdottiValidita(r.getCodice(), true));
                     req.getRequestDispatcher(view("ristorante/menu")).forward(req, resp);
+
                     break;
                 }
                 case "/show-info":// mostrare info statiche
@@ -205,6 +230,42 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     }
                     break;
                 }
+
+                case "/add-pref": {
+                    HttpSession ssn = req.getSession();
+                    authenticateUtente(ssn);
+                    System.out.println(CommonValidator.validateId(req));
+                    validate(CommonValidator.validateId(req));
+                    System.out.println(prodottoValidator.validateIdRis(req));
+                    validate(prodottoValidator.validateIdRis(req));
+                    int idUtente=Integer.parseInt(req.getParameter("id"));
+                    int idRis=Integer.parseInt(req.getParameter("idRis"));
+
+                    RistoranteDAO service=new RistoranteDAO();
+                    if(!service.savePreferenza(idRis, idUtente))
+                        InternalError();
+                    else
+                        resp.sendRedirect("/FoodOut/ristorante/show-menu?id=" + idRis);
+                    break;
+                }
+
+                case "/remove-pref": {
+                    HttpSession ssn = req.getSession();
+                    authenticateUtente(ssn);
+                    System.out.println(CommonValidator.validateId(req));
+                    validate(CommonValidator.validateId(req));
+                    System.out.println(prodottoValidator.validateIdRis(req));
+                    validate(prodottoValidator.validateIdRis(req));
+                    int idUtente=Integer.parseInt(req.getParameter("id"));
+                    int idRis=Integer.parseInt(req.getParameter("idRis"));
+
+                    RistoranteDAO service=new RistoranteDAO();
+                    if(!service.deletePreferenza(idRis, idUtente))
+                        InternalError();
+                    else
+                        resp.sendRedirect("/FoodOut/ristorante/show-menu?id=" + idRis);
+                    break;
+                }
                 default:
                     notFound();
             }
@@ -225,8 +286,6 @@ public class ristoranteServlet extends controller implements ErrorHandler {
         String path = getPath(req);
         try {
             switch (path) {
-                case "/add-pref":
-                    break;
                 case "/update": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);

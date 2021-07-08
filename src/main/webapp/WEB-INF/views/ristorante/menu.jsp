@@ -292,6 +292,13 @@
         border: none;
     }
 
+    #star{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+    }
+
 
 
 
@@ -336,6 +343,19 @@
             <div class="cell w50 grid-x justify-center show-menu">
                 <div class="grid-x justify-center info-ris cell">
                     <fieldset class="grid-x cell w100 index">
+                        <span class="cell" id="star">
+                            <c:if test="${utenteSession!=null}">
+                                <c:choose>
+                                    <c:when test="${pref==false}">
+                                        <span onclick="addToPrefs(${ristorante.codice}, ${utenteSession.id})"> <%@include file="../../../icons/no_pref.svg" %></span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span onclick="removeFromPrefs(${ristorante.codice}, ${utenteSession.id})"><%@include file="../../../icons/pref.svg" %></span>
+                                    </c:otherwise>
+                                </c:choose>
+
+                            </c:if>
+                        </span>
                         <c:choose>
                             <c:when test="${not empty ristorante.prodotti}">
                                 <c:if test="${countProdValidi>0}">
