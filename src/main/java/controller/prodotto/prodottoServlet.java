@@ -35,6 +35,7 @@ public class prodottoServlet extends controller{
         try {
             switch (path) {
                 case "/update" : {
+                    authorizeUtente(req.getSession());
                     validate(CommonValidator.validateId(req));
                     validate(prodottoValidator.validateIdRis(req));
                     int codice = Integer.parseInt(req.getParameter("id"));
