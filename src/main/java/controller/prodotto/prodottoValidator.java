@@ -5,7 +5,7 @@ import controller.http.RequestValidator;
 import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Pattern;
 
-final class prodottoValidator {
+public final class prodottoValidator {
     static RequestValidator validateForm(HttpServletRequest request){
         RequestValidator validator=new RequestValidator(request);
         validator.assertMatch("nome", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "nome compreso tra 1 e 30 caratteri");

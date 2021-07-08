@@ -68,6 +68,9 @@
                                                                     <%@include file="../../../icons/moto.svg" %>
                                                                 </c:forEach>
                                                             </div>
+                                                            <div class="w80" style="color:black;font-weight: normal; font-style: italic;"> Spesa minima: ${ristorante.spesaMinima}</div>
+                                                            <div class="w80" style="color:black;font-weight: normal; font-style: italic"> Tasso consegna: ${ristorante.tassoConsegna}</div>
+
                                                         </div>
 
                                                         <img class="w80" src="/FoodOut/covers/${ristorante.urlImmagine}">

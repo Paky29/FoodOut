@@ -5,6 +5,9 @@ import controller.tipologia.tipologiaValidator;
 import model.disponibilita.Disponibilita;
 import model.disponibilita.DisponibilitaDAO;
 import model.menu.MenuDAO;
+import model.ordine.Ordine;
+import model.ordine.OrdineDAO;
+import model.ordine.OrdineItem;
 import model.prodotto.ProdottoDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
@@ -84,11 +87,21 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     if (r == null)
                         notFound();
                     ProdottoDAO prodottoDAO = new ProdottoDAO();
+                    OrdineDAO ordineDAO=new OrdineDAO();
                     MenuDAO menuDAO = new MenuDAO();
+                    HttpSession session=req.getSession(true);
+                    synchronized (session){
+                            if(session.getAttribute("cart")!=null) {
+                                Ordine cart = new Ordine();
+                                cart.setRistorante(r);
+                                session.setAttribute("cart", cart);
+                            }
+                    }
                     r.setProdotti(prodottoDAO.doRetrieveByRistorante(r.getCodice()));
                     req.setAttribute("menus", menuDAO.doRetrieveByRistorante(r.getCodice()));
+                    req.setAttribute("countMenuValidi", ristoranteDAO.countMenuValidita(r.getCodice(), true));
                     req.setAttribute("ristorante", r);
-                    req.setAttribute("countValidi", ristoranteDAO.countProdottiValidita(r.getCodice(), true));
+                    req.setAttribute("countProdValidi", ristoranteDAO.countProdottiValidita(r.getCodice(), true));
                     req.getRequestDispatcher(view("ristorante/menu")).forward(req, resp);
                     break;
                 }

@@ -154,6 +154,12 @@
         justify-content: space-between;
     }
 
+    .item{
+        color: black;
+        background-color: white;
+        font-weight: bold;
+    }
+
     .prodotto > img {
         max-height: 60px;
         max-width: 100px;
@@ -228,6 +234,23 @@
         margin-left: 5px;
     }
 
+    .show-ord * {
+        margin: 3px;
+    }
+
+    .ord_info{
+        color: white;
+    }
+
+    .deficit{
+        color: white;
+        padding: 10px;
+        font-size: 15px;
+        font-weight: bold;
+        font-family: Myriad;
+        text-align: center;
+    }
+
 
 
 </style>
@@ -272,14 +295,14 @@
                     <fieldset class="grid-x cell w100 index">
                         <c:choose>
                             <c:when test="${not empty ristorante.prodotti}">
-                                <c:if test="${countValidi>0}">
+                                <c:if test="${countProdValidi>0}">
                                     <h2 class="cell"> Prodotti </h2>
                                     <c:forEach items="${ristorante.tipologie}" var="tipologia">
                                         <h3 class="cell" style="font-style: italic"><a name="${tipologia.nome}">${tipologia.nome}</a></h3>
                                         <c:forEach items="${ristorante.prodotti}" var="prodotto">
                                             <c:if test="${tipologia.nome.equals(prodotto.tipologia.nome)}">
                                                 <c:if test="${prodotto.valido}">
-                                                    <label class="field cell w100 prodotto grid-x" onclick="showRisDetails()" title="Clicca per acquistare">
+                                                    <label class="field cell w100 prodotto grid-x" onclick="showProdDetails(this)" title="Clicca per acquistare">
                                                         <div class="w50">
                                                             <div class="w80" style="font-weight: bold;">${prodotto.nome}</div>
                                                         </div>
@@ -297,11 +320,11 @@
                             </c:when>
                             <c:otherwise> <h2> Non sono presenti prodotti </h2> </c:otherwise>
                         </c:choose>
-                        <c:if test="${not empty menus}">
+                        <c:if test="${countMenuValidi>0}">
                             <h2 class="cell"><a name="Menu"> Menu</a> </h2>
                             <c:forEach items="${menus}" var="menu">
                                 <c:if test="${menu.valido}">
-                                <label class="field cell w100 menu" style="font-weight: bold" onclick="showMenuDetails(this)" title="Clicca per modificare" >
+                                <label class="field cell w100 menu" style="font-weight: bold" onclick="showMenuDetails(this)" title="Clicca per acquistare" >
                                     <span> ${menu.nome} </span>
                                     <input style="display: none" id="id" name="id" value="${menu.codice}"/>
                                 </label>
@@ -324,13 +347,30 @@
                                 </div>
                             </c:forEach>
                         </c:if>
-                        <div class="cell">
-                            <span style="font-weight: bold"> Costo consegna : </span> ${ristorante.tassoConsegna}
+
+                        <div class="cell ord_info">
+                            <span style="font-weight: bold"> Subtotale: </span> ${cart.totale}€
                         </div>
-                        <div class="cell tot">
-                            <span style="font-weight: bold"> Totale : </span> : ${cart.totale}
+                        <div class="cell ord_info">
+                            <span style="font-weight: bold"> Costo consegna: </span> ${ristorante.tassoConsegna}€
+                        </div>
+                        <div class="cell tot ord_info">
+                            <span style="font-weight: bold"> Totale : </span>${cart.totale + ristorante.tassoConsegna}€
                         </div>
                     </div>
+                        <span class="grid-x cell justify-center">
+                        <c:choose>
+                            <c:when test="${cart.totale > ristorante.spesaMinima }">
+                                <button type="submit" class="btn primary"> Acquista </button>
+                            </c:when>
+                            <c:otherwise>
+                            <div style="background-color: var(--primary)">
+                                <div class="deficit"> Mancano ${ristorante.spesaMinima - cart.totale}€ per raggiungere la spesa minima </div>
+                            </div>
+                            </c:otherwise>
+                        </c:choose>
+                        </span>
+
                     </c:if>
                 </section>
             </form>

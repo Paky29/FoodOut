@@ -151,7 +151,7 @@ div#header {
     color: white;
 }
 
-.filtro, .ristorante, .menu {
+.filtro {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid black;
@@ -159,12 +159,15 @@ div#header {
     max-height: 100px;
 
 }
-
-
-.ristorante, .menu {
+.ristorante{
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin: 2px;
     color: black;
     background-color: lightgrey;
     justify-content: space-between;
+    max-height: 200px;
 }
 
 .ristorante > img {
@@ -199,7 +202,7 @@ div#header {
     font-family: Myriad;
 }
 
-.ristorante, .menu, .tipologia {
+.ristorante, .tipologia {
     cursor: pointer;
 }
 
