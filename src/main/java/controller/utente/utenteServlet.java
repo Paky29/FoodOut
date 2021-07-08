@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import controller.http.CommonValidator;
@@ -14,8 +15,11 @@ import controller.http.InvalidRequestException;
 import controller.http.RequestValidator;
 import controller.http.controller;
 ;
+import model.ristorante.Ristorante;
+import model.ristorante.RistoranteDAO;
 import model.utente.Utente;
 import model.utente.UtenteDAO;
+import model.utility.Paginator;
 import model.utility.UtenteSession;
 
 @WebServlet(name = "utenteServlet", value = "/utente/*")
@@ -74,16 +78,32 @@ public class utenteServlet extends controller {
                     req.getRequestDispatcher(view("customer/profile")).forward(req, resp);
                     break;
                 }
-                case "/ristoranti-pref":
-                    break;
-                case "/saldo": {
+                case "/ristoranti-pref":{
                     HttpSession session=req.getSession();
-                    authenticateUtente(req.getSession(false));
+                    authenticateUtente(session);
+                    UtenteSession us=(UtenteSession) session.getAttribute("utenteSession");
+                    UtenteDAO serviceUtente=new UtenteDAO();
+                    Utente u=serviceUtente.doRetrieveById(us.getId());
+                    if (req.getParameter("page") != null) {
+                        validate(CommonValidator.validatePage(req));
+                    }
+                    int intPage = parsePage(req);
+                    Paginator paginator = new Paginator(intPage, 6);
+                    int size = serviceUtente.countRistPref(u);
+                    req.setAttribute("pages", paginator.getPages(size));
+                    ArrayList<Ristorante> ristoranti=serviceUtente.doRetrievebyUtentePref(u.getCodice(),paginator);
+                    req.setAttribute("ristoranti",ristoranti);
+                    req.getRequestDispatcher(view("customer/rist-pref")).forward(req,resp);
+                    break;
+                }
+                case "/saldo": {
+                    HttpSession session=req.getSession(false);
+                    authenticateUtente(session);
                     UtenteSession us =(UtenteSession) session.getAttribute("utenteSession");
                     UtenteDAO serviceUtente=new UtenteDAO();
                     Utente u=serviceUtente.doRetrieveById(us.getId());
-                    req.setAttribute("saldo",u.getSaldo());
-                    req.getRequestDispatcher(view("costumer/saldo")).forward(req,resp);
+                    req.setAttribute("profilo",u);
+                    req.getRequestDispatcher(view("customer/saldo")).forward(req,resp);
                     break;
                 }
                 case "/delete": {

@@ -11,6 +11,11 @@
         <jsp:param name="styles" value="show_zona"/>
         <jsp:param name="scripts" value="show_zona"/>
     </jsp:include>
+   <style>
+       #welcome{
+           cursor: pointer;
+       }
+   </style>
 </head>
 <body>
 <div class="app">
@@ -20,7 +25,7 @@
             <div id="user">
                 <span class="account" style="color: white" onclick="toProfile(this)">
                     <%@include file="../../../icons/user.svg"%> <%--cambiare con icona user--%>
-                    Benvenuto, ${utenteSession.nome}
+                    <span id="welcome">Benvenuto, ${utenteSession.nome}</span>
                     <input style="display: none" type="number" name="idUtente" id="idUtente" value="${utenteSession.id}">
                 </span>
             </div>
