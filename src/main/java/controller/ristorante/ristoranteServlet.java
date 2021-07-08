@@ -67,23 +67,32 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     //req.getRequestDispatcher(view("ristorante/zona")).forward(req,resp);
                     RistoranteDAO serviceRis = new RistoranteDAO();
                     TipologiaDAO serviceTip = new TipologiaDAO();
-                    String citta;
+                    UtenteDAO serviceUtente=new UtenteDAO();
+                    String citta=null;
+                    HttpSession session=req.getSession(false);
+                    if(session!=null){
+                        UtenteSession us=(UtenteSession) session.getAttribute("utenteSession");
+                        Utente u=serviceUtente.doRetrieveById(us.getId());
+                        citta=u.getCitta();
+                    }
+                    else{
+                        citta=req.getParameter("citta");
+                    }
                     if (req.getParameter("page") != null) {
                         validate(CommonValidator.validatePage(req));
                     }
                     int intPage = parsePage(req);
                     Paginator paginator = new Paginator(intPage, 6);
-                    int size = serviceRis.countCitta("Milano");
+                    int size = serviceRis.countCitta(citta);
                     req.setAttribute("pages", paginator.getPages(size));
 
-                    HttpSession session=req.getSession(false);
                     Ordine cart=(Ordine) session.getAttribute("cart");
                     if(cart!=null){
                         session.removeAttribute("cart");
                     }
 
-                    ArrayList<Ristorante> ristoranti = serviceRis.doRetrieveByCitta("Milano", paginator, false);
-                    ArrayList<Tipologia> tipologie = serviceTip.doRetriveByCitta("Milano");
+                    ArrayList<Ristorante> ristoranti = serviceRis.doRetrieveByCitta(citta, paginator, false);
+                    ArrayList<Tipologia> tipologie = serviceTip.doRetriveByCitta(citta);
                     req.setAttribute("ristoranti", ristoranti);
                     req.setAttribute("tipologie", tipologie);
                     req.getRequestDispatcher(view("ristorante/show-zona")).forward(req, resp);
