@@ -136,7 +136,17 @@ public class ristoranteServlet extends controller implements ErrorHandler {
 
                     break;
                 }
-                case "/show-info":// mostrare info statiche
+                case "/show-info": {
+                    authenticateUtente(req.getSession(false));
+                    validate(CommonValidator.validateId(req));
+                    int id = Integer.parseInt(req.getParameter("id"));
+                    RistoranteDAO ristoranteDAO = new RistoranteDAO();
+                    Ristorante r = ristoranteDAO.doRetrieveById(id, true);
+                    if (r == null)
+                        notFound();
+                    req.setAttribute("ristorante", r);
+                    req.getRequestDispatcher(view("ristorante/info")).forward(req, resp);
+                }
                     break;
                 case "/show-menu-admin": {
                     authorizeUtente(req.getSession());
