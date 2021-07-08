@@ -9,7 +9,7 @@
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Scegli ristorante"/>
         <jsp:param name="styles" value="show_zona"/>
-        <jsp:param name="scripts" value="menu_admin"/>
+        <jsp:param name="scripts" value="show_zona"/>
     </jsp:include>
 </head>
 <body>
@@ -18,9 +18,10 @@
         <nav class="grid-y navbar align-center cell">
             <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
             <div id="user">
-                <span class="account" style="color: white">
+                <span class="account" style="color: white" onclick="toProfile(this)">
                     <%@include file="../../../icons/user.svg"%> <%--cambiare con icona user--%>
                     Benvenuto, ${utenteSession.nome}
+                    <input style="display: none" type="number" name="idUtente" id="idUtente" value="${utenteSession.id}"
                 </span>
             </div>
             <label class="field command w100 justify-center">
