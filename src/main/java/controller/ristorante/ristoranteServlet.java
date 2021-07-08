@@ -183,6 +183,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     r.setProdotti(serviceProd.doRetrieveByRistorante(codiceRis));
                     req.setAttribute("ristorante", r);
                     req.setAttribute("function", function);
+                    req.setAttribute("countProdValidi", serviceRis.countProdottiValidita(r.getCodice(), true));
                     req.getRequestDispatcher(view("ristorante/add-prodmenu")).forward(req, resp);
                     break;
                 }

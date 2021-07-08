@@ -129,7 +129,7 @@
 </form>
     </div>
 </div>
-<c:if test="${empty ristorante.prodotti || fn:length(ristorante.prodotti)<2}">
+<c:if test="${empty ristorante.prodotti || countProdValidi<2}">
     <script> document.getElementsByTagName("form")[1].style.display="none";</script>
 </c:if>
 </body>
