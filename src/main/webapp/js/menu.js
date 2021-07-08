@@ -11,7 +11,7 @@ function closeAmount(element){
 
 function removeItem(element){
     var parent=element.parentElement;
-    var tipo=parent.getElementsByClassName("item-cod")[0].getAttribute("name");
+    var tipo =parent.getElementsByClassName("item-cod")[0].getAttribute("name");
     var id=parent.getElementsByClassName("item-cod")[0].getAttribute("value");
     var conf=confirm("Sicuro di voler elimare questo prodotto dal carrello?");
     if(conf==true) {

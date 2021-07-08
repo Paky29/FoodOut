@@ -673,7 +673,7 @@ public class RistoranteDAO {
         }
     }
 
-    public int countTipologieCitta(ArrayList<String> tipologie, String citta) throws SQLException {
+    public int countTipologieCitta (ArrayList<String> tipologie, String citta) throws SQLException {
         try(Connection conn=ConPool.getConnection()) {StringJoiner sj_tipologie=new StringJoiner(",", "(", ")");
             for(String tipologia : tipologie){
                 tipologia="'" + tipologia + "'";
@@ -733,7 +733,7 @@ public class RistoranteDAO {
 
     public int countProdottiValidita(int id, boolean valido) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("SELECT COUNT(p.codiceProdotto) as numProd FROM Prodotto p WHERE p.codRis_fk=? AND p.valido=?");
+            PreparedStatement ps=conn.prepareStatement("SELECT COUNT(distinct p.codiceProdotto) as numProd FROM Prodotto p WHERE p.codRis_fk=? AND p.valido=?");
             ps.setInt(1,id);
             ps.setBoolean(2,valido);
             ResultSet rs = ps.executeQuery();

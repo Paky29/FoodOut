@@ -52,7 +52,7 @@ public class ordineItemServlet extends controller {
                     Prodotto p=service.doRetrievebyId(id);
                     Ristorante r=p.getRistorante();
 
-                    synchronized (session){
+                    synchronized (session) {
                         if(session.getAttribute("cart")!=null){
                             Ordine cart=(Ordine) session.getAttribute("cart");
                                 if (!cart.removeOrdineItem(id, "Prodotto"))

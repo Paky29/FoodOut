@@ -288,7 +288,7 @@
         margin-bottom: 5px;
     }
 
-    fieldset {
+    fieldset  {
         border: none;
     }
 

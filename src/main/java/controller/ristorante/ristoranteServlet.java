@@ -41,7 +41,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
         String path = getPath(req);
         System.out.println((path));
         try {
-            switch (path) {
+            switch (path)  {
                 case "/all": {
                     authorizeUtente(req.getSession());
                     RistoranteDAO service = new RistoranteDAO();

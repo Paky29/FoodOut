@@ -1,4 +1,4 @@
-function showRisDetails(element){
+function  showRisDetails(element){
     var id= element.lastElementChild.value;
     window.location.href = "/FoodOut/ristorante/show-menu?id="+id;
 
