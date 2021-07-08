@@ -11,6 +11,7 @@ import java.util.List;
 
 import controller.http.CommonValidator;
 import controller.http.InvalidRequestException;
+import controller.http.RequestValidator;
 import controller.http.controller;
 ;
 import model.utente.Utente;
@@ -30,7 +31,7 @@ public class utenteServlet extends controller {
                 case "/login":
                     req.getRequestDispatcher(view("site/login")).forward(req, resp);
                     break;
-                case "/logout":
+                case "/logout": {
                     HttpSession session = req.getSession(false);
                     authenticateUtente(session);
                     synchronized (session) {
@@ -38,7 +39,9 @@ public class utenteServlet extends controller {
                     }
                     resp.sendRedirect("/FoodOut/index.jsp");
                     break;
+                }
                 case "/update-pw":
+                    authenticateUtente(req.getSession(false));
                     req.getRequestDispatcher(view("site/update-pw")).forward(req, resp);
                     break;
                 case "/show":{
@@ -73,8 +76,16 @@ public class utenteServlet extends controller {
                 }
                 case "/ristoranti-pref":
                     break;
-                case "/saldo":
+                case "/saldo": {
+                    HttpSession session=req.getSession();
+                    authenticateUtente(req.getSession(false));
+                    UtenteSession us =(UtenteSession) session.getAttribute("utenteSession");
+                    UtenteDAO serviceUtente=new UtenteDAO();
+                    Utente u=serviceUtente.doRetrieveById(us.getId());
+                    req.setAttribute("saldo",u.getSaldo());
+                    req.getRequestDispatcher(view("costumer/saldo")).forward(req,resp);
                     break;
+                }
                 case "/delete": {
                     HttpSession ssn = req.getSession();
                     authenticateUtente(ssn);
@@ -202,9 +213,9 @@ public class utenteServlet extends controller {
                         session.setAttribute("utenteSession", utenteSession);
                     }
                     if (u.getEmail().contains("@foodout.com"))
-                        resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
+                        resp.sendRedirect("/FoodOut/utente/show");
                     else
-                        resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
+                        resp.sendRedirect("/FoodOut/utente/profile");
                     break;
                 }
                 case "/update-pw": {
@@ -230,13 +241,26 @@ public class utenteServlet extends controller {
                         session.setAttribute("utenteSession", utenteSession);
                     }
                     if (u.getEmail().contains("@foodout.com"))
-                        resp.sendRedirect("/FoodOut/utente/show");//cambiare in /utente/show
+                        resp.sendRedirect("/FoodOut/utente/show");
                     else
-                        resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare contenuto pagina
+                        resp.sendRedirect("/FoodOut/utente/profile");
                     break;
                 }
-                case "/deposit":
+                case "/deposit": {
+                    HttpSession session=req.getSession();
+                    authenticateUtente(session);
+                    validate(utenteValidator.validateDeposit(req));
+                    float deposito=Float.parseFloat(req.getParameter("deposito"));
+                    UtenteSession us=(UtenteSession) session.getAttribute("utenteSession");
+                    UtenteDAO serviceDAO=new UtenteDAO();
+                    Utente u=serviceDAO.doRetrieveById(us.getId());
+                    u.setSaldo(u.getSaldo()+deposito);
+                    if(!serviceDAO.doUpdate(u))
+                        InternalError();
+                    else
+                        resp.sendRedirect("/FoodOut/utente/saldo");
                     break;
+                }
                 default:
                     notAllowed();
             }

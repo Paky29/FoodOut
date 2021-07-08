@@ -49,4 +49,10 @@ public class utenteValidator {
         return validator;
     }
 
+    static RequestValidator validateDeposit(HttpServletRequest request){
+        RequestValidator validator=new RequestValidator(request);
+        validator.assertPositiveDouble("deposito","il deposito deve essere un decimale positivo");
+        return validator;
+    }
+
 }
