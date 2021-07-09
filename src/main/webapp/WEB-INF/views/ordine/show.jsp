@@ -147,8 +147,10 @@
                     <span style="font-weight: bold" class="field cell w40"> Ristorante:
                     <a style="font-weight: normal" href="/FoodOut/ristorante/show-info-admin?id=${ordine.ristorante.codice}" id="dettagliRis">  ${ordine.ristorante.nome} </a>
                     </span>
-                    <span style="font-weight: bold" class="field cell w40"> Data: </span>
-                    <input type="date" name="data" id="data" value="${ordine.dataOrdine}" readonly>
+                    <span class="field cell w40" style="font-weight: bold;">
+                     Data:
+                    <input type="date" name="data" id="data" value="${ordine.dataOrdine}" style="margin-left: 2px;" readonly>
+                    </span>
                 </label>
                 <label class="field cell w40 grid-x">
                     <span style="font-weight: bold" class="field cell w40"> Ora partenza: </span>
