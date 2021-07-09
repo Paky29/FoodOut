@@ -18,7 +18,7 @@ import model.ordine.Ordine;
 import model.ordine.OrdineDAO;
 import model.utility.Paginator;
 
-@WebServlet(name="ordineServlet", value="/ordine/*")
+@WebServlet(name="ordineServlet", value="/ordine/*" )
 public class ordineServlet extends controller {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

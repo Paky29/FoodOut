@@ -39,7 +39,7 @@ import java.util.ArrayList;
 
 @WebServlet(name = "ristoranteServlet", value = "/ristorante/*")
 @MultipartConfig
-public class ristoranteServlet extends controller implements ErrorHandler {
+public class ristoranteServlet extends controller implements ErrorHandler{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = getPath(req);

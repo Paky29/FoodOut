@@ -16,7 +16,6 @@
             background-color:white;
             border-radius: 10px;
         }
-
         .signup > * {
             margin:10px;
         }
