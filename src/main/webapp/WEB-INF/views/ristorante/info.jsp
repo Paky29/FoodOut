@@ -9,7 +9,7 @@
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Info"/>
         <jsp:param name="styles" value="info_ris_crm"/>
-        <jsp:param name="scripts" value="info_ris_crm"/>
+        <jsp:param name="scripts" value="info"/>
     </jsp:include>
 </head>
 <body>
@@ -130,7 +130,7 @@
 <div class="app">
     <div class="cell grid-x" id="header">
         <nav class="grid-y navbar align-center cell">
-            <img onclick="goBack()" src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
+            <img onclick="goBack()" src="/FoodOut/images/logo.png" class="fluid-image" id="logo" title="Torna indietro">
             <div id="links">
                 <a href="${pageContext.request.contextPath}/ristorante/show-info?id=${ristorante.codice}">
                     Info </a>

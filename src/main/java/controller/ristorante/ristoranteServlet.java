@@ -45,7 +45,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
         String path = getPath(req);
         System.out.println((path));
         try {
-            switch (path)  {
+            switch (path) {
                 case "/all": {
                     authorizeUtente(req.getSession());
                     RistoranteDAO service = new RistoranteDAO();
@@ -67,16 +67,25 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     //req.getRequestDispatcher(view("ristorante/zona")).forward(req,resp);
                     RistoranteDAO serviceRis = new RistoranteDAO();
                     TipologiaDAO serviceTip = new TipologiaDAO();
-                    UtenteDAO serviceUtente=new UtenteDAO();
-                    String citta=null;
-                    HttpSession session=req.getSession(false);
-                    if(session!=null){
-                        UtenteSession us=(UtenteSession) session.getAttribute("utenteSession");
-                        Utente u=serviceUtente.doRetrieveById(us.getId());
-                        citta=u.getCitta();
-                    }
-                    else{
-                        citta=req.getParameter("citta");
+                    UtenteDAO serviceUtente = new UtenteDAO();
+                    String citta = null;
+                    HttpSession session = req.getSession(true);
+                    UtenteSession us = (UtenteSession) session.getAttribute("utenteSession");
+                    if (us != null) {
+                        Utente u = serviceUtente.doRetrieveById(us.getId());
+                        citta = u.getCitta();
+                        System.out.println("cittaUtente:" + citta);
+                    } else {
+                        if(session.getAttribute("citta")==null) {
+                            citta = req.getParameter("citta");
+                            session.setAttribute("citta", citta);
+                            System.out.println("cittaGuest:" + citta);
+                        }
+                        else {
+                            citta = (String) session.getAttribute("citta");
+                            System.out.println("cittaGuestSecondaVolta:" + citta);
+                        }
+
                     }
                     if (req.getParameter("page") != null) {
                         validate(CommonValidator.validatePage(req));
@@ -86,11 +95,11 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     int size = serviceRis.countCitta(citta);
                     req.setAttribute("pages", paginator.getPages(size));
 
-                    Ordine cart=(Ordine) session.getAttribute("cart");
-                    if(cart!=null){
+                    Ordine cart = (Ordine) session.getAttribute("cart");
+                    if (cart != null) {
                         session.removeAttribute("cart");
                     }
-
+                    System.out.println("citta" + citta);
                     ArrayList<Ristorante> ristoranti = serviceRis.doRetrieveByCitta(citta, paginator, false);
                     ArrayList<Tipologia> tipologie = serviceTip.doRetriveByCitta(citta);
                     req.setAttribute("ristoranti", ristoranti);
@@ -101,26 +110,26 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/show-menu": {//possibilità di aggiungere al carrello i prodotti
                     validate(CommonValidator.validateId(req));
                     int id = Integer.parseInt(req.getParameter("id"));
-                    UtenteDAO utenteDAO=new UtenteDAO();
+                    UtenteDAO utenteDAO = new UtenteDAO();
                     RistoranteDAO ristoranteDAO = new RistoranteDAO();
                     Ristorante r = ristoranteDAO.doRetrieveById(id, true);
                     if (r == null)
                         notFound();
                     ProdottoDAO prodottoDAO = new ProdottoDAO();
-                    OrdineDAO ordineDAO=new OrdineDAO();
+                    OrdineDAO ordineDAO = new OrdineDAO();
                     MenuDAO menuDAO = new MenuDAO();
-                    HttpSession session=req.getSession(true);
-                    synchronized (session){
-                            if(session.getAttribute("cart")==null) {
-                                Ordine cart = new Ordine();
-                                cart.setRistorante(r);
-                                session.setAttribute("cart", cart);
-                            }
+                    HttpSession session = req.getSession(true);
+                    synchronized (session) {
+                        if (session.getAttribute("cart") == null) {
+                            Ordine cart = new Ordine();
+                            cart.setRistorante(r);
+                            session.setAttribute("cart", cart);
+                        }
                     }
-                    UtenteSession us=(UtenteSession) session.getAttribute("utenteSession");
-                    Utente u=new Utente();
+                    UtenteSession us = (UtenteSession) session.getAttribute("utenteSession");
+                    Utente u = new Utente();
                     boolean pref = false;
-                    if(us!=null) {
+                    if (us != null) {
                         u.setCodice(us.getId());
                         int count = utenteDAO.countRistPref(u);
                         ArrayList<Ristorante> prefs = utenteDAO.doRetrievebyUtentePref(us.getId(), new Paginator(1, count));
@@ -156,7 +165,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     req.setAttribute("ristorante", r);
                     req.getRequestDispatcher(view("ristorante/info")).forward(req, resp);
                 }
-                    break;
+                break;
                 case "/show-menu-admin": {
                     authorizeUtente(req.getSession());
                     validate(CommonValidator.validateId(req));
@@ -258,11 +267,11 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     validate(CommonValidator.validateId(req));
                     System.out.println(prodottoValidator.validateIdRis(req));
                     validate(prodottoValidator.validateIdRis(req));
-                    int idUtente=Integer.parseInt(req.getParameter("id"));
-                    int idRis=Integer.parseInt(req.getParameter("idRis"));
+                    int idUtente = Integer.parseInt(req.getParameter("id"));
+                    int idRis = Integer.parseInt(req.getParameter("idRis"));
 
-                    RistoranteDAO service=new RistoranteDAO();
-                    if(!service.savePreferenza(idRis, idUtente))
+                    RistoranteDAO service = new RistoranteDAO();
+                    if (!service.savePreferenza(idRis, idUtente))
                         InternalError();
                     else
                         resp.sendRedirect("/FoodOut/ristorante/show-menu?id=" + idRis);
@@ -276,11 +285,11 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     validate(CommonValidator.validateId(req));
                     System.out.println(prodottoValidator.validateIdRis(req));
                     validate(prodottoValidator.validateIdRis(req));
-                    int idUtente=Integer.parseInt(req.getParameter("id"));
-                    int idRis=Integer.parseInt(req.getParameter("idRis"));
+                    int idUtente = Integer.parseInt(req.getParameter("id"));
+                    int idRis = Integer.parseInt(req.getParameter("idRis"));
 
-                    RistoranteDAO service=new RistoranteDAO();
-                    if(!service.deletePreferenza(idRis, idUtente))
+                    RistoranteDAO service = new RistoranteDAO();
+                    if (!service.deletePreferenza(idRis, idUtente))
                         InternalError();
                     else
                         resp.sendRedirect("/FoodOut/ristorante/show-menu?id=" + idRis);

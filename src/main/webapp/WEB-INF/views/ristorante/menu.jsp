@@ -313,7 +313,7 @@
 
     <div class="cell grid-x" id="header">
         <nav class="grid-y navbar align-center cell">
-            <img onclick="goBack()" src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
+            <img onclick="goBack()" src="/FoodOut/images/logo.png" class="fluid-image" id="logo" title="Torna indietro">
             <div id="links">
                 <a href="${pageContext.request.contextPath}/ristorante/show-info?id=${ristorante.codice}">
                     Info </a>
