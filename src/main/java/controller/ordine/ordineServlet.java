@@ -25,7 +25,9 @@ public class ordineServlet extends controller {
         String path=getPath(req);
         try {
             switch (path) {
-                case "/utente":
+                case "/utente-storico":
+                    break;
+                case "/utente-attesa":
                     break;
                 case "/dettagli": {
                     authorizeUtente(req.getSession());
@@ -108,8 +110,6 @@ public class ordineServlet extends controller {
         try {
             switch (path) {
                 case "/ordine-recensione-utente":
-                    break;
-                case "/ordine-update-rider":
                     break;
                 case "/ordine-pagamento":
                     break;

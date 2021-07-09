@@ -391,6 +391,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                     break;
                 }
                 case "/disponibilita": {
+                    req.setAttribute("back",view("ristorante/add-disponibilita"));
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
                     validate(disponibilitaValidator.validateForm(req));

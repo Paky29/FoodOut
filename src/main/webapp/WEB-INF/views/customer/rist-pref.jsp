@@ -1,12 +1,12 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Profilo"/>
-        <jsp:param name="scripts" value="customer,show_zona"/>
-        <jsp:param name="styles" value="customer,show_zona"/>
+        <jsp:param name="scripts" value="customer,"/>
+        <jsp:param name="styles" value="customer,"/>
     </jsp:include>
     <style>
         input {
@@ -23,47 +23,59 @@
     <%@include file="../partials/customer/sidebar.jsp" %>
     <section class="content grid-y">
         <%@include file="../partials/customer/header.jsp" %>
-        <div class="body grid-x justify-center">
-            <c:if test="${not empty alert}">
-                <%@ include file="../partials/alert.jsp"%>
-            </c:if>
-            <section class="cell w100 grid-x container justify-center">
-                <div class="cell w100 grid-x show-ris">
-                    <div class="grid-x justify-center info-ris cell">
-                        <fieldset class="grid-x cell w100 index">
-                            <c:choose>
-                                <c:when test="${not empty ristoranti}">
-                                    <h2 class="cell"> Ristoranti preferiti </h2>
-                                    <c:forEach items="${ristoranti}" var="ristorante">
-                                        <label class="field cell w100 ristorante grid-x" onclick="showRisDetails(this)" title="Clicca per visitare">
-                                            <div class="w70">
-                                                <div class="w80" style="font-weight: bold;">${ristorante.nome}</div>
-                                                <c:forEach begin="0" end="2" var="counter">
-                                                    <span class="w80" style="color:black;font-weight: normal; font-style: italic"> ${ristorante.tipologie[counter].nome}</span>
-                                                </c:forEach>
-                                                <div class="w80">
-                                                    <c:forEach var="counter" begin="1" end="${ristorante.rating}">
-                                                        <%@include file="../../../icons/moto.svg" %>
-                                                    </c:forEach>
-                                                </div>
-                                            </div>
-                                            <img class="w80" src="/FoodOut/covers/${ristorante.urlImmagine}">
-                                            <input style="display: none" id="id" name="id" value="${ristorante.codice}"/>
-                                        </label>
+            <div class="body grid-x justify-center">
+                <c:if test="${not empty alert}">
+                    <%@ include file="../partials/alert.jsp"%>
+                </c:if>
+                <section class="grid-y cell restaurants justify-center">
+                    <table class="table restaurants-table">
+                        <caption> Ristoranti </caption>
+                        <thead>
+                        <tr>
+                            <th> Nome </th>
+                            <th> Rating </th>
+                            <th> Tipologie </th>
+                            <th> Tasso Consegna</th>
+                            <th> Spesa Minima</th>
+                            <th> </th>
+                            <th> </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${ristoranti}" var="ristorante">
+                            <tr <c:if test="${!ristorante.valido}"> style="background-color: lightgrey;"</c:if> >
+                                <td data-head="Nome">${ristorante.nome} </td>
+                                <td data-head="Rating">
+                                    <c:forEach var="counter" begin="1" end="${ristorante.rating}">
+                                        <%@include file="../../../icons/moto.svg" %>
                                     </c:forEach>
-                                </c:when>
-                                <c:otherwise> <h2> Non sono presenti ristoranti preferiti</h2> </c:otherwise>
-                            </c:choose>
-                        </fieldset>
-                    </div>
-                    <div class="cell justify-center ">
+                                </td>
+                                <td data-head="Tipologie">
+                                    <c:choose>
+                                        <c:when test="${fn:length(ristorante.tipologie)==0}">
+                                            No tipologie
+                                        </c:when>
+                                        <c:when test="${fn:length(ristorante.tipologie)==1}">
+                                            ${ristorante.tipologie[0].nome}...
+                                        </c:when>
+                                        <c:otherwise>
+                                            ${ristorante.tipologie[0].nome}, ${ristorante.tipologie[1].nome}...
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td style="border-bottom: 0" > <a href="/FoodOut/ristorante/show-menu?id=${ristorante.codice}" target="_blank"> Vai al profilo </a></td>
+                                <td class="blank" value="${ristorante.codice}"></td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                    <div>
                         <jsp:include page="../partials/paginator.jsp">
                             <jsp:param name="risorsa" value="ristoranti-pref"/>
                         </jsp:include>
                     </div>
-                </div>
-            </section>
-        </div>
+                </section>
+            </div>
         <%@include file="../partials/customer/footer.jsp" %>
     </section>
 </main>
