@@ -11,24 +11,32 @@
         <jsp:param name="styles" value="show_zona"/>
         <jsp:param name="scripts" value="show_zona"/>
     </jsp:include>
-   <style>
-       #welcome{
-           cursor: pointer;
-       }
-   </style>
+    <style>
+        #welcome, #back {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <div class="app">
     <div class="cell grid-x" id="header">
         <nav class="grid-y navbar align-center cell">
             <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
-            <div id="user">
-                <span class="account" style="color: white" onclick="toProfile(this)">
-                    <%@include file="../../../icons/user.svg"%> <%--cambiare con icona user--%>
+            <c:choose>
+                <c:when test="${utenteSession==null}">
+                    <div id="guest" style="color: white" onclick="goToIndex()" title="Clicca per cambiare citta">
+                        <span id="back">${citta}</span>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div id="user">
+                <span class="account" style="color: white" onclick="toProfile()">
+                    <%@include file="../../../icons/user.svg" %>
                     <span id="welcome">Benvenuto, ${utenteSession.nome}</span>
-                    <input style="display: none" type="number" name="idUtente" id="idUtente" value="${utenteSession.id}">
                 </span>
-            </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
             <label class="field command w100 justify-center">
                 <input type="text" placeholder="Cerca Ristoranti">
             </label>
@@ -37,14 +45,14 @@
             <form class="cell grid-x search w20">
                 <section class="grid-x cell w100">
                     <h3 class="cell w100 title" style="color:white"> Tipologie: </h3>
-                        <c:if test="${not empty tipologie}">
-                            <c:forEach items="${tipologie}" var="tipologia">
-                                <div class="cell grid-x align-center filtro">
-                                    <input type="checkbox" id="tipologia" name="tipologia" value="${tipologia.nome}">
-                                    <label for="tipologia"> ${tipologia.nome} </label>
-                                </div>
-                            </c:forEach>
-                        </c:if>
+                    <c:if test="${not empty tipologie}">
+                        <c:forEach items="${tipologie}" var="tipologia">
+                            <div class="cell grid-x align-center filtro">
+                                <input type="checkbox" id="tipologia" name="tipologia" value="${tipologia.nome}">
+                                <label for="tipologia"> ${tipologia.nome} </label>
+                            </div>
+                        </c:forEach>
+                    </c:if>
 
                     <h3 class="cell w100 title" style="color:white"> Filtri: </h3>
                     <div class="cell grid-x align-center filtro">
@@ -62,30 +70,36 @@
                     <div class="grid-x cell w100 index" style="border: 1px solid lightgrey">
                         <c:choose>
                             <c:when test="${not empty ristoranti}">
-                                    <h2 class="cell"> Ristoranti  </h2>
-                                        <c:forEach items="${ristoranti}" var="ristorante">
-                                                    <label class="field cell w100 ristorante grid-x" onclick="showRisDetails(this)" title="Clicca per visitare">
-                                                        <div class="w70">
-                                                        <div class="w80" style="font-weight: bold;">${ristorante.nome}</div>
-                                                        <c:forEach begin="0" end="2" var="counter">
-                                                            <span class="w80" style="color:black;font-weight: normal; font-style: italic"> ${ristorante.tipologie[counter].nome}</span>
-                                                        </c:forEach>
-                                                            <div class="w80">
-                                                                <c:forEach var="counter" begin="1" end="${ristorante.rating}">
-                                                                    <%@include file="../../../icons/moto.svg" %>
-                                                                </c:forEach>
-                                                            </div>
-                                                            <div class="w80" style="color:black;font-weight: normal; font-style: italic;"> Spesa minima: ${ristorante.spesaMinima}</div>
-                                                            <div class="w80" style="color:black;font-weight: normal; font-style: italic"> Tasso consegna: ${ristorante.tassoConsegna}</div>
+                                <h2 class="cell"> Ristoranti </h2>
+                                <c:forEach items="${ristoranti}" var="ristorante">
+                                    <label class="field cell w100 ristorante grid-x" onclick="showRisDetails(this)"
+                                           title="Clicca per visitare">
+                                        <div class="w70">
+                                            <div class="w80" style="font-weight: bold;">${ristorante.nome}</div>
+                                            <c:forEach begin="0" end="2" var="counter">
+                                                <span class="w80"
+                                                      style="color:black;font-weight: normal; font-style: italic"> ${ristorante.tipologie[counter].nome}</span>
+                                            </c:forEach>
+                                            <div class="w80">
+                                                <c:forEach var="counter" begin="1" end="${ristorante.rating}">
+                                                    <%@include file="../../../icons/moto.svg" %>
+                                                </c:forEach>
+                                            </div>
+                                            <div class="w80"
+                                                 style="color:black;font-weight: normal; font-style: italic;"> Spesa
+                                                minima: ${ristorante.spesaMinima}</div>
+                                            <div class="w80"
+                                                 style="color:black;font-weight: normal; font-style: italic"> Tasso
+                                                consegna: ${ristorante.tassoConsegna}</div>
 
-                                                        </div>
+                                        </div>
 
-                                                        <img class="w80" src="/FoodOut/covers/${ristorante.urlImmagine}">
-                                                        <input style="display: none" id="id" name="id" value="${ristorante.codice}"/>
-                                                    </label>
-                                        </c:forEach>
+                                        <img class="w80" src="/FoodOut/covers/${ristorante.urlImmagine}">
+                                        <input style="display: none" id="id" name="id" value="${ristorante.codice}"/>
+                                    </label>
+                                </c:forEach>
                             </c:when>
-                            <c:otherwise> <h2> Non sono presenti ristoranti </h2> </c:otherwise>
+                            <c:otherwise><h2> Non sono presenti ristoranti </h2></c:otherwise>
                         </c:choose>
                     </div>
                 </div>

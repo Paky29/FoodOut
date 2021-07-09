@@ -91,6 +91,7 @@
     <%
         TipologiaDAO service=new TipologiaDAO();
         ArrayList<Tipologia> tipologie=service.doRetrieveByVendite();
+        session.removeAttribute("citta");
     %>
 
     <div class="content">
