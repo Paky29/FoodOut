@@ -74,16 +74,13 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     if (us != null) {
                         Utente u = serviceUtente.doRetrieveById(us.getId());
                         citta = u.getCitta();
-                        System.out.println("cittaUtente:" + citta);
                     } else {
                         if(session.getAttribute("citta")==null) {
                             citta = req.getParameter("citta");
                             session.setAttribute("citta", citta);
-                            System.out.println("cittaGuest:" + citta);
                         }
                         else {
                             citta = (String) session.getAttribute("citta");
-                            System.out.println("cittaGuestSecondaVolta:" + citta);
                         }
 
                     }
@@ -99,7 +96,6 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     if (cart != null) {
                         session.removeAttribute("cart");
                     }
-                    System.out.println("citta" + citta);
                     ArrayList<Ristorante> ristoranti = serviceRis.doRetrieveByCitta(citta, paginator, false);
                     ArrayList<Tipologia> tipologie = serviceTip.doRetriveByCitta(citta);
                     req.setAttribute("ristoranti", ristoranti);
@@ -155,7 +151,6 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     break;
                 }
                 case "/show-info": {
-                    authenticateUtente(req.getSession(false));
                     validate(CommonValidator.validateId(req));
                     int id = Integer.parseInt(req.getParameter("id"));
                     RistoranteDAO ristoranteDAO = new RistoranteDAO();
@@ -217,9 +212,31 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     req.getRequestDispatcher(view("ristorante/info-admin")).forward(req, resp);
                     break;
                 }
-                case "/show-recensioni":
+                case "/show-recensioni": {
+                    validate(CommonValidator.validateId(req));
+                    int id=Integer.parseInt(req.getParameter("id"));
+                    RistoranteDAO serviceRis=new RistoranteDAO();
+                    OrdineDAO serviceOrd=new OrdineDAO();
+                    Ristorante r=serviceRis.doRetrieveById(id,false);
+                    if(r==null){
+                        notFound();
+                    }
+
+                    if (req.getParameter("page") != null) {
+                        validate(CommonValidator.validatePage(req));
+                    }
+                    int intPage = parsePage(req);
+                    Paginator paginator = new Paginator(intPage, 6);
+                    int size = serviceOrd.countRistorante(r);
+                    req.setAttribute("pages", paginator.getPages(size));
+
+                    ArrayList<Ordine> ordini=serviceOrd.doRetrieveByRistorante(r, paginator);
+                    req.setAttribute("ordini", ordini);
+                    req.setAttribute("nome", r.getNome());
+                    req.setAttribute("id", r.getCodice());
                     req.getRequestDispatcher(view("ristorante/recensioni")).forward(req, resp);
                     break;
+                }
                 case "/add":
                     authorizeUtente(req.getSession());
                     req.getRequestDispatcher(view("ristorante/add-ristorante")).forward(req, resp);

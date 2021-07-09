@@ -15,11 +15,34 @@
         #welcome, #back {
             cursor: pointer;
         }
+
+        #container-links {
+            position: absolute;
+            top:0px;
+            right:0px;
+            height: 10%;
+        }
+
+        #links{
+            background-color: var(--primary);
+            padding: 3px;
+            border: 1px solid var(--primary);
+            border-radius: 10px;
+            margin: 5px;
+            font-weight: bold;
+            font-family: Myriad;
+        }
     </style>
 </head>
 <body>
 <div class="app">
     <div class="cell grid-x" id="header">
+        <div id="container-links" class="cell" style="justify-content: flex-end">
+            <div id="links">
+            <a href="${pageContext.request.contextPath}/utente/login"> Accedi </a>
+            <a href="${pageContext.request.contextPath}/utente/signup"> Registrati </a>
+            </div>
+        </div>
         <nav class="grid-y navbar align-center cell">
             <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
             <c:choose>

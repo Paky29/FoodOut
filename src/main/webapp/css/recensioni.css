@@ -1,0 +1,181 @@
+.fluid-image{
+    max-width: 100%;
+    height: 65px;
+}
+
+
+figure {
+    margin: 5px;
+    background-color: rgba(0,0,0,0);
+    color:white;
+    text-align:center;
+    max-width:100%;
+}
+
+#links a{
+    text-decoration: none;
+    color:white;
+    font-weight: bold;
+    font-style: normal;
+    font-family: Myriad;
+}
+
+.navbar{
+    justify-content: space-between;
+    width:100%;
+    padding: 20px;
+}
+
+
+@media screen and (min-width: 769px){
+    .fluid-image{
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+
+
+.index  {
+    padding: 1rem;
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    opacity: revert;
+}
+
+.index > * {
+    margin: 10px;
+}
+
+input:focus {
+    outline: 1px solid var(--primary);
+}
+
+input {
+    height: 40px;
+    line-height: 40px;
+}
+
+
+.info {
+    text-align: center;
+    font-style: normal;
+    font-weight: bold;
+    padding: 1rem;
+    border-top: 1px solid black;
+    background-color: lightgrey;
+}
+
+.info > a {
+    text-decoration: none;
+    color: black;
+    margin-right: 25px;
+    margin-left: 25px;
+}
+
+.container {
+    margin: 10px;
+    height: 100vh;
+}
+
+div#header {
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("/FoodOut/images/sfondo.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 500px;
+    position: relative;
+}
+
+
+.ordine{
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin: 2px;
+    color: black;
+    background-color: lightgrey;
+    justify-content: space-between;
+    max-height: 200px;
+}
+
+
+
+.title {
+    text-align: center;
+    padding: 5px;
+    height: content-box;
+}
+
+
+#user, #guest {
+    background-color: var(--primary);
+    padding: 3px;
+    border: 1px solid var(--primary);
+    border-radius: 10px;
+    margin: 2px;
+    font-weight: bold;
+    font-family: Myriad;
+}
+
+.ordine{
+    cursor: pointer;
+}
+
+.navbar {
+    justify-content: space-between;
+}
+
+.navbar > * {
+    margin: 5px 0;
+}
+
+
+#container-links {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 10%;
+}
+
+.links {
+    background-color: var(--primary);
+    padding: 3px;
+    border: 1px solid var(--primary);
+    border-radius: 10px;
+    margin: 5px;
+    font-weight: bold;
+    font-family: Myriad;
+}
+
+.links a {
+    text-decoration: none;
+    color: white;
+    font-family: Myriad;
+    font-weight: bold;
+    font-style: normal;
+    margin: 5px;
+}
+
+.ordine {
+    box-sizing: unset;
+}
+
+ordine > label > * {
+    margin:5px;
+}
+
+textarea{
+    background-color: white !important;
+    resize: none;
+}
+
+
+
+
+
+
+
+
