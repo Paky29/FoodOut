@@ -277,6 +277,8 @@
         border: 1px solid #888;
         width: 80%;
         box-sizing: unset;
+        border-radius: 10px;
+
     }
 
     .show-amount * {
@@ -297,6 +299,10 @@
         top: 10px;
         right: 10px;
         cursor: pointer;
+    }
+
+    .show-menu{
+        height: 50vh;
     }
 
 
@@ -342,7 +348,7 @@
             </form>
             <div class="cell w50 grid-x justify-center show-menu">
                 <div class="grid-x justify-center info-ris cell">
-                    <fieldset class="grid-x cell w100 index">
+                    <div class="grid-x cell w100 index" style="border: 1px solid lightgrey">
                         <span class="cell" id="star">
                             <c:if test="${utenteSession!=null}">
                                 <c:choose>
@@ -477,7 +483,7 @@
                                 </c:if>
                             </c:forEach>
                         </c:if>
-                    </fieldset>
+                    </div>
                 </div>
             </div>
             <form class="cell w20 grid-x show-ord">

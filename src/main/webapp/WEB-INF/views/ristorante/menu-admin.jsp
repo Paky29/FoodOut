@@ -204,6 +204,14 @@
         cursor: pointer;
     }
 
+    mark{
+        max-height: 100px;
+    }
+
+    .show-menu{
+        height: 50vh;
+    }
+
 
 
 </style>
@@ -220,20 +228,20 @@
                     Recensioni </a>
             </div>
         </nav>
-        <section class="cell w100 grid-x container">
+        <section class="cell grid-x container">
             <form class="cell w20 grid-x search">
-                <section class="grid-x cell w100">
-                    <h3 class="cell w100 title" style="color:white"> Tipologie: </h3>
+                <section class="grid-x cell">
+                    <h3 class="cell title" style="color:white"> Tipologie: </h3>
                     <div class="tipologie cell grid-x">
                         <c:if test="${not empty ristorante.tipologie}">
-                        <c:forEach items="${ristorante.tipologie}" var="tipologia">
-                            <a href="#${tipologia.nome}" class="field cell w100 tipologia">
-                                <span style="font-style: italic"> ${tipologia.nome} </span>
-                            </a>
-                        </c:forEach>
+                            <c:forEach items="${ristorante.tipologie}" var="tipologia">
+                                <a href="#${tipologia.nome}" class="field cell w100 tipologia">
+                                    <span style="font-style: italic"> ${tipologia.nome} </span>
+                                </a>
+                            </c:forEach>
                         </c:if>
                         <c:if test="${not empty menus}">
-                        <a class="field cell w100 tipologia" href="#Menu"><span style="font-style: italic">Menu</span></a>
+                            <a class="field cell tipologia" href="#Menu"><span style="font-style: italic">Menu</span></a>
                         </c:if>
                     </div>
                     <h3 class="cell w100 title"> Filtri: </h3>
@@ -245,49 +253,49 @@
             </form>
             <div class="cell w75 grid-x justify-center show-menu">
                 <div class="grid-x justify-center info-ris cell">
-                    <fieldset class="grid-x cell w100 index">
+                    <div class="grid-x cell w100 index" style="border: 1px solid lightgrey">
                         <span class="cell" id="plus" onclick="addProdMenu(this)">
                             <%@include file="../../../icons/plus.svg" %>
                         </span>
                         <c:choose>
                             <c:when test="${not empty ristorante.prodotti}">
                                 <c:if test="${countValidi>0}">
-                        <h2 class="cell"> Prodotti </h2>
-                        <c:forEach items="${ristorante.tipologie}" var="tipologia">
-                            <h3 class="cell" style="font-style: italic"><a name="${tipologia.nome}">${tipologia.nome}</a></h3>
-                            <c:forEach items="${ristorante.prodotti}" var="prodotto">
-                                <c:if test="${tipologia.nome.equals(prodotto.tipologia.nome)}">
-                                <c:if test="${prodotto.valido}">
-                                    <label class="field cell w100 prodotto grid-x" onclick="showProdDetails(this)" title="Clicca per modificare">
-                                    <span class="w80" style="font-weight: bold;">${prodotto.nome}</span>
-                                        <c:if test="${not empty prodotto.urlImmagine}">
-                                            <img class="w10" src="/FoodOut/covers/${prodotto.urlImmagine}">
-                                        </c:if>
-                                        <input style="display: none" id="id" name="id" value="${prodotto.codice}"/>
-                                    </label>
-                                </c:if>
-                                </c:if>
-                            </c:forEach>
-                        </c:forEach>
+                                    <h2 class="cell mark"> Prodotti </h2>
+                                    <c:forEach items="${ristorante.tipologie}" var="tipologia">
+                                        <h3 class="cell mark" style="font-style: italic"><a name="${tipologia.nome}">${tipologia.nome}</a></h3>
+                                        <c:forEach items="${ristorante.prodotti}" var="prodotto">
+                                            <c:if test="${tipologia.nome.equals(prodotto.tipologia.nome)}">
+                                                <c:if test="${prodotto.valido}">
+                                                    <label class="field cell w100 prodotto grid-x" onclick="showProdDetails(this)" title="Clicca per modificare">
+                                                        <span class="w80" style="font-weight: bold;">${prodotto.nome}</span>
+                                                        <c:if test="${not empty prodotto.urlImmagine}">
+                                                            <img class="w10" src="/FoodOut/covers/${prodotto.urlImmagine}">
+                                                        </c:if>
+                                                        <input style="display: none" id="id" name="id" value="${prodotto.codice}"/>
+                                                    </label>
+                                                </c:if>
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:forEach>
                                 </c:if>
                             </c:when>
                             <c:otherwise> <h2> Non sono presenti prodotti </h2> </c:otherwise>
                         </c:choose>
                         <c:if test="${not empty menus}">
-                        <h2 class="cell"><a name="Menu"> Menu</a> </h2>
-                        <c:forEach items="${menus}" var="menu">
-                            <label class="field cell w100 menu" style="font-weight: bold" onclick="showMenuDetails(this)" title="Clicca per modificare" >
-                                <span  <c:if test="${!menu.valido}"> style="color:red;"</c:if>> ${menu.nome} </span>
-                                <input style="display: none" id="id" name="id" value="${menu.codice}"/>
-                            </label>
-                        </c:forEach>
+                            <h2 class="cell"><a name="Menu"> Menu</a> </h2>
+                            <c:forEach items="${menus}" var="menu">
+                                <label class="field cell w100 menu" style="font-weight: bold" onclick="showMenuDetails(this)" title="Clicca per modificare" >
+                                    <span  <c:if test="${!menu.valido}"> style="color:red;"</c:if>> ${menu.nome} </span>
+                                    <input style="display: none" id="id" name="id" value="${menu.codice}"/>
+                                </label>
+                            </c:forEach>
                         </c:if>
                         <c:if test="${countNonValidi>0}">
                             <h2 class="cell"> Prodotti non validi </h2>
                             <c:forEach items="${ristorante.prodotti}" var="prodotto">
                                 <c:if test="${!prodotto.valido}">
                                     <label class="field cell w100 prodotto grid-x" onclick="showProdDetails(this)" title="Clicca per modificare">
-                                    <span class="w80" style="font-weight: bold; color:red;">${prodotto.nome}</span>
+                                        <span class="w80" style="font-weight: bold; color:red;">${prodotto.nome}</span>
                                         <c:if test="${not empty prodotto.urlImmagine}">
                                             <img class="w10" src="/FoodOut/covers/${prodotto.urlImmagine}">
                                         </c:if>
@@ -295,10 +303,10 @@
                                     </label>
                                 </c:if>
 
-                        </c:forEach>
+                            </c:forEach>
                         </c:if>
 
-                    </fieldset>
+                    </div>
                 </div>
             </div>
             <input type="number" style="display:none;" id="idRis" name="idRis" value="${ristorante.codice}">

@@ -353,6 +353,7 @@ public class ristoranteServlet extends controller implements ErrorHandler {
                 case "/add": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
+                    System.out.println(req.getParameter("nome"));
                     validate(ristoranteValidator.validateForm(req));
                     Ristorante r = new Ristorante();
                     r.setNome(req.getParameter("nome"));

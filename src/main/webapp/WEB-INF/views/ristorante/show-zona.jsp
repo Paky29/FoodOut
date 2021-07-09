@@ -34,9 +34,9 @@
             </label>
         </nav>
         <section class="cell w100 grid-x container">
-            <form class="cell w20 grid-x search">
+            <form class="cell grid-x search w20">
                 <section class="grid-x cell w100">
-                    <h3 class="cell w100 title" style="color:white"> Filtri: </h3>
+                    <h3 class="cell w100 title" style="color:white"> Tipologie: </h3>
                         <c:if test="${not empty tipologie}">
                             <c:forEach items="${tipologie}" var="tipologia">
                                 <div class="cell grid-x align-center filtro">
@@ -45,6 +45,8 @@
                                 </div>
                             </c:forEach>
                         </c:if>
+
+                    <h3 class="cell w100 title" style="color:white"> Filtri: </h3>
                     <div class="cell grid-x align-center filtro">
                         <input type="checkbox" id="sconto" name="sconto" value="1">
                         <label for="sconto"> Sconto </label>
@@ -57,7 +59,7 @@
             </form>
             <div class="cell w75 grid-x justify-center show-ris">
                 <div class="grid-x justify-center info-ris cell">
-                    <fieldset class="grid-x cell w100 index">
+                    <div class="grid-x cell w100 index" style="border: 1px solid lightgrey">
                         <c:choose>
                             <c:when test="${not empty ristoranti}">
                                     <h2 class="cell"> Ristoranti  </h2>
@@ -85,7 +87,7 @@
                             </c:when>
                             <c:otherwise> <h2> Non sono presenti ristoranti </h2> </c:otherwise>
                         </c:choose>
-                    </fieldset>
+                    </div>
                 </div>
                 <div class="cell justify-center ">
                     <jsp:include page="../partials/paginator.jsp">
@@ -93,10 +95,15 @@
                     </jsp:include>
                 </div>
             </div>
+            <footer class="info grid-x cell justify-center align-center">
+                <a href="faq.jsp" class="cell w10"> FAQ </a>
+                <a href="/" class="cell w10"> Chi siamo </a>
+                <a href="/" class="cell w10"> Collabora con noi</a>
+                <a href="contatti.jsp" class="cell w10"> Contatti</a>
+            </footer>
         </section>
 
     </div>
 </div>
-
 </body>
 </html>

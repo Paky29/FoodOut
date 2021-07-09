@@ -13,8 +13,9 @@
     </jsp:include>
     <script>
         $(document).ready(function(){
+            $("#sliding-table").hide()
             $("#mock-button").click(function (){
-                $("#sliding-table").slideToggle("slow");
+                $("#sliding-table").fadeToggle();
             })
         })
 
@@ -125,6 +126,11 @@
         cursor: pointer;
     }
 
+    .table{
+        border-radius: 10px;
+    }
+
+
 
 </style>
 <div class="app">
@@ -214,39 +220,39 @@
                 </c:if>
             </fieldset>
         </form>
-    <div class="disponibilita grid-x justify-center align-center cell">
-        <section class="grid-y cell w63">
-            <div class="cell justify-center" id="mock-button">
-                Elenco prodotti
-            </div>
-            <div class="grid-x cell " id="sliding-table">
-            <table class="table cell ">
-                <thead>
-                    <tr>
-                        <th> Prodotto</th>
-                        <th> Prezzo </th>
-                        <th> Quantità</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach items="${ordine.ordineItems}" var="item">
-                        <tr class="w100">
-                            <td data-head="Prodotto">
-                                ${item.off.nome}
-                            </td>
-                            <td data-head="Prezzo" >
-                                ${item.off.prezzo}
-                            </td>
-                            <td data-head="Quantità">
-                                ${item.quantita}
-                            </td>
+        <div class="disponibilita grid-x justify-center align-center cell">
+            <section class="grid-y cell w63">
+                <div class="cell justify-center" id="mock-button">
+                    Elenco prodotti
+                </div>
+                <div class="grid-x cell " id="sliding-table">
+                    <table class="table cell ">
+                        <thead>
+                        <tr>
+                            <th> Prodotto</th>
+                            <th> Prezzo </th>
+                            <th> Quantità</th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-            </div>
-        </section>
-    </div>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${ordine.ordineItems}" var="item">
+                            <tr class="w100">
+                                <td data-head="Prodotto">
+                                        ${item.off.nome}
+                                </td>
+                                <td data-head="Prezzo" >
+                                        ${item.off.prezzo}
+                                </td>
+                                <td data-head="Quantità">
+                                        ${item.quantita}
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
     </div>
 </div>
 </body>
