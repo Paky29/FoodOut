@@ -203,9 +203,9 @@ public class ordineServlet extends controller {
                     if (u == null) {
                         InternalError();
                     }
-                    if(u.getSaldo()<o.getTotale())
-                        notAllowed();
                     String metodo=req.getParameter("metodo");
+                    if(metodo.equals("saldo") && u.getSaldo()<o.getTotale())
+                        notAllowed();
                     if(metodo.equals("cash"))
                         u.setSaldo(u.getSaldo()-o.getTotale());
                     o.setUtente(u);
