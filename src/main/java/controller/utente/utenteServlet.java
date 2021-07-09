@@ -16,6 +16,8 @@ import controller.http.RequestValidator;
 import controller.http.controller;
 ;
 import controller.prodotto.prodottoValidator;
+import model.ordine.Ordine;
+import model.ordine.OrdineDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
 import model.utente.Utente;
@@ -122,6 +124,33 @@ public class utenteServlet extends controller {
                     }
                     else
                         InternalError();
+                    break;
+                }
+
+                case "/storico": {
+                    HttpSession session=req.getSession(false);
+                    authenticateUtente(session);
+                    UtenteSession us =(UtenteSession) session.getAttribute("utenteSession");
+                    UtenteDAO serviceUtente=new UtenteDAO();
+                    OrdineDAO serviceOrd=new OrdineDAO();
+                    Utente u=serviceUtente.doRetrieveById(us.getId());
+                    if(u==null)
+                        notFound();
+
+                    if (req.getParameter("page") != null) {
+                        validate(CommonValidator.validatePage(req));
+                    }
+                    int intPage = parsePage(req);
+                    Paginator paginator = new Paginator(intPage, 6);
+                    int size = serviceOrd.countUtenteConsegnato(u, true);
+                    req.setAttribute("pages", paginator.getPages(size));
+                    ArrayList<Ordine> ordini=serviceOrd.doRetrieveByUtentePaginatedAndConsegnato(u, paginator, true);
+
+
+                    req.setAttribute("ordini", ordini);
+                    req.setAttribute("totOrd", size);
+
+                    req.getRequestDispatcher(view("customer/storico")).forward(req,resp);
                     break;
                 }
 

@@ -8,8 +8,8 @@
 <head>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Ordini"/>
-        <jsp:param name="scripts" value="crm,crm_ordini"/>
-        <jsp:param name="styles" value="crm,crm_ordini"/>
+        <jsp:param name="scripts" value="customer,customer_storico"/>
+        <jsp:param name="styles" value="customer,customer_storico"/>
     </jsp:include>
     <style>
         .blank{
@@ -24,21 +24,18 @@
 </head>
 <body>
 <main class="app">
-    <%@include file="../partials/crm/sidebar.jsp" %>
+    <%@include file="../partials/customer/sidebar.jsp" %>
     <section class="content grid-y">
-        <%@include file="../partials/crm/header.jsp" %>
+        <%@include file="../partials/customer/header.jsp" %>
+        <div class="body grid-x justify-center">
+            <c:if test="${not empty alert}">
+                <%@ include file="../partials/alert.jsp"%>
+            </c:if>
         <div class="body grid-x justify-center">
             <div class="searchbar grid-x align-center cell">
-                <label class="field command w75">
-                    <input type="text" placeholder="Cerca ordine per ristorante">
-                </label>
                 <label class="field command w20" id="totaleOrd">
                     <span> Totale ordini:</span>
                     <span style="color: black; font-weight: normal"> ${totOrd}</span>
-                </label>
-                <label class="field command w20" id="incasso">
-                    <span> Incasso:</span>
-                    <span style="color: black; font-weight: normal"> ${incasso}</span>
                 </label>
             </div>
             <section class="grid-y cell orders">
@@ -53,7 +50,7 @@
                         <th> Totale </th>
                         <th> Metodo pagamento</th>
                         <th> Consegnato </th>
-                        <th> Elimina </th>
+                        <th> Recensione </th>
                         <th> </th>
                         <th> </th>
                     </tr>
@@ -95,8 +92,15 @@
                                     </c:otherwise>
                                 </c:choose>
                             </td>
-                            <td class="delete" onclick="deleteOrd(${ordine.codice})" data-head="Elimina">
-                                <%@include file="../../../icons/delete.svg" %>
+                            <td class="recensione" data-head="Recensione">
+                                <c:choose>
+                                <c:when test="${ordine.voto==0}">
+                                <span onclick="addRecensione(${ordine.codice}, ${ordine.voto==0})"> <%@include file="../../../icons/pencil1.svg" %></span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span onclick="addRecensione(${ordine.codice},${ordine.voto==0})"> <%@include file="../../../icons/valid.svg" %></span>
+                                </c:otherwise>
+                                </c:choose>
                             </td>
                             <td style="border-bottom: 0" > <a href="/FoodOut/ordine/dettagli?id=${ordine.codice}"> Dettagli ordine </a></td>
                             <td class="blank" value="${ordine.codice}"></td>
@@ -111,7 +115,7 @@
                 </div>
             </section>
         </div>
-        <%@include file="../partials/crm/footer.jsp" %>
+                <%@include file="../partials/customer/footer.jsp" %>
     </section>
 </main>
 </body>

@@ -1,7 +1,6 @@
-function deleteOrd(ord){
-    var id=document.getElementById("id").textContent;
+function deleteOrd(ordId){
     var conferma = confirm("Sicuro di voler eliminare l'ordine?");
     if(conferma){
-        window.location.href = "/FoodOut/ordine/delete?id=" + id;
+        window.location.href = "/FoodOut/ordine/delete?id=" + ordId;
     }
 };
