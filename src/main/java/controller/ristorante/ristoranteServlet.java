@@ -234,6 +234,8 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     req.setAttribute("ordini", ordini);
                     req.setAttribute("nome", r.getNome());
                     req.setAttribute("id", r.getCodice());
+                    req.setAttribute("urlImmagine", r.getUrlImmagine());
+                    req.setAttribute("numRecensioni", serviceOrd.countRecensioni(r.getCodice()));
                     req.getRequestDispatcher(view("ristorante/recensioni")).forward(req, resp);
                     break;
                 }

@@ -798,4 +798,17 @@ public class OrdineDAO {
                 return 0;
         }
     }
+
+    public int countRecensioni(int idRis) throws SQLException{
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count(distinct o.codiceOrdine) as numRecensioni  FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente WHERE o.codRis_fk=? AND o.voto!=0");
+            ps.setInt(1,idRis);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numRecensioni");
+            }
+            else
+                return 0;
+        }
+    }
 }

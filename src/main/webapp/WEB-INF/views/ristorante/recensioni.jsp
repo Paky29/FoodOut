@@ -12,8 +12,16 @@
         <jsp:param name="scripts" value="recensioni"/>
     </jsp:include>
     <style>
-        #welcome, #back {
-            cursor: pointer;
+
+
+        div#header {
+            background-color: rgba(0, 0, 0, 0);
+            background-image: url("/FoodOut/covers/${urlImmagine}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            height: 500px;
+            position: relative;
         }
 
     </style>
@@ -22,10 +30,22 @@
 <div class="app">
     <div class="cell grid-x" id="header">
         <div id="container-links" class="cell" style="justify-content: flex-end">
-            <div class="links">
-                <a href="${pageContext.request.contextPath}/utente/login"> Accedi </a>
-                <a href="${pageContext.request.contextPath}/utente/signup"> Registrati </a>
-            </div>
+            <c:choose>
+                <c:when test="${utenteSession==null}">
+                    <div class="links">
+                        <a href="${pageContext.request.contextPath}/utente/login"> Accedi </a>
+                        <a href="${pageContext.request.contextPath}/utente/signup"> Registrati </a>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="links">
+                        <span class="account" style="color: white" onclick="toProfile()">
+                    <%@include file="../../../icons/user.svg" %>
+                    <span id="welcome">Benvenuto, ${utenteSession.nome}</span>
+                        </span>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
         <nav class="grid-y navbar align-center cell">
             <img onclick="goBack()" src="/FoodOut/images/logo.png" class="fluid-image" id="logo" title="Torna indietro">
@@ -40,10 +60,11 @@
         </nav>
         <section class="cell w100 justify-center grid-x container">
             <div class="grid-x justify-center align-center index w75">
+                <h2 class="cell"> Recensioni per <span style="color: var(--primary); font-style: italic"> ${nome}</span> </h2>
                     <c:choose>
-                            <c:when test="${not empty ordini}">
-                                <h2 class="cell"> Recensioni per <span style="color: var(--primary); font-style: italic"> ${nome}</span> </h2>
+                        <c:when test="${numRecensioni!=0}">
                                 <c:forEach items="${ordini}" var="ordine">
+                                    <c:if test="${ordine.voto!=0}">
                                     <label class="field cell w40 ordine grid-x">
                                         <div class="w100">
                                             <div style="font-weight: bold;">${ordine.utente.nome}</div>
@@ -55,32 +76,28 @@
                                                 </c:forEach>
                                                 </div>
                                             </div>
-                                            <c:if test="${not empty ordine.giudizio}">
-                                                <span> Info:</span>
+
+                                                <span> Giudizio:</span>
                                                 <label for="giudizio" class="field cell w40">
                                                     <textarea rows="3" cols="100" type="text" name="giudizio" id="giudizio" maxlength="200" disabled>${ordine.giudizio}</textarea>
                                                 </label>
-                                            </c:if>
 
 
                                         </div>
                                     </label>
-                                </c:forEach>
+
+            </c:if>
+            </c:forEach>
+            </div>
+            <div class="cell justify-center ">
+                <jsp:include page="../partials/paginator.jsp">
+                    <jsp:param name="risorsa" value="show-recensioni"/>
+                </jsp:include>
+            </div>
+
                             </c:when>
-                            <c:otherwise><h2> Non sono presenti recensioni </h2></c:otherwise>
+                            <c:otherwise><h2> Non sono presenti recensioni </h2> </div></c:otherwise>
                         </c:choose>
-                    </div>
-                <div class="cell justify-center ">
-                    <jsp:include page="../partials/paginator.jsp">
-                        <jsp:param name="risorsa" value="show-recensioni"/>
-                    </jsp:include>
-                </div>
-            <footer class="info grid-x cell justify-center align-center">
-                <a href="faq.jsp" class="cell w10"> FAQ </a>
-                <a href="/" class="cell w10"> Chi siamo </a>
-                <a href="/" class="cell w10"> Collabora con noi</a>
-                <a href="contatti.jsp" class="cell w10"> Contatti</a>
-            </footer>
         </section>
 
     </div>

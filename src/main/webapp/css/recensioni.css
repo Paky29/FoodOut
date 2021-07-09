@@ -76,7 +76,7 @@ input {
 
 .container {
     margin: 10px;
-    height: 100vh;
+    height: 50vh;
 }
 
 div#header {
@@ -172,7 +172,16 @@ textarea{
     resize: none;
 }
 
+#welcome {
+    cursor: pointer;
+}
 
+
+@media screen and (max-width:769px) {
+    #welcome{
+        display: none;
+    }
+}
 
 
 

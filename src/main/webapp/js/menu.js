@@ -34,3 +34,7 @@ function addToPrefs(idRis, idUtente){
 function removeFromPrefs(idRis, idUtente){
     window.location.href="/FoodOut/ristorante/remove-pref?id=" + idUtente + "&idRis=" + idRis;
 }
+
+function toProfile(){
+    window.location.href = "/FoodOut/utente/profile";
+}
