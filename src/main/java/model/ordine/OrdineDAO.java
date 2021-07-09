@@ -501,14 +501,15 @@ public class OrdineDAO {
     public boolean doSave(Ordine o) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             conn.setAutoCommit(false);
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO Ordine (dataOrdine, totale, nota, metodoPagamento, consegnato, codUtente_fk, codRis_fk) VALUES(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO Ordine (dataOrdine, totale, nota, metodoPagamento, voto, consegnato, codUtente_fk, codRis_fk) VALUES(?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ps.setDate(1, Date.valueOf(o.getDataOrdine()));
             ps.setFloat(2, o.getTotale());
             ps.setString(3, o.getNota());
             ps.setString(4, o.getMetodoPagamento());
-            ps.setBoolean(5, o.isConsegnato());
-            ps.setInt(6, o.getUtente().getCodice());
-            ps.setInt(7, o.getRistorante().getCodice());
+            ps.setInt(5, o.getVoto());
+            ps.setBoolean(6, o.isConsegnato());
+            ps.setInt(7, o.getUtente().getCodice());
+            ps.setInt(8, o.getRistorante().getCodice());
             int rows = ps.executeUpdate();
 
             if (rows != 1) {

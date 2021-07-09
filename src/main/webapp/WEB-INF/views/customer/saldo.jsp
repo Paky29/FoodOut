@@ -26,7 +26,7 @@
             <c:if test="${not empty alert}">
                 <%@ include file="../partials/alert.jsp"%>
             </c:if>
-            <form class="grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/deposit" method="post">
+            <form class="grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/deposit?function=${function}" method="post">
                 <fieldset
                         class="grid-x cell justify-center">
                     <legend> Gestion saldo</legend>

@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class utenteValidator {
 
-    static RequestValidator validateForm(HttpServletRequest request) {
+    public static RequestValidator validateForm(HttpServletRequest request) {
         RequestValidator validator = new RequestValidator(request);
         validator.checkLength("email", 50, "email deve essere al massimo di 50 caratteri");
         validator.assertEmail("email", "email non valida");
@@ -42,7 +42,7 @@ public class utenteValidator {
         return validator;
     }
 
-    static RequestValidator validateLogin(HttpServletRequest request){
+    public static RequestValidator validateLogin(HttpServletRequest request){
         RequestValidator validator=new RequestValidator(request);
         validator.assertEmail("email", "Formato email non valido");
         validator.assertMatch("pw", Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$"), "Formato password non valido");

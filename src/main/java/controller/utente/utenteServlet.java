@@ -99,11 +99,13 @@ public class utenteServlet extends controller {
                 }
                 case "/saldo": {
                     HttpSession session=req.getSession(false);
+                    validate(CommonValidator.validateFunctionValue(req));
                     authenticateUtente(session);
                     UtenteSession us =(UtenteSession) session.getAttribute("utenteSession");
                     UtenteDAO serviceUtente=new UtenteDAO();
                     Utente u=serviceUtente.doRetrieveById(us.getId());
                     req.setAttribute("profilo",u);
+                    req.setAttribute("function",req.getParameter("function"));
                     req.getRequestDispatcher(view("customer/saldo")).forward(req,resp);
                     break;
                 }
@@ -272,6 +274,8 @@ public class utenteServlet extends controller {
                     HttpSession session=req.getSession();
                     authenticateUtente(session);
                     validate(utenteValidator.validateDeposit(req));
+                    validate(CommonValidator.validateFunctionValue(req));
+                    int function=Integer.parseInt(req.getParameter("function"));
                     float deposito=Float.parseFloat(req.getParameter("deposito"));
                     UtenteSession us=(UtenteSession) session.getAttribute("utenteSession");
                     UtenteDAO serviceDAO=new UtenteDAO();
@@ -280,7 +284,10 @@ public class utenteServlet extends controller {
                     if(!serviceDAO.doUpdate(u))
                         InternalError();
                     else
-                        resp.sendRedirect("/FoodOut/utente/saldo");
+                        if(function==1)
+                            resp.sendRedirect("/FoodOut/ordine/pagamento");
+                        else
+                            resp.sendRedirect("/FoodOut/utente/saldo");
                     break;
                 }
                 default:
