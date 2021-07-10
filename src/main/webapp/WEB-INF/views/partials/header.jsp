@@ -7,13 +7,13 @@
         <a href="${pageContext.request.contextPath}/utente/signup"> Registrati </a>
     </div>
     </nav>
-    <form class="grid-x justify-center align-center address" method="post">
+    <form class="grid-x justify-center align-center address" action="/FoodOut/ristorante/zona">
         <fieldset class="grid-y cell w50 index">
             <h2> Inserisci la tua citt&agrave </h2>
-            <label for="indirizzo" class="field">
-                <input type="text" name="indirizzo" id="indirizzo">
+            <label for="citta" class="field">
+                <input type="text" name="citta" id="citta" required>
             </label>
-            <button type="submit" class="btn primary" onclick="search()"> Cerca ristoranti</button>
+            <button type="submit" class="btn primary"> Cerca ristoranti</button>
         </fieldset>
     </form>
 </div>

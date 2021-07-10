@@ -28,7 +28,7 @@
 </head>
 
 <body>
-<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ordine/login" method="post">
+<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ordine/signup" method="post">
     <c:if test="${not empty alert}">
         <%@ include file="../partials/alert.jsp"%>
     </c:if>
@@ -44,7 +44,7 @@
             <input type="text" name="provincia" id="provincia" placeholder="Provincia">
         </label>
         <label for="citta" class="field w40 cell">
-            <input type="text" name="citta" id="citta" placeholder="Citta">
+            <input type="text" name="citta" id="citta" value="${citta}" readonly>
         </label>
         <label for="via" class="field w50 cell" >
             <input type="text" name="via" id="via" placeholder="Via">

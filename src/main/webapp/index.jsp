@@ -98,8 +98,8 @@
     <div class="content">
         <div class="tipologie app grid-x justify-center align-center">
             <%if(tipologie!=null){for(int i=0;i<tipologie.size() && i<4;++i){%>
-                <span class="cell w20 tipologia">
-                <p class="box"><%=tipologie.get(i).getNome()%></p>
+                <span class="cell w20 tipologia" onclick="search(this)" style="cursor: pointer">
+                    <p class="box" value="<%=tipologie.get(i).getNome()%>"><%=tipologie.get(i).getNome()%></p>
                 </span><%}}%>
         </div>
     </div>

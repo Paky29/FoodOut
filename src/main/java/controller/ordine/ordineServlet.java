@@ -232,16 +232,20 @@ public class ordineServlet extends controller {
                     if(o==null)
                         notAllowed();
                     UtenteSession us = (UtenteSession) session.getAttribute("utenteSession");
-                    UtenteDAO service = new UtenteDAO();
-                    Utente u = service.doRetrieveById(us.getId());
+                    UtenteDAO serviceUtente = new UtenteDAO();
+                    Utente u = serviceUtente.doRetrieveById(us.getId());
                     if (u == null) {
                         InternalError();
                     }
                     String metodo=req.getParameter("metodo");
-                    if(metodo.equals("saldo") && u.getSaldo()<o.getTotale())
-                        notAllowed();
-                    if(metodo.equals("cash"))
-                        u.setSaldo(u.getSaldo()-o.getTotale());
+                    if(metodo.equals("saldo"))
+                        if(u.getSaldo()<o.getTotale())
+                            notAllowed();
+                        else
+                        {
+                            u.setSaldo(u.getSaldo()-o.getTotale());
+                            serviceUtente.doUpdate(u);
+                        }
                     o.setUtente(u);
                     o.setConsegnato(false);
                     o.setOraArrivo(null);

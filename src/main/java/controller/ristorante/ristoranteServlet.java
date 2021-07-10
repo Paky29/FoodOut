@@ -77,9 +77,7 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                         citta = u.getCitta();
                         session.setAttribute("utente",u);
                     } else {
-                        if(session.getAttribute("citta")==null) {
-                            if(req.getParameter("citta")==null)
-                                notFound();
+                        if(req.getParameter("citta")!=null){
                             validate(ristoranteValidator.validateCitta(req));
                             citta = req.getParameter("citta");
                             synchronized (session) {
@@ -87,7 +85,10 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                             }
                         }
                         else {
-                            citta = (String) session.getAttribute("citta");
+                            if (session.getAttribute("citta") == null)
+                                notFound();
+                            else
+                                citta = (String) session.getAttribute("citta");
                         }
                     }
                     if (req.getParameter("page") != null) {
@@ -153,7 +154,6 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     req.setAttribute("pref", pref);
                     req.setAttribute("countProdValidi", ristoranteDAO.countProdottiValidita(r.getCodice(), true));
                     req.getRequestDispatcher(view("ristorante/menu")).forward(req, resp);
-
                     break;
                 }
                 case "/show-info": {
@@ -165,8 +165,8 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                         notFound();
                     req.setAttribute("ristorante", r);
                     req.getRequestDispatcher(view("ristorante/info")).forward(req, resp);
+                    break;
                 }
-                break;
                 case "/show-menu-admin": {
                     authorizeUtente(req.getSession());
                     validate(CommonValidator.validateId(req));
