@@ -145,8 +145,9 @@ public class ordineItemServlet extends controller {
                         Ordine cart=(Ordine) session.getAttribute("cart");
                         boolean isPresent=false;
                         for(OrdineItem oc: cart.getOrdineItems()){
-                            if(oc.getOff().getCodice()==p.getCodice()){
+                            if(oc.getOff().getCodice()==p.getCodice() && oc.getOff().getClass().getName().contains("Prodotto")){
                                 oc.setQuantita(oc.getQuantita()+q);
+                                System.out.println("Gia presente");
                                 isPresent=true;
                                 break;
                             }
@@ -156,7 +157,10 @@ public class ordineItemServlet extends controller {
                             oi.setOff(p);
                             oi.setQuantita(q);
                             cart.getOrdineItems().add(oi);
+                            System.out.println("Aggiunto");
+
                         }
+
                         float totale=cart.getTotale();
                         for(int i=1; i<=q; i++){
                             totale+=p.getPrezzo() - (p.getPrezzo()*p.getSconto())/100;
@@ -166,6 +170,7 @@ public class ordineItemServlet extends controller {
                         session.setAttribute("cart", cart);
                     }
 
+                    System.out.println("Carrello:");
                     Ordine oo=(Ordine) session.getAttribute("cart");
                     for(OrdineItem oii : oo.getOrdineItems())
                         System.out.println(oii.getOff().getNome());
@@ -201,8 +206,9 @@ public class ordineItemServlet extends controller {
                         Ordine cart=(Ordine) session.getAttribute("cart");
                         boolean isPresent=false;
                         for(OrdineItem oc: cart.getOrdineItems()){
-                            if(oc.getOff().getCodice()==m.getCodice()){
+                            if(oc.getOff().getCodice()==m.getCodice() && oc.getOff().getClass().getName().contains("Menu")){
                                 oc.setQuantita(oc.getQuantita()+q);
+                                System.out.println("Gia Presente");
                                 isPresent=true;
                                 break;
                             }
@@ -212,10 +218,16 @@ public class ordineItemServlet extends controller {
                             oi.setOff(m);
                             oi.setQuantita(q);
                             cart.getOrdineItems().add(oi);
+                            System.out.println("Aggiunto");
                         }
                         float totale=cart.getTotale();
                         for(int i=1; i<=q; i++){
                             totale+=m.getPrezzo() - (m.getPrezzo()*m.getSconto())/100;
+                        }
+
+                        System.out.println("Menu");
+                        for(OrdineItem oc: cart.getOrdineItems()){
+                           System.out.println(oc.getOff().getNome());
                         }
                         cart.setTotale(totale);
                         session.setAttribute("cart", cart);

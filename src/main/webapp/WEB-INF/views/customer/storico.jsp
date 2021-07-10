@@ -58,7 +58,7 @@
                         <th> Metodo pagamento</th>
                         <th> Consegnato </th>
                         <th> Recensione </th>
-                        <th> Ristorante </th>
+                        <th> </th>
                         <th> </th>
                     </tr>
                     </thead>
@@ -95,7 +95,7 @@
                                 </c:otherwise>
                                 </c:choose>
                             </td>
-                            <td style="border-bottom: 0" data-head="Ristorante" > <a href="/FoodOut/ristorante/show-info?id=${ordine.ristorante.codice}"> ${ordine.ristorante.nome} </a></td>
+                            <td style="border-bottom: 0"> <a href="/FoodOut/ordine/dettagli-utente?id=${ordine.codice}"> Dettagli ordine </a></td>
                             <td class="blank" value="${ordine.codice}"></td>
                         </tr>
                     </c:forEach>

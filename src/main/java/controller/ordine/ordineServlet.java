@@ -55,6 +55,20 @@ public class ordineServlet extends controller {
                     }
                     break;
                 }
+                case "/dettagli-utente": {
+                    authenticateUtente(req.getSession());
+                    OrdineDAO service = new OrdineDAO();
+                    validate(CommonValidator.validateId(req));
+                    int id = Integer.parseInt(req.getParameter("id"));
+                    Ordine o = service.doRetrieveById(id);
+                    if (o == null)
+                        notFound();
+                    else {
+                        req.setAttribute("ordine", o);
+                        req.getRequestDispatcher(view("ordine/show-utente")).forward(req, resp);
+                    }
+                    break;
+                }
                 /*case "/rider"://passare come parametro lo stato della consegna
                     break;*/
                 case "/ristorante":

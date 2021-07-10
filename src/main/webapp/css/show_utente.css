@@ -1,0 +1,130 @@
+.fluid-image{
+    max-width: 100%;
+    height: 65px;
+}
+
+
+figure {
+    margin: 5px;
+    background-color: rgba(0,0,0,0);
+    color:white;
+    text-align:center;
+    max-width:100%;
+}
+
+#links a{
+    text-decoration: none;
+    color:white;
+    font-weight: bold;
+    font-style: normal;
+    font-family: Myriad;
+}
+
+.navbar{
+    justify-content: space-between;
+    width:100%;
+    padding: 20px;
+}
+
+
+@media screen and (min-width: 769px){
+    .fluid-image{
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+
+.index > * {
+    margin: 10px;
+}
+
+input:focus {
+    outline: 1px solid var(--primary);
+}
+
+input {
+    height: 40px;
+    line-height: 40px;
+}
+
+#urlImmagine {
+    height: 50px;
+    line-height: 27px;
+}
+
+.info{
+    text-align: center;
+    font-style: normal;
+    font-weight: bold;
+    padding: 1rem;
+    border-top: 1px solid black;
+    background-color: lightgrey;
+}
+
+.info > a {
+    text-decoration: none;
+    color: black;
+    margin-right: 25px;
+    margin-left: 25px;
+}
+
+label > span {
+    margin: 5px 5px;
+    font-style: italic;
+}
+
+div#header{
+    background-color: rgba(0,0,0,0);
+    background-image:url("/FoodOut/images/o.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 500px;
+    position: relative;
+}
+
+
+#dettagliRis {
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.voto > svg {
+    margin: 0 2px;
+}
+
+#mock-button{
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
+    font-style: normal;
+    font-family:Myriad;
+    padding: 5px;
+    text-align: center;
+}
+
+th {
+    background-color: lightcoral;
+}
+
+#logo {
+    cursor: pointer;
+}
+
+.table{
+    border-radius: 10px;
+}
+
+#giudizio, #nota{
+    background-color: rgb(244,244,244);
+    resize: none;
+}
+
+label > span > span {
+    margin-left: 3px;
+}
+
+
+
+

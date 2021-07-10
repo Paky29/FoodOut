@@ -55,7 +55,7 @@
                         <th> Ora Arrivo </th>
                         <th> Totale </th>
                         <th> Metodo pagamento</th>
-                        <th> Ristorante </th>
+                        <th> Dettagli ordine </th>
                         <th> </th>
                     </tr>
                     </thead>
@@ -86,7 +86,7 @@
                             </td>
                             <td data-head="Totale"><fmt:formatNumber value="${ordine.totale}" type="currency"/></td>
                             <td data-head="Metodo pagamento">${ordine.metodoPagamento}</td>
-                            <td style="border-bottom: 0" data-head="Ristorante" > <a href="/FoodOut/ristorante/show-info?id=${ordine.ristorante.codice}"> ${ordine.ristorante.nome} </a></td>
+                            <td style="border-bottom: 0" > <a href="/FoodOut/ordine/dettagli-utente?id=${ordine.codice}"> Dettagli ordine </a></td>
                             <td class="blank" value="${ordine.codice}"></td>
                         </tr>
                     </c:forEach>
