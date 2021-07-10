@@ -24,6 +24,9 @@
         height: 500px;
         position: relative;
     }
+    .amount-content .close{
+        cursor: pointer;
+    }
 </style>
 <div class="app">
 
@@ -165,7 +168,12 @@
                                                                            name="idRis" id="idRis"
                                                                            value="${ristorante.codice}">
                                                                     <span class="grid-x cell justify-center">
-                                                                        <button type="submit" class="btn primary"> Aggiungi </button>
+                                                                        <c:choose>
+                                                                            <c:when test="${isOpen==true}"><button type="submit" class="btn primary"> Aggiungi </button></c:when>
+                                                                        <c:otherwise>
+                                                                            <span style="color: red;font-weight: bold">Non puoi ordinare, ristorante chiuso</span>
+                                                                        </c:otherwise>
+                                                                        </c:choose>
                                                                     </span>
                                                                 </fieldset>
                                                             </form>
@@ -271,7 +279,14 @@
                         </c:otherwise>
                     </c:choose>
                     <section class="grid-x cell w100">
-                        <h3 class="cell w100 title" style="color:white"> Ordine: </h3>
+                        <c:choose>
+                            <c:when test="${isOpen==true}">
+                                <h3 class="cell w100 title" style="color:white"> Ordine: </h3>
+                            </c:when>
+                            <c:otherwise>
+                                <h3 class="cell w100 title" style="color:white"> Chiuso </h3>
+                            </c:otherwise>
+                        </c:choose>
                         <c:if test="${not empty cart}">
                             <div class="items cell grid-x">
                             <c:if test="${not empty cart.ordineItems}">

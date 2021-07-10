@@ -316,7 +316,7 @@ public class utenteServlet extends controller {
                         if(function==1)
                             resp.sendRedirect("/FoodOut/ordine/pagamento");
                         else
-                            resp.sendRedirect("/FoodOut/utente/saldo");
+                            resp.sendRedirect("/FoodOut/utente/saldo?function="+function);
                     break;
                 }
                 default:

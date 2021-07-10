@@ -4,6 +4,10 @@ import model.disponibilita.Disponibilita;
 import model.prodotto.Prodotto;
 import model.tipologia.Tipologia;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Ristorante {
@@ -121,6 +125,20 @@ public class Ristorante {
     public boolean isValido() { return valido; }
 
     public void setValido(boolean valido) { this.valido = valido; }
+
+    public boolean isOpen(LocalDateTime ldt){
+        boolean isOpen=false;
+        DayOfWeek dw=ldt.getDayOfWeek();
+        String giorno=Disponibilita.giorni[dw.getValue()-1];
+        LocalTime ora=ldt.toLocalTime();
+        for(Disponibilita d:giorni){
+            if(d.getGiorno().equalsIgnoreCase(giorno) && (d.getOraApertura().isBefore(ora) || d.getOraApertura().equals(ora)) && (d.getOraChiusura().isAfter(ora) || d.getOraChiusura().equals(ora))){
+                isOpen=true;
+                break;
+            }
+        }
+        return isOpen;
+    }
 
     private int codice, civico;
     private String nome, provincia, citta, via, info;

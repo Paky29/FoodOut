@@ -33,6 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -148,7 +149,7 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     req.setAttribute("menus", menuDAO.doRetrieveByRistorante(r.getCodice()));
                     req.setAttribute("countMenuValidi", ristoranteDAO.countMenuValidita(r.getCodice(), true));
                     req.setAttribute("ristorante", r);
-                    System.out.println("pref:" + pref);
+                    req.setAttribute("isOpen",r.isOpen(LocalDateTime.now()));
                     req.setAttribute("pref", pref);
                     req.setAttribute("countProdValidi", ristoranteDAO.countProdottiValidita(r.getCodice(), true));
                     req.getRequestDispatcher(view("ristorante/menu")).forward(req, resp);
