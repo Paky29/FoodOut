@@ -5,8 +5,8 @@
 <head>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Profilo"/>
-        <jsp:param name="scripts" value="customer,"/>
-        <jsp:param name="styles" value="customer,"/>
+        <jsp:param name="scripts" value="customer"/>
+        <jsp:param name="styles" value="customer"/>
     </jsp:include>
     <style>
         input {
@@ -15,6 +15,20 @@
         }
         svg{
             fill: black;
+        }
+        .restaurants{
+            margin: 1rem;
+        }
+
+        .restaurants-table > thead {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        table > caption {
+            font-weight: bold;
+            font-size: large;
+            margin: 10px;
         }
     </style>
 </head>
