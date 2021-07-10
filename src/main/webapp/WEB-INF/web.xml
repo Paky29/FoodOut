@@ -25,6 +25,10 @@
     </error-page>
 
     <error-page>
+        <error-code>405</error-code>
+        <location>/WEB-INF/views/errors/unauthorized.jsp</location>
+    </error-page>
+    <error-page>
         <error-code>403</error-code>
         <location>/WEB-INF/views/errors/unauthorized.jsp</location>
     </error-page>

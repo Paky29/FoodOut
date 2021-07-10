@@ -16,6 +16,10 @@
             cursor: pointer;
         }
 
+        #welcome{
+            display: none;
+        }
+
         #container-links {
             position: absolute;
             top:0px;
@@ -32,16 +36,34 @@
             font-weight: bold;
             font-family: Myriad;
         }
+
+        @media screen and (min-width: 768px){
+            #welcome{
+                display: inline;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="app">
     <div class="cell grid-x" id="header">
         <div id="container-links" class="cell" style="justify-content: flex-end">
-            <div id="links">
-            <a href="${pageContext.request.contextPath}/utente/login"> Accedi </a>
-            <a href="${pageContext.request.contextPath}/utente/signup"> Registrati </a>
-            </div>
+            <c:choose>
+                <c:when test="${utenteSession==null}">
+                    <div id="links">
+                        <a href="${pageContext.request.contextPath}/utente/login"> Accedi </a>
+                        <a href="${pageContext.request.contextPath}/utente/signup"> Registrati </a>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div id="user">
+                        <span class="account" style="color: white" onclick="toProfile()">
+                            <%@include file="../../../icons/user.svg" %>
+                            <span id="welcome">Benvenuto, ${utenteSession.nome}</span>
+                        </span>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
         <nav class="grid-y navbar align-center cell">
             <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
@@ -52,11 +74,8 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <div id="user">
-                <span class="account" style="color: white" onclick="toProfile()">
-                    <%@include file="../../../icons/user.svg" %>
-                    <span id="welcome">Benvenuto, ${utenteSession.nome}</span>
-                </span>
+                    <div id="citta" style="color: white">
+                        <span>${utente.citta}</span>
                     </div>
                 </c:otherwise>
             </c:choose>

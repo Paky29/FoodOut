@@ -74,15 +74,20 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     if (us != null) {
                         Utente u = serviceUtente.doRetrieveById(us.getId());
                         citta = u.getCitta();
+                        session.setAttribute("utente",u);
                     } else {
                         if(session.getAttribute("citta")==null) {
+                            if(req.getParameter("citta")==null)
+                                notFound();
+                            validate(ristoranteValidator.validateCitta(req));
                             citta = req.getParameter("citta");
-                            session.setAttribute("citta", citta);
+                            synchronized (session) {
+                                session.setAttribute("citta", citta);
+                            }
                         }
                         else {
                             citta = (String) session.getAttribute("citta");
                         }
-
                     }
                     if (req.getParameter("page") != null) {
                         validate(CommonValidator.validatePage(req));

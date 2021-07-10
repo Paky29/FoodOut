@@ -8,7 +8,7 @@ menu.addEventListener('click', function() {
 
 const home = document.getElementsByClassName("menu")[0].firstElementChild;
 home.addEventListener('click', function (){
-    window.location.href="/FoodOut/utente/profile";
+    window.location.href="/FoodOut/ristorante/zona";
 });
 
 home.addEventListener('mouseover', function (){

@@ -110,7 +110,7 @@
                 </table>
                 <div>
                     <jsp:include page="../partials/paginator.jsp">
-                        <jsp:param name="risorsa" value="all"/>
+                        <jsp:param name="risorsa" value="storico"/>
                     </jsp:include>
                 </div>
             </section>
