@@ -3,6 +3,8 @@
 <%@ page import="java.io.PrintWriter" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -71,7 +73,7 @@
                             <td data-head="Ora Arrivo">
                                     ${ordine.oraArrivo}
                             </td>
-                            <td data-head="Totale">${ordine.totale}</td>
+                            <td data-head="Totale"><fmt:formatNumber value="${ordine.totale}" type="currency"/></td>
                             <td data-head="Metodo pagamento">${ordine.metodoPagamento}</td>
                             <td data-head="Consegnato">
                                 <c:choose>

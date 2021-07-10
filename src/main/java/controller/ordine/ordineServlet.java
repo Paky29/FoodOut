@@ -67,15 +67,14 @@ public class ordineServlet extends controller {
                     }
                     int intPage = parsePage(req);
                     int totOrd = service.countAll();
-                    int incasso=0;
+                    float incasso=service.getIncasso();
+                    if(incasso==-1)
+                        InternalError();
                     Paginator paginator = new Paginator(intPage, 6);
                     int size = service.countAll();
                     req.setAttribute("pages", paginator.getPages(size));
                     ArrayList<Ordine> ordini = service.doRetrieveAll(paginator);
 
-                    if(ordini!=null)
-                        for(Ordine o: ordini)
-                            incasso+=o.getTotale();
 
                     req.setAttribute("ordini", ordini);
                     req.setAttribute("totOrd", totOrd);

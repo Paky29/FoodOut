@@ -13,11 +13,18 @@
 
 }
 
-.orders{
+input {
+    height: 40px;
+    line-height: 40px;
+}
+svg{
+    fill: black;
+}
+.restaurants{
     margin: 1rem;
 }
 
-.orders-table > thead {
+.restaurants-table > thead {
     background-color: var(--primary);
     color: white;
 }
@@ -28,19 +35,17 @@ table > caption {
     margin: 10px;
 }
 
-td > a {
+a {
     text-decoration: none;
 }
 
-#totaleOrd{
-    color: var(--primary);
-    font-weight: bold;
-    font-style: normal;
-    font-family: Myriad;
-    padding: 10px;
-    justify-content: flex-start;
+.blank{
+    display:none;
+    border-bottom: 0 !important;
 }
 
-svg {
-    fill: black;
+#totaleOrd{
+    color:var(--primary);
+    font-weight: bold;
+    font-family: Myriad;
 }

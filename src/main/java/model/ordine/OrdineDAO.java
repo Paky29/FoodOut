@@ -870,4 +870,16 @@ public class OrdineDAO {
                 return 0;
         }
     }
+
+    public float getIncasso() throws SQLException{
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT sum(o.totale) as incasso FROM Ordine o ");
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getFloat("incasso");
+            }
+            else
+                return -1;
+        }
+    }
 }

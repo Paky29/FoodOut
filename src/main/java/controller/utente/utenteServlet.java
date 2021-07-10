@@ -155,6 +155,33 @@ public class utenteServlet extends controller {
                     break;
                 }
 
+                case "/attesa": {
+                    HttpSession session=req.getSession(false);
+                    authenticateUtente(session);
+                    UtenteSession us =(UtenteSession) session.getAttribute("utenteSession");
+                    UtenteDAO serviceUtente=new UtenteDAO();
+                    OrdineDAO serviceOrd=new OrdineDAO();
+                    Utente u=serviceUtente.doRetrieveById(us.getId());
+                    if(u==null)
+                        notFound();
+
+                    if (req.getParameter("page") != null) {
+                        validate(CommonValidator.validatePage(req));
+                    }
+                    int intPage = parsePage(req);
+                    Paginator paginator = new Paginator(intPage, 6);
+                    int size = serviceOrd.countUtenteConsegnato(u, false);
+                    req.setAttribute("pages", paginator.getPages(size));
+                    ArrayList<Ordine> ordini=serviceOrd.doRetrieveByUtentePaginatedAndConsegnato(u, paginator, false);
+
+
+                    req.setAttribute("ordini", ordini);
+                    req.setAttribute("totOrd", size);
+
+                    req.getRequestDispatcher(view("customer/attesa")).forward(req,resp);
+                    break;
+                }
+
                 default:
                     notFound();
             }

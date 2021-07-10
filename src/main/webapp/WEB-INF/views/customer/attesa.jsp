@@ -3,6 +3,7 @@
 <%@ page import="java.io.PrintWriter" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -65,7 +66,7 @@
                             <td data-head="Data">${ordine.dataOrdine}</td>
                             <td data-head="Ora Partenza">
                                 <c:choose>
-                                    <c:when test="${ordine.oraPartenza==null}">
+                                    <c:when test="${empty ordine.oraPartenza}">
                                         Non partito
                                     </c:when>
                                     <c:otherwise>
@@ -75,7 +76,7 @@
                             </td>
                             <td data-head="Ora Arrivo">
                                 <c:choose>
-                                    <c:when test="${ordine.oraArrivo==null}">
+                                    <c:when test="${empty ordine.oraArrivo}">
                                         Non arrivato
                                     </c:when>
                                     <c:otherwise>
@@ -83,7 +84,7 @@
                                     </c:otherwise>
                                 </c:choose>
                             </td>
-                            <td data-head="Totale">${ordine.totale}</td>
+                            <td data-head="Totale"><fmt:formatNumber value="${ordine.totale}" type="currency"/></td>
                             <td data-head="Metodo pagamento">${ordine.metodoPagamento}</td>
                             <td style="border-bottom: 0" data-head="Ristorante" > <a href="/FoodOut/ristorante/show-info?id=${ordine.ristorante.codice}"> ${ordine.ristorante.nome} </a></td>
                             <td class="blank" value="${ordine.codice}"></td>

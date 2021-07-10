@@ -9,31 +9,7 @@
         <jsp:param name="styles" value="customer,customer_rist_pref"/>
     </jsp:include>
     <style>
-        input {
-            height: 40px;
-            line-height: 40px;
-        }
-        svg{
-            fill: black;
-        }
-        .restaurants{
-            margin: 1rem;
-        }
 
-        .restaurants-table > thead {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        table > caption {
-            font-weight: bold;
-            font-size: large;
-            margin: 10px;
-        }
-
-        a {
-            text-decoration: none;
-        }
 
     </style>
 </head>
@@ -94,7 +70,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
-                                <td style="border-bottom: 0" > <a href="/FoodOut/ristorante/show-menu?id=${ristorante.codice}" target="_blank"> Vai al profilo </a></td>
+                                <td style="border-bottom: 0" > <a href="/FoodOut/ristorante/show-menu?id=${ristorante.codice}"> Vai al profilo </a></td>
                                 <td class="blank" value="${ristorante.codice}"></td>
                             </tr>
                         </c:forEach>
