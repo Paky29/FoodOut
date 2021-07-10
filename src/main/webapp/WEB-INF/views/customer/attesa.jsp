@@ -8,8 +8,8 @@
 <head>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Ordini"/>
-        <jsp:param name="scripts" value="customer,customer_storico"/>
-        <jsp:param name="styles" value="customer,customer_storico"/>
+        <jsp:param name="scripts" value="customer"/>
+        <jsp:param name="styles" value="customer,customer_attesa"/>
     </jsp:include>
     <style>
         .blank{
@@ -54,8 +54,6 @@
                         <th> Ora Arrivo </th>
                         <th> Totale </th>
                         <th> Metodo pagamento</th>
-                        <th> Consegnato </th>
-                        <th> Recensione </th>
                         <th> Ristorante </th>
                         <th> </th>
                     </tr>
@@ -66,33 +64,27 @@
                             <td data-head="Codice" id="id">${ordine.codice}</td>
                             <td data-head="Data">${ordine.dataOrdine}</td>
                             <td data-head="Ora Partenza">
-                                    ${ordine.oraPartenza}
-                            </td>
-                            <td data-head="Ora Arrivo">
-                                    ${ordine.oraArrivo}
-                            </td>
-                            <td data-head="Totale">${ordine.totale}</td>
-                            <td data-head="Metodo pagamento">${ordine.metodoPagamento}</td>
-                            <td data-head="Consegnato">
                                 <c:choose>
-                                    <c:when test="${ordine.consegnato}">
-                                        <span class="valid"><%@include file="../../../icons/valid.svg" %></span>
+                                    <c:when test="${ordine.oraPartenza==null}">
+                                        Non partito
                                     </c:when>
                                     <c:otherwise>
-                                        <%@include file="../../../icons/wait.svg" %>
+                                        ${ordine.oraPartenza}
                                     </c:otherwise>
                                 </c:choose>
                             </td>
-                            <td class="recensione" data-head="Recensione">
+                            <td data-head="Ora Arrivo">
                                 <c:choose>
-                                <c:when test="${ordine.voto==0}">
-                                <span onclick="addRecensione(${ordine.codice}, ${ordine.voto==0})"> <%@include file="../../../icons/pencil1.svg" %></span>
-                                </c:when>
-                                <c:otherwise>
-                                    <span onclick="addRecensione(${ordine.codice},${ordine.voto==0})"> <span class="valid"><%@include file="../../../icons/valid.svg" %></span></span>
-                                </c:otherwise>
+                                    <c:when test="${ordine.oraArrivo==null}">
+                                        Non arrivato
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${ordine.oraArrivo}
+                                    </c:otherwise>
                                 </c:choose>
                             </td>
+                            <td data-head="Totale">${ordine.totale}</td>
+                            <td data-head="Metodo pagamento">${ordine.metodoPagamento}</td>
                             <td style="border-bottom: 0" data-head="Ristorante" > <a href="/FoodOut/ristorante/show-info?id=${ordine.ristorante.codice}"> ${ordine.ristorante.nome} </a></td>
                             <td class="blank" value="${ordine.codice}"></td>
                         </tr>
@@ -107,7 +99,7 @@
             </section>
         </div>
         </div>
-                <%@include file="../partials/customer/footer.jsp" %>
+        <%@include file="../partials/customer/footer.jsp" %>
     </section>
 </main>
 </body>

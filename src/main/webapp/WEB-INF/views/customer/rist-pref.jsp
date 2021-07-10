@@ -6,7 +6,7 @@
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Profilo"/>
         <jsp:param name="scripts" value="customer"/>
-        <jsp:param name="styles" value="customer"/>
+        <jsp:param name="styles" value="customer,customer_rist_pref"/>
     </jsp:include>
     <style>
         input {
@@ -30,6 +30,11 @@
             font-size: large;
             margin: 10px;
         }
+
+        a {
+            text-decoration: none;
+        }
+
     </style>
 </head>
 <body>
@@ -41,24 +46,36 @@
                 <c:if test="${not empty alert}">
                     <%@ include file="../partials/alert.jsp"%>
                 </c:if>
+                <div class="searchbar grid-x align-center cell">
+                            <label class="field command w20" id="totaleOrd">
+                                <span> Totale preferiti:</span>
+                                <span style="color: black; font-weight: normal"> ${totRis}</span>
+                            </label>
+                </div>
                 <section class="grid-y cell restaurants justify-center">
                     <table class="table restaurants-table">
                         <caption> Ristoranti </caption>
                         <thead>
                         <tr>
                             <th> Nome </th>
+                            <th> Provincia </th>
+                            <th> Citt&agrave; </th>
+                            <th> Via </th>
+                            <th> Civico </th>
                             <th> Rating </th>
                             <th> Tipologie </th>
-                            <th> Tasso Consegna</th>
-                            <th> Spesa Minima</th>
                             <th> </th>
                             <th> </th>
+
                         </tr>
                         </thead>
                         <tbody>
                         <c:forEach items="${ristoranti}" var="ristorante">
                             <tr <c:if test="${!ristorante.valido}"> style="background-color: lightgrey;"</c:if> >
                                 <td data-head="Nome">${ristorante.nome} </td>
+                                <td data-head="Provincia">${ristorante.provincia} </td>
+                                <td data-head="Citt&agrave;">${ristorante.citta} </td>
+                                <td data-head="Civico">${ristorante.civico} </td>
                                 <td data-head="Rating">
                                     <c:forEach var="counter" begin="1" end="${ristorante.rating}">
                                         <%@include file="../../../icons/moto.svg" %>

@@ -83,25 +83,38 @@ public class ordineServlet extends controller {
                     req.getRequestDispatcher(view("ordine/show-all")).forward(req, resp);
                     break;
                 }
-                case "/pagamento":
-                    HttpSession session=req.getSession(false);
+                case "/pagamento": {
+                    HttpSession session = req.getSession(false);
                     authenticateUtente(session);
-                    UtenteSession us=(UtenteSession)session.getAttribute("utenteSession");
-                    UtenteDAO serviceUtente=new UtenteDAO();
-                    Utente u=serviceUtente.doRetrieveById(us.getId());
-                    Ordine o=(Ordine)session.getAttribute("cart");
-                    if(o==null)
+                    UtenteSession us = (UtenteSession) session.getAttribute("utenteSession");
+                    UtenteDAO serviceUtente = new UtenteDAO();
+                    Utente u = serviceUtente.doRetrieveById(us.getId());
+                    Ordine o = (Ordine) session.getAttribute("cart");
+                    if (o == null)
                         notAllowed();
                     boolean saldo;
-                    if(u.getSaldo()>o.getTotale())
-                        saldo=true;
+                    if (u.getSaldo() > o.getTotale())
+                        saldo = true;
                     else
-                        saldo=false;
-                    req.setAttribute("saldo",saldo);
-                    req.getRequestDispatcher(view("ordine/pagamento")).forward(req,resp);
+                        saldo = false;
+                    req.setAttribute("saldo", saldo);
+                    req.getRequestDispatcher(view("ordine/pagamento")).forward(req, resp);
                     break;
-                case "/recensione":
+                }
+
+                case "/add-recensione":{
+                    HttpSession session=req.getSession(false);
+                    authenticateUtente(session);
+                    validate(CommonValidator.validateId(req));
+                    int codice=Integer.parseInt(req.getParameter("id"));
+                    OrdineDAO serviceOrd=new OrdineDAO();
+                    if(serviceOrd.doRetrieveById(codice)==null)
+                        notFound();
+                    req.setAttribute("id", codice);
+                    req.getRequestDispatcher(view("ordine/recensione")).forward(req, resp);
                     break;
+                }
+
                 case "/delete":{
                     authorizeUtente(req.getSession());
                     validate(CommonValidator.validateId(req));
@@ -187,8 +200,30 @@ public class ordineServlet extends controller {
                     }
                     break;
                 }
-                case "/recensione-utente":
+                case "/add-recensione": {
+                    HttpSession session=req.getSession(false);
+                    if(session==null ||  session.getAttribute("utenteSession")==null)
+                        System.out.println("utente non trovato");
+                    System.out.println(((UtenteSession)session.getAttribute("utenteSession")).getId());
+                    authenticateUtente(session);
+                    validate(CommonValidator.validateId(req));
+                    System.out.println(ordineValidator.validateForm(req));
+                    validate(ordineValidator.validateForm(req));
+                    int codice=Integer.parseInt(req.getParameter("id"));
+                    int voto=Integer.parseInt(req.getParameter("voto"));
+                    String giudizio=req.getParameter("giudizio");
+                    OrdineDAO serviceOrd=new OrdineDAO();
+                    Ordine ord=serviceOrd.doRetrieveById(codice);
+                    if(ord==null)
+                        notFound();
+                    ord.setVoto(voto);
+                    ord.setGiudizio(giudizio);
+                    if(!serviceOrd.updateVG(ord))
+                        InternalError();
+                    else
+                        resp.sendRedirect("/FoodOut/utente/storico");
                     break;
+                }
                 case "/pagamento":{
                     HttpSession session=req.getSession(false);
                     authenticateUtente(session);

@@ -96,6 +96,7 @@ public class utenteServlet extends controller {
                     req.setAttribute("pages", paginator.getPages(size));
                     ArrayList<Ristorante> ristoranti=serviceUtente.doRetrievebyUtentePref(u.getCodice(),paginator);
                     req.setAttribute("ristoranti",ristoranti);
+                    req.setAttribute("totRis", size);
                     req.getRequestDispatcher(view("customer/rist-pref")).forward(req,resp);
                     break;
                 }

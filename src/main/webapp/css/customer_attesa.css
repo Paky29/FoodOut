@@ -1,0 +1,46 @@
+.searchbar {
+    background-color: white;
+    padding: .2rem;
+    border-bottom: 2px dotted var(--primary);
+    max-height: 20%; /* da vedere */
+}
+
+
+.searchbar > *{
+    color:white;
+    margin-right: 8px;
+    margin-left: 8px;
+
+}
+
+.orders{
+    margin: 1rem;
+}
+
+.orders-table > thead {
+    background-color: var(--primary);
+    color: white;
+}
+
+table > caption {
+    font-weight: bold;
+    font-size: large;
+    margin: 10px;
+}
+
+td > a {
+    text-decoration: none;
+}
+
+#totaleOrd{
+    color: var(--primary);
+    font-weight: bold;
+    font-style: normal;
+    font-family: Myriad;
+    padding: 10px;
+    justify-content: flex-start;
+}
+
+svg {
+    fill: black;
+}
