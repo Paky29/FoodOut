@@ -14,12 +14,19 @@
 </head>
 <body>
 <style>
+    #star {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+    }
 
     .index {
         padding: 1rem;<%--dimensione relativa al root--%>
         background-color: white;
         border-radius: 10px;
         opacity: revert;
+        position:relative;
     }
 
     .index > * {
@@ -141,7 +148,21 @@
             </div>
         </nav>
         <div class="grid-x justify-center align-center info-ris cell">
-            <fieldset class="grid-x index cell w63">
+            <div style="border:1px solid lightgrey" class="grid-x index cell w63">
+                <span class="cell" id="star">
+                <c:if test="${utenteSession!=null}">
+                    <c:choose>
+                        <c:when test="${pref==false}">
+                            <span onclick="addToPrefs(${ristorante.codice}, ${utenteSession.id})">
+                                <%@include file="../../../icons/no_pref.svg" %></span>
+                        </c:when>
+                        <c:otherwise>
+                            <span onclick="removeFromPrefs(${ristorante.codice}, ${utenteSession.id})">
+                                <%@include file="../../../icons/pref.svg" %></span>
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
+                </span>
                 <h2 class="cell"> Info </h2>
                 <label for="nome" class="field cell w80" >
                     <span style="font-weight: bold"> Nome: </span>
@@ -201,7 +222,7 @@
                     <span style="font-weight: bold"> Info:</span>
                     <span name="info" id="info"> ${ristorante.info}</span>
                 </label>
-            </fieldset>
+            </div>
         </div>
         <div class="disponibilita grid-x justify-center align-center cell">
             <section class="grid-y cell w63">

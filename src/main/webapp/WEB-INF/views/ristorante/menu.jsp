@@ -87,7 +87,7 @@
             </form>
             <div class="cell w50 grid-x justify-center show-menu">
                 <div class="grid-x justify-center info-ris cell">
-                    <div class="grid-x cell w100 index" style="border: 1px solid lightgrey">
+                    <div class="grid-x cell index" style="border: 1px solid lightgrey">
                         <span class="cell" id="star">
                             <c:if test="${utenteSession!=null}">
                                 <c:choose>
@@ -169,6 +169,7 @@
                                                                            value="${ristorante.codice}">
                                                                     <span class="grid-x cell justify-center">
                                                                         <c:choose>
+                                                                            <c:when test="${utenteSession.admin==true}"><span style="color: red;font-weight: bold">Non puoi ordinare, sei un amministratore</span></c:when>
                                                                             <c:when test="${isOpen==true}"><button type="submit" class="btn primary"> Aggiungi </button></c:when>
                                                                         <c:otherwise>
                                                                             <span style="color: red;font-weight: bold">Non puoi ordinare, ristorante chiuso</span>
