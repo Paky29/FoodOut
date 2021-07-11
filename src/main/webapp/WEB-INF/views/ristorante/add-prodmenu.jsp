@@ -3,10 +3,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Aggiungi prodotto-menu"/>
     </jsp:include>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         .app {
             background: linear-gradient(var(--primary), white);

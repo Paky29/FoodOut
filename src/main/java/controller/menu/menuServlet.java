@@ -4,6 +4,7 @@ import controller.http.CommonValidator;
 import controller.http.InvalidRequestException;
 import controller.http.RequestValidator;
 import controller.http.controller;
+import controller.prodotto.prodottoValidator;
 import controller.tipologia.tipologiaValidator;
 import model.menu.Menu;
 import model.menu.MenuDAO;
@@ -11,6 +12,8 @@ import model.prodotto.Prodotto;
 import model.prodotto.ProdottoDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
+import model.tipologia.Tipologia;
+import model.tipologia.TipologiaDAO;
 
 import javax.management.MalformedObjectNameException;
 import javax.servlet.ServletException;
@@ -53,10 +56,6 @@ public class menuServlet extends controller{
 
                     break;
                 }
-                case "/delete":
-                    break;
-                case "/edit-prodotti"://mostra select di prodotti da aggiungere e da togliere
-                    break;
                 default:
                     notFound();
             }
@@ -80,28 +79,40 @@ public class menuServlet extends controller{
                 case "/create": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
-                    validate(menuValidator.validateForm(req));
+                    req.setAttribute("back",view("ristorante/add-prodmenu"));
                     validate(CommonValidator.validateId(req));
                     validate(CommonValidator.validateFunctionValue(req));
-                    int id = Integer.parseInt(req.getParameter("id"));
-                    int function = Integer.parseInt(req.getParameter("function"));
+                    //preparazione alert
+                    int function=Integer.parseInt(req.getParameter("function"));
+                    int codice=Integer.parseInt(req.getParameter("id"));
+                    RistoranteDAO serviceRis = new RistoranteDAO();
+                    Ristorante r = serviceRis.doRetrieveById(codice, true);
+                    ProdottoDAO serviceProd = new ProdottoDAO();
+                    r.setProdotti(serviceProd.doRetrieveByRistorante(codice));
+                    req.setAttribute("ristorante",r);
+                    req.setAttribute("function",function);
+                    TipologiaDAO serviceTip=new TipologiaDAO();
+                    ArrayList<Tipologia> tipologie = serviceTip.doRetrieveAll();
+                    req.setAttribute("tipologie", tipologie);
+                    req.setAttribute("countProdValidi", serviceRis.countProdottiValidita(codice, true));
+                    validate(menuValidator.validateForm(req));
+
                     Menu m = new Menu();
                     m.setNome(req.getParameter("nome"));
                     m.setPrezzo(Float.parseFloat(req.getParameter("prezzo")));
                     m.setSconto(Integer.parseInt(req.getParameter("sconto")));
                     m.setValido(true);
                     String[] prodotti = req.getParameterValues("prodotti");
-                    ProdottoDAO serviceProd = new ProdottoDAO();
                     for (int i = 0; i < prodotti.length; ++i) {
                         m.getProdotti().add(serviceProd.doRetrievebyId(Integer.parseInt(prodotti[i])));
                     }
                     MenuDAO serviceMenu = new MenuDAO();
                     if (serviceMenu.doSave(m)) {
                         if (req.getParameter("button").equals("again"))
-                            resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id=" + id + "&function=" + function);
+                            resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id=" + codice + "&function=" + function);
                         else {
                             if (function == 1)
-                                resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id=" + id);
+                                resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id=" + codice);
                             else
                                 resp.sendRedirect("/FoodOut/ristorante/all");
                         }

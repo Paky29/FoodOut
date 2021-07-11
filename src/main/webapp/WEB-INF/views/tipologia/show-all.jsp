@@ -49,7 +49,6 @@
                         <th> Nome </th>
                         <th> Descrizione </th>
                         <th> Modifica</th>
-                        <th> Elimina</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -59,9 +58,6 @@
                             <td data-head="Descrizione" class="descrizione" value="${tipologia.descrizione}">${tipologia.descrizione}</td>
                             <td class="edit" data-head="Modifica" onclick="editTip(this)">
                                 <%@include file="../../../icons/pencil1.svg" %>
-                            </td>
-                            <td class="delete" data-head="Elimina" onclick="deleteTip(this)">
-                                <%@include file="../../../icons/delete.svg" %>
                             </td>
                         </tr>
                     </c:forEach>

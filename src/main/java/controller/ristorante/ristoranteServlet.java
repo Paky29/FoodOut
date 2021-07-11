@@ -387,7 +387,7 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                 case "/add": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
-                    System.out.println(req.getParameter("nome"));
+                    req.setAttribute("back",view("ristorante/add-ristorante"));
                     validate(ristoranteValidator.validateForm(req));
                     Ristorante r = new Ristorante();
                     r.setNome(req.getParameter("nome"));
@@ -425,12 +425,13 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     break;
                 }
                 case "/disponibilita": {
-                    req.setAttribute("back",view("ristorante/add-disponibilita"));
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
-                    validate(disponibilitaValidator.validateForm(req));
+                    req.setAttribute("back",view("ristorante/add-disponibilita"));
                     validate(CommonValidator.validateId(req));
                     int codice = Integer.parseInt(req.getParameter("id"));
+                    req.setAttribute("id",codice);
+                    validate(disponibilitaValidator.validateForm(req));
                     RistoranteDAO serviceRis = new RistoranteDAO();
                     if (serviceRis.doRetrieveById(codice, true) == null)
                         notFound();

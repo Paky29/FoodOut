@@ -29,13 +29,15 @@ public class tipologiaServlet extends controller {
         try {
             switch (path) {
                 case "/create": {
+                    authorizeUtente(req.getSession(false));
                     validate(CommonValidator.validateFunctionValue(req));
                     int function = Integer.parseInt(req.getParameter("function"));
                     req.setAttribute("function", function);
                     req.getRequestDispatcher(view("tipologia/create-edit-tipologia")).forward(req, resp);
                     break;
                 }
-                case "/update": {//mostra form con informazioni modificabili
+                case "/update": {
+                    authorizeUtente(req.getSession(false));
                     validate(CommonValidator.validateFunctionValue(req));
                     int function=Integer.parseInt(req.getParameter("function"));
                     validate(tipologiaValidator.validateName(req,"nome"));
@@ -49,7 +51,7 @@ public class tipologiaServlet extends controller {
                     break;
                 }
                 case "/delete": {
-                    authorizeUtente(req.getSession());
+                    authorizeUtente(req.getSession(false));
                     validate(tipologiaValidator.validateName(req, "nome"));
                     TipologiaDAO service = new TipologiaDAO();
                     String nome = req.getParameter("nome");
@@ -61,7 +63,7 @@ public class tipologiaServlet extends controller {
                     break;
                 }
                 case "/all": {
-                    authorizeUtente(req.getSession());
+                    authorizeUtente(req.getSession(false));
                     TipologiaDAO service = new TipologiaDAO();
                     if (req.getParameter("page") != null) {
                         validate(CommonValidator.validatePage(req));
@@ -97,17 +99,22 @@ public class tipologiaServlet extends controller {
         try {
             switch (path) {
                 case "/create-edit": {
-                    req.setAttribute("back",view("tipologia/create-edit-tipologia"));
-                    HttpSession session = req.getSession();
+                    HttpSession session = req.getSession(false);
                     authorizeUtente(session);
+                    req.setAttribute("back",view("tipologia/create-edit-tipologia"));
                     validate(CommonValidator.validateFunctionValue(req));
-                    req.setAttribute("function",req.getParameter("function"));
                     int function=Integer.parseInt(req.getParameter("function"));
+                    req.setAttribute("function",function);
+                    TipologiaDAO service = new TipologiaDAO();
+                    if(function==1){
+                        validate(tipologiaValidator.validateName(req, "nomeVecchio"));
+                        Tipologia tip=service.doRetrieveByNome(req.getParameter("nomeVecchio"));
+                        req.setAttribute("tipologia",tip);
+                    }
                     validate(tipologiaValidator.validateForm(req));
                     Tipologia t = new Tipologia();
                     t.setNome(req.getParameter("nome"));
                     t.setDescrizione(req.getParameter("descrizione"));
-                    TipologiaDAO service = new TipologiaDAO();
                     if(function==0) {
                         if (service.doSave(t)) {
                             resp.sendRedirect("/FoodOut/tipologia/all");
@@ -115,7 +122,6 @@ public class tipologiaServlet extends controller {
                             InternalError();
                     }
                     else{
-                        validate(tipologiaValidator.validateName(req, "nomeVecchio"));
                         String nomeVecchio=req.getParameter("nomeVecchio");
                         if(t.getNome().equals(nomeVecchio)) {
                             if (service.doUpdate(t, nomeVecchio)) {

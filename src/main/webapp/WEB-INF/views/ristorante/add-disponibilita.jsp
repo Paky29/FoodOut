@@ -2,12 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="it" dir="ltr">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Aggiungi Disponibilita"/>
         <jsp:param name="styles" value="crm"/>
         <jsp:param name="scripts" value="add_disponibilita"/>
     </jsp:include>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         .app {
             background: linear-gradient(var(--primary), white);

@@ -12,9 +12,14 @@ public class menuValidator {
         validator.assertPositiveDouble("prezzo","prezzo deve essere un numero con la virgola");
         validator.assertMatch("sconto", Pattern.compile("^((100)|[0-9]?[0-9]?)$"),"sconto deve essere un intero tra 0 e 100");
         String[] prodotti=request.getParameterValues("prodotti");
-        boolean size=prodotti.length>=2;
+        boolean size;
+        if(prodotti==null)
+            size=false;
+        else
+            size=prodotti.length>=2;
         validator.gatherError(size,"il menu deve contenere almeno due prodotti");
-        validator.assertInts("prodotti","errore nei codici dei prodotti");
+        if(size)
+            validator.assertInts("prodotti","errore nei codici dei prodotti");
         return validator;
     }
 

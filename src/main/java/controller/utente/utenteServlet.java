@@ -269,7 +269,7 @@ public class utenteServlet extends controller {
                     break;
                 }
                 case "/update": {
-                    //req.setAttribute("back","FoodOut/utente/show");
+                    req.setAttribute("back",view("crm/show"));
                     HttpSession session = req.getSession();
                     authenticateUtente(session);
                     validate(utenteValidator.validateUpdate(req));
@@ -300,6 +300,7 @@ public class utenteServlet extends controller {
                     break;
                 }
                 case "/update-pw": {
+                    req.setAttribute("back",view("site/update-pw"));
                     HttpSession session = req.getSession();
                     authenticateUtente(session);
                     validate(utenteValidator.validateUpdatePassword(req));

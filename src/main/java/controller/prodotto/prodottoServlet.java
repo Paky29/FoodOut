@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 @WebServlet(name="prodottoServlet", value="/prodotto/*")
 @MultipartConfig
@@ -76,20 +77,28 @@ public class prodottoServlet extends controller{
         try{
         switch(path) {
             case "/create": {
-                req.setAttribute("back",view("ristorante/add-prodmenu"));
                 HttpSession session = req.getSession();
                 authorizeUtente(session);
-
-                validate(prodottoValidator.validateForm(req));
+                req.setAttribute("back",view("ristorante/add-prodmenu"));
                 validate(CommonValidator.validateId(req));
                 validate(CommonValidator.validateFunctionValue(req));
-
+                //preparazione alert
                 int function=Integer.parseInt(req.getParameter("function"));
+                int codice=Integer.parseInt(req.getParameter("id"));
+                RistoranteDAO serviceRis = new RistoranteDAO();
+                Ristorante r = serviceRis.doRetrieveById(codice, true);
+                req.setAttribute("ristorante",r);
+                req.setAttribute("function",function);
+                TipologiaDAO serviceTip=new TipologiaDAO();
+                ArrayList<Tipologia> tipologie = serviceTip.doRetrieveAll();
+                req.setAttribute("tipologie", tipologie);
+                req.setAttribute("countProdValidi", serviceRis.countProdottiValidita(codice, true));
+                validate(prodottoValidator.validateForm(req));
+
                 Prodotto pr = new Prodotto();
                 pr.setNome(req.getParameter("nome"));
                 pr.setPrezzo(Float.parseFloat(req.getParameter("prezzo")));
                 pr.setSconto(Integer.parseInt(req.getParameter("sconto")));
-                TipologiaDAO serviceTip=new TipologiaDAO();
                 Tipologia t = serviceTip.doRetrieveByNome(req.getParameter("tipologia"));
                 if(t==null)
                     notFound();
@@ -103,8 +112,6 @@ public class prodottoServlet extends controller{
                     pr.setUrlImmagine(null);
                 else
                     pr.setUrlImmagine(fileName);
-                Ristorante r = new Ristorante();
-                r.setCodice(Integer.parseInt(req.getParameter("id")));
                 pr.setRistorante(r);
                 ProdottoDAO service = new ProdottoDAO();
                 if (service.doSave(pr)) {
