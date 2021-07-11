@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import controller.http.CommonValidator;
 import controller.http.InvalidRequestException;
@@ -22,6 +24,10 @@ import model.prodotto.Prodotto;
 import model.prodotto.ProdottoDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
+import model.utente.Utente;
+import model.utente.UtenteDAO;
+import model.utility.Paginator;
+import model.utility.UtenteSession;
 
 @WebServlet(name="ordineItemServlet", value="/ordineItem/*")
 public class ordineItemServlet extends controller {
@@ -123,13 +129,43 @@ public class ordineItemServlet extends controller {
             switch (path) {
                 case "/add-prodotto-item": { //aggiungi l'ordine item all'ordine
                     HttpSession session=req.getSession(true);
+                    req.setAttribute("back",view("ristorante/menu"));
                     validate(CommonValidator.validateId(req));
-                    validate(ordineItemValidator.validateForm(req));
                     validate(prodottoValidator.validateIdRis(req));
                     int id=Integer.parseInt(req.getParameter("id"));
-                    int q=Integer.parseInt(req.getParameter("quantita"));
                     int idRis=Integer.parseInt(req.getParameter("idRis"));
+                    //setup alert
+                    RistoranteDAO ristoranteDAO=new RistoranteDAO();
+                    MenuDAO menuDAO=new MenuDAO();
                     ProdottoDAO serviceProd=new ProdottoDAO();
+                    UtenteDAO utenteDAO=new UtenteDAO();
+                    Ristorante r=ristoranteDAO.doRetrieveById(idRis,true);
+                    UtenteSession us = (UtenteSession) session.getAttribute("utenteSession");
+                    Utente u = new Utente();
+                    boolean pref = false;
+                    if (us != null) {
+                        u.setCodice(us.getId());
+                        int count = utenteDAO.countRistPref(u);
+                        ArrayList<Ristorante> prefs = utenteDAO.doRetrievebyUtentePref(us.getId(), new Paginator(1, count));
+                        if (prefs != null) {
+                            for (Ristorante rp : prefs) {
+                                if (rp.getCodice() == r.getCodice()) {
+                                    pref = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    r.setProdotti(serviceProd.doRetrieveByRistorante(r.getCodice()));
+                    req.setAttribute("menus", menuDAO.doRetrieveByRistorante(r.getCodice()));
+                    req.setAttribute("countMenuValidi", ristoranteDAO.countMenuValidita(r.getCodice(), true));
+                    req.setAttribute("ristorante", r);
+                    req.setAttribute("isOpen",r.isOpen(LocalDateTime.now()));
+                    req.setAttribute("pref", pref);
+                    req.setAttribute("countProdValidi", ristoranteDAO.countProdottiValidita(r.getCodice(), true));
+                    validate(ordineItemValidator.validateForm(req));
+
+                    int q=Integer.parseInt(req.getParameter("quantita"));
                     Prodotto p=serviceProd.doRetrievebyId(id);
                     if(p==null)
                         notFound();
@@ -147,7 +183,6 @@ public class ordineItemServlet extends controller {
                         for(OrdineItem oc: cart.getOrdineItems()){
                             if(oc.getOff().getCodice()==p.getCodice() && oc.getOff().getClass().getName().contains("Prodotto")){
                                 oc.setQuantita(oc.getQuantita()+q);
-                                System.out.println("Gia presente");
                                 isPresent=true;
                                 break;
                             }
@@ -157,8 +192,6 @@ public class ordineItemServlet extends controller {
                             oi.setOff(p);
                             oi.setQuantita(q);
                             cart.getOrdineItems().add(oi);
-                            System.out.println("Aggiunto");
-
                         }
 
                         float totale=cart.getTotale();
@@ -170,28 +203,53 @@ public class ordineItemServlet extends controller {
                         session.setAttribute("cart", cart);
                     }
 
-                    System.out.println("Carrello:");
                     Ordine oo=(Ordine) session.getAttribute("cart");
-                    for(OrdineItem oii : oo.getOrdineItems())
-                        System.out.println(oii.getOff().getNome());
                     resp.sendRedirect("/FoodOut/ristorante/show-menu?id=" + p.getRistorante().getCodice());
                     break;
                 }
 
                 case "/add-menu-item": { //aggiungi l'ordine item all'ordine
                     HttpSession session=req.getSession(true);
+                    req.setAttribute("back",view("ristorante/menu"));
                     validate(CommonValidator.validateId(req));
-                    validate(ordineItemValidator.validateForm(req));
-                    validate(menuValidator.validateIdRis(req));
+                    validate(prodottoValidator.validateIdRis(req));
                     int id=Integer.parseInt(req.getParameter("id"));
-                    int q=Integer.parseInt(req.getParameter("quantita"));
                     int idRis=Integer.parseInt(req.getParameter("idRis"));
+                    //setup alert
+                    RistoranteDAO ristoranteDAO=new RistoranteDAO();
+                    MenuDAO menuDAO=new MenuDAO();
                     ProdottoDAO serviceProd=new ProdottoDAO();
-                    MenuDAO serviceMenu=new MenuDAO();
-                    Menu m=serviceMenu.doRetrieveById(id);
+                    UtenteDAO utenteDAO=new UtenteDAO();
+                    Ristorante r=ristoranteDAO.doRetrieveById(idRis,true);
+                    UtenteSession us = (UtenteSession) session.getAttribute("utenteSession");
+                    Utente u = new Utente();
+                    boolean pref = false;
+                    if (us != null) {
+                        u.setCodice(us.getId());
+                        int count = utenteDAO.countRistPref(u);
+                        ArrayList<Ristorante> prefs = utenteDAO.doRetrievebyUtentePref(us.getId(), new Paginator(1, count));
+                        if (prefs != null) {
+                            for (Ristorante rp : prefs) {
+                                if (rp.getCodice() == r.getCodice()) {
+                                    pref = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    r.setProdotti(serviceProd.doRetrieveByRistorante(r.getCodice()));
+                    req.setAttribute("menus", menuDAO.doRetrieveByRistorante(r.getCodice()));
+                    req.setAttribute("countMenuValidi", ristoranteDAO.countMenuValidita(r.getCodice(), true));
+                    req.setAttribute("ristorante", r);
+                    req.setAttribute("isOpen",r.isOpen(LocalDateTime.now()));
+                    req.setAttribute("pref", pref);
+                    req.setAttribute("countProdValidi", ristoranteDAO.countProdottiValidita(r.getCodice(), true));
+                    validate(ordineItemValidator.validateForm(req));
+
+                    int q=Integer.parseInt(req.getParameter("quantita"));
+                    Menu m=menuDAO.doRetrieveById(id);
                     if(m==null)
                         notFound();
-                    System.out.println("Codp" + m.getProdotti().get(0).getCodice());
                     Prodotto p=serviceProd.doRetrievebyId(m.getProdotti().get(0).getCodice());
 
                     if(p.getRistorante().getCodice()!=idRis)
@@ -208,7 +266,6 @@ public class ordineItemServlet extends controller {
                         for(OrdineItem oc: cart.getOrdineItems()){
                             if(oc.getOff().getCodice()==m.getCodice() && oc.getOff().getClass().getName().contains("Menu")){
                                 oc.setQuantita(oc.getQuantita()+q);
-                                System.out.println("Gia Presente");
                                 isPresent=true;
                                 break;
                             }
@@ -218,16 +275,10 @@ public class ordineItemServlet extends controller {
                             oi.setOff(m);
                             oi.setQuantita(q);
                             cart.getOrdineItems().add(oi);
-                            System.out.println("Aggiunto");
                         }
                         float totale=cart.getTotale();
                         for(int i=1; i<=q; i++){
                             totale+=m.getPrezzo() - (m.getPrezzo()*m.getSconto())/100;
-                        }
-
-                        System.out.println("Menu");
-                        for(OrdineItem oc: cart.getOrdineItems()){
-                           System.out.println(oc.getOff().getNome());
                         }
                         cart.setTotale(totale);
                         session.setAttribute("cart", cart);

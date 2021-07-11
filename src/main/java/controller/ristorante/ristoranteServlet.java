@@ -137,7 +137,6 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                         ArrayList<Ristorante> prefs = utenteDAO.doRetrievebyUtentePref(us.getId(), new Paginator(1, count));
                         if (prefs != null) {
                             for (Ristorante rp : prefs) {
-                                System.out.println(rp.getNome());
                                 if (rp.getCodice() == r.getCodice()) {
                                     pref = true;
                                     break;

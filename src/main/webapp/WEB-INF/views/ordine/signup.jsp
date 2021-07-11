@@ -33,7 +33,7 @@
     <c:if test="${not empty alert}">
         <%@ include file="../partials/alert.jsp"%>
     </c:if>
-    <fieldset class="grid-x cell w75 signup justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
+    <fieldset class="grid-x cell w75 signup justify-center">
         <h1 id="title" class="cell"> Sign up </h1>
         <label for="nome" class="field w40 cell grid-x">
             <input class="cell" type="text" name="nome" id="nome" placeholder="Nome" maxlength="30" pattern="^([a-zA-Z]|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>

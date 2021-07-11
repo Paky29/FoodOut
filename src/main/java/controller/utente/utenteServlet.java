@@ -335,15 +335,22 @@ public class utenteServlet extends controller {
                 case "/deposit": {
                     HttpSession session=req.getSession();
                     authenticateUtente(session);
-                    validate(utenteValidator.validateDeposit(req));
+                    req.setAttribute("back",view("customer/saldo"));
                     validate(CommonValidator.validateFunctionValue(req));
                     int function=Integer.parseInt(req.getParameter("function"));
+                    //setup alert
+                    req.setAttribute("function",function);
+                    UtenteSession us =(UtenteSession) session.getAttribute("utenteSession");
+                    UtenteDAO serviceUtente=new UtenteDAO();
+                    Utente u=serviceUtente.doRetrieveById(us.getId());
+                    if(u==null)
+                        notFound();
+                    req.setAttribute("profilo",u);
+                    validate(utenteValidator.validateDeposit(req));
+
                     float deposito=Float.parseFloat(req.getParameter("deposito"));
-                    UtenteSession us=(UtenteSession) session.getAttribute("utenteSession");
-                    UtenteDAO serviceDAO=new UtenteDAO();
-                    Utente u=serviceDAO.doRetrieveById(us.getId());
                     u.setSaldo(u.getSaldo()+deposito);
-                    if(!serviceDAO.doUpdate(u))
+                    if(!serviceUtente.doUpdate(u))
                         InternalError();
                     else
                         if(function==1)

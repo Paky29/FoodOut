@@ -7,6 +7,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Menu"/>
         <jsp:param name="styles" value="menu"/>
@@ -29,9 +30,7 @@
     }
 </style>
 <div class="app">
-
     <div class="cell grid-x" id="header">
-
             <div id="container-links" class="cell" style="justify-content: flex-end">
                 <c:choose>
                     <c:when test="${utenteSession==null}">
@@ -270,6 +269,9 @@
                         </c:if>
                     </div>
                 </div>
+                <c:if test="${not empty alert}">
+                    <%@ include file="../partials/alert.jsp"%>
+                </c:if>
             </div>
             <c:choose>
                 <c:when test="${not empty utenteSession}">

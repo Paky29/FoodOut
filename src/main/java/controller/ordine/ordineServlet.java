@@ -159,7 +159,7 @@ public class ordineServlet extends controller {
         try {
             switch (path) {
                 case "/signup": {
-                    req.setAttribute("back",view("site/signup"));
+                    req.setAttribute("back",view("ordine/signup"));
                     validate(utenteValidator.validateForm(req));
                     Utente u = new Utente();
                     u.setNome(req.getParameter("nome"));
@@ -187,7 +187,7 @@ public class ordineServlet extends controller {
                     break;
                 }
                 case "/login": {
-                    req.setAttribute("back",view("site/login"));
+                    req.setAttribute("back",view("ordine/login"));
                     validate(utenteValidator.validateLogin(req));
                     String email = req.getParameter("email");
                     String pw = req.getParameter("pw");
