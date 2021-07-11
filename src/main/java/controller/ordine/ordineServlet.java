@@ -43,9 +43,9 @@ public class ordineServlet extends controller {
                     break;
                 case "/dettagli": {
                     authorizeUtente(req.getSession());
-                    OrdineDAO service = new OrdineDAO();
                     validate(CommonValidator.validateId(req));
                     int id = Integer.parseInt(req.getParameter("id"));
+                    OrdineDAO service = new OrdineDAO();
                     Ordine o = service.doRetrieveById(id);
                     if (o == null)
                         notFound();
@@ -69,10 +69,6 @@ public class ordineServlet extends controller {
                     }
                     break;
                 }
-                /*case "/rider"://passare come parametro lo stato della consegna
-                    break;*/
-                case "/ristorante":
-                    break;
                 case "/all": {//possibile inviare date come parametri per filtrare gli ordini
                     authorizeUtente(req.getSession());
                     OrdineDAO service = new OrdineDAO();
@@ -215,20 +211,21 @@ public class ordineServlet extends controller {
                 }
                 case "/add-recensione": {
                     HttpSession session=req.getSession(false);
-                    if(session==null ||  session.getAttribute("utenteSession")==null)
-                        System.out.println("utente non trovato");
-                    System.out.println(((UtenteSession)session.getAttribute("utenteSession")).getId());
                     authenticateUtente(session);
+                    req.setAttribute("back",view("ordine/recensione"));
                     validate(CommonValidator.validateId(req));
-                    System.out.println(ordineValidator.validateForm(req));
-                    validate(ordineValidator.validateForm(req));
+                    //setupalert
                     int codice=Integer.parseInt(req.getParameter("id"));
-                    int voto=Integer.parseInt(req.getParameter("voto"));
-                    String giudizio=req.getParameter("giudizio");
                     OrdineDAO serviceOrd=new OrdineDAO();
                     Ordine ord=serviceOrd.doRetrieveById(codice);
                     if(ord==null)
                         notFound();
+                    req.setAttribute("id", codice);
+                    validate(ordineValidator.validateRecensione(
+                            req));
+
+                    int voto=Integer.parseInt(req.getParameter("voto"));
+                    String giudizio=req.getParameter("giudizio");
                     ord.setVoto(voto);
                     ord.setGiudizio(giudizio);
                     if(!serviceOrd.updateVG(ord))
@@ -278,27 +275,29 @@ public class ordineServlet extends controller {
                 }
                 case "/update": {
                     authorizeUtente(req.getSession());
+                    req.setAttribute("back",view("ordine/show"));
                     validate(CommonValidator.validateId(req));
-                    validate(ordineValidator.validateFormAdmin(req));
-                    OrdineDAO service=new OrdineDAO();
-                    int id=Integer.parseInt(req.getParameter("id"));
-                    Ordine o=service.doRetrieveById(id);
+                    int id = Integer.parseInt(req.getParameter("id"));
+                    OrdineDAO service = new OrdineDAO();
+                    Ordine o = service.doRetrieveById(id);
                     if(o==null)
                         notFound();
-                    else {
-                        if(!o.isConsegnato()) {
-                            String oraPartenza = req.getParameter("oraPartenza");
-                            String oraArrivo = req.getParameter("oraArrivo");
-                            if (!oraPartenza.isBlank())
-                                o.setOraPartenza(LocalTime.parse(oraPartenza));
-                            if (!oraArrivo.isBlank()) {
-                                o.setConsegnato(true);
-                                o.setOraArrivo(LocalTime.parse(oraArrivo));
-                            }
+                    req.setAttribute("ordine",o);
+                    validate(ordineValidator.validateFormAdmin(req));
+
+                    if (!o.isConsegnato()) {
+                        String oraPartenza = req.getParameter("oraPartenza");
+                        String oraArrivo = req.getParameter("oraArrivo");
+                        if (!oraPartenza.isBlank())
+                            o.setOraPartenza(LocalTime.parse(oraPartenza));
+                        if (!oraArrivo.isBlank()) {
+                            o.setConsegnato(true);
+                            o.setOraArrivo(LocalTime.parse(oraArrivo));
                         }
-                        if(service.doUpdate(o))
-                            resp.sendRedirect("/FoodOut/ordine/dettagli?id=" + o.getCodice());
                     }
+                    if (service.doUpdate(o))
+                        resp.sendRedirect("/FoodOut/ordine/dettagli?id=" + o.getCodice());
+
                     break;
                 }
                 default:

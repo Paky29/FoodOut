@@ -19,12 +19,13 @@
             border-bottom: 0 !important;
         }
 
-        .delete>svg{
+        svg{
             cursor: pointer;
         }
 
         .valid > svg{
             fill: limegreen;
+            cursor: unset;
         }
 
 
@@ -109,7 +110,7 @@
             </section>
         </div>
         </div>
-                <%@include file="../partials/customer/footer.jsp" %>
+        <%@include file="../partials/customer/footer.jsp" %>
     </section>
 </main>
 </body>

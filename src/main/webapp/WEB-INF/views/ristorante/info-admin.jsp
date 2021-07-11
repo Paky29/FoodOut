@@ -6,127 +6,131 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Info"/>
         <jsp:param name="styles" value="info_ris_crm"/>
         <jsp:param name="scripts" value="info_ris_crm"/>
     </jsp:include>
+
+    <style>
+
+        .index {
+            padding: 1rem;<%--dimensione relativa al root--%>
+            background-color: white;
+            border-radius: 10px;
+            opacity: revert;
+        }
+
+        .index > * {
+            margin: 10px;
+        }
+
+        input:focus {
+            outline: 1px solid var(--primary);
+        }
+
+        input {
+            height: 40px;
+            line-height: 40px;
+        }
+
+        #urlImmagine {
+            height: 50px;
+            line-height: 27px;
+        }
+
+        .info{
+            text-align: center;
+            font-style: normal;
+            font-weight: bold;
+            padding: 1rem;
+            border-top: 1px solid black;
+            background-color: lightgrey;
+        }
+
+        .info > a {
+            text-decoration: none;
+            color: black;
+            margin-right: 25px;
+            margin-left: 25px;
+        }
+
+        label > span {
+            margin: 5px 5px;
+            font-style: italic;
+        }
+
+        .table{
+            border-collapse: collapse;
+            background-color:white;
+            font-size: large;
+            font-weight: normal;
+            font-style: normal;
+            font-family: Myriad;
+        }
+
+        .table > thead{
+            visibility: hidden;
+        }
+
+        .table tr{
+            border:none;
+            margin: .5rem;
+            padding: .5rem;
+            display:block;
+        }
+
+        .table > tbody{
+            border:1px solid black;
+            border-radius: 20px;
+        }
+
+        .table > tbody td{
+            display: block;
+            border-bottom: 1px solid black;
+            text-align: right;
+            padding: .5rem;
+        }
+
+        .table > tbody td:before{
+            content: attr(data-head);
+            float: left;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        div#header{
+            background-color: rgba(0,0,0,0);
+            background-image: url("/FoodOut/covers/${ristorante.urlImmagine}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            height: 500px;
+            position: relative;
+        }
+
+        #links{
+            background-color: var(--primary);
+            padding:3px;
+            border:1px solid var(--primary);
+            border-radius: 10px;
+            margin:2px;
+        }
+        #links a{
+            text-decoration: none;
+            color:white;
+            font-family:Myriad;
+            font-weight:bold;
+            font-style:normal;
+            margin:5px;
+        }
+
+    </style>
+
 </head>
 <body>
-<style>
-
-    .index {
-        padding: 1rem;<%--dimensione relativa al root--%>
-        background-color: white;
-        border-radius: 10px;
-        opacity: revert;
-    }
-
-    .index > * {
-        margin: 10px;
-    }
-
-    input:focus {
-        outline: 1px solid var(--primary);
-    }
-
-    input {
-        height: 40px;
-        line-height: 40px;
-    }
-
-    #urlImmagine {
-        height: 50px;
-        line-height: 27px;
-    }
-
-    .info{
-        text-align: center;
-        font-style: normal;
-        font-weight: bold;
-        padding: 1rem;
-        border-top: 1px solid black;
-        background-color: lightgrey;
-    }
-
-    .info > a {
-        text-decoration: none;
-        color: black;
-        margin-right: 25px;
-        margin-left: 25px;
-    }
-
-    label > span {
-        margin: 5px 5px;
-        font-style: italic;
-    }
-
-    .table{
-        border-collapse: collapse;
-        background-color:white;
-        font-size: large;
-        font-weight: normal;
-        font-style: normal;
-        font-family: Myriad;
-    }
-
-    .table > thead{
-        visibility: hidden;
-    }
-
-    .table tr{
-        border:none;
-        margin: .5rem;
-        padding: .5rem;
-        display:block;
-    }
-
-    .table > tbody{
-        border:1px solid black;
-        border-radius: 20px;
-    }
-
-    .table > tbody td{
-        display: block;
-        border-bottom: 1px solid black;
-        text-align: right;
-        padding: .5rem;
-    }
-
-    .table > tbody td:before{
-        content: attr(data-head);
-        float: left;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-
-    div#header{
-        background-color: rgba(0,0,0,0);
-        background-image: url("/FoodOut/covers/${ristorante.urlImmagine}");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-        height: 500px;
-        position: relative;
-    }
-
-    #links{
-        background-color: var(--primary);
-        padding:3px;
-        border:1px solid var(--primary);
-        border-radius: 10px;
-        margin:2px;
-    }
-    #links a{
-        text-decoration: none;
-        color:white;
-        font-family:Myriad;
-        font-weight:bold;
-        font-style:normal;
-        margin:5px;
-    }
-
-</style>
 <div class="app">
     <div class="cell grid-x" id="header">
         <nav class="grid-y navbar align-center cell">
@@ -138,6 +142,9 @@
             </div>
         </nav>
         <form class="grid-x justify-center align-center info-ris cell" action="${pageContext.request.contextPath}/ristorante/update" method="post" enctype="multipart/form-data">
+            <c:if test="${not empty alert}">
+                <%@ include file="../partials/alert.jsp"%>
+            </c:if>
             <fieldset class="grid-x cell w63 index">
                 <h2 class="cell"> Info </h2>
                 <label for="nome" class="field cell w80" >

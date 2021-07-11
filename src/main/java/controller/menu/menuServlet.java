@@ -122,37 +122,46 @@ public class menuServlet extends controller{
                 }
                 case "/update": {
                     authorizeUtente(req.getSession());
+                    req.setAttribute("back",view("menu/update-menu"));
                     validate(CommonValidator.validateId(req));
                     validate(menuValidator.validateIdRis(req));
-                    validate(menuValidator.validateForm(req));
-                    int id = Integer.parseInt(req.getParameter("id"));
-                    int idRis = Integer.parseInt(req.getParameter("idRis"));
-                    MenuDAO menuDAO = new MenuDAO();
-                    ProdottoDAO prodottoDAO = new ProdottoDAO();
-                    Menu m = menuDAO.doRetrieveById(id);
-                    if (m == null)
+                    //setup alert
+                    int id=Integer.parseInt(req.getParameter("id"));
+                    int idRis=Integer.parseInt(req.getParameter("idRis"));
+                    MenuDAO menuDAO=new MenuDAO();
+                    RistoranteDAO ristoranteDAO=new RistoranteDAO();
+                    ProdottoDAO prodottoDAO=new ProdottoDAO();
+                    Menu m=menuDAO.doRetrieveById(id);
+                    if(m==null)
                         notFound();
-                    else{
-                        m.setNome(req.getParameter("nome"));
-                        m.setPrezzo(Float.parseFloat(req.getParameter("prezzo")));
-                        m.setSconto(Integer.parseInt(req.getParameter("sconto")));
-
-                        ArrayList<Prodotto> oldProdMenu = m.getProdotti();
-                        menuDAO.deleteProducts(id, oldProdMenu);
-
-                        String[] prodotti=req.getParameterValues("prodotti");
-                        ArrayList<Prodotto> newProdMenu=new ArrayList<>();
-                        for (int i = 0; i < prodotti.length; ++i) {
-                            newProdMenu.add(prodottoDAO.doRetrievebyId(Integer.parseInt(prodotti[i])));
-                        }
-                        menuDAO.addProducts(id, newProdMenu);
-                        if(menuDAO.doUpdate(m)){
-                            resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id=" + idRis);
-                        }
-                        else
-                            InternalError();
-
+                    else {
+                        Ristorante r = ristoranteDAO.doRetrieveById(idRis, true);
+                        if (r == null)
+                            notFound();
+                        r.setProdotti(prodottoDAO.doRetrieveByRistorante(idRis));
+                        req.setAttribute("ristorante", r);
+                        req.setAttribute("menu", m);
                     }
+                    validate(menuValidator.validateForm(req));
+
+                    m.setNome(req.getParameter("nome"));
+                    m.setPrezzo(Float.parseFloat(req.getParameter("prezzo")));
+                    m.setSconto(Integer.parseInt(req.getParameter("sconto")));
+
+                    ArrayList<Prodotto> oldProdMenu = m.getProdotti();
+                    menuDAO.deleteProducts(id, oldProdMenu);
+
+                    String[] prodotti = req.getParameterValues("prodotti");
+                    ArrayList<Prodotto> newProdMenu = new ArrayList<>();
+                    for (int i = 0; i < prodotti.length; ++i) {
+                        newProdMenu.add(prodottoDAO.doRetrievebyId(Integer.parseInt(prodotti[i])));
+                    }
+                    menuDAO.addProducts(id, newProdMenu);
+                    if (menuDAO.doUpdate(m)) {
+                        resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id=" + idRis);
+                    } else
+                        InternalError();
+
                     break;
                 }
                 case "/update-validita": {

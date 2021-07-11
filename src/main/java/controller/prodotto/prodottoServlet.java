@@ -138,50 +138,54 @@ public class prodottoServlet extends controller{
         }
             case "/update": {
                 authorizeUtente(req.getSession());
-                validate(prodottoValidator.validateForm(req));
+                req.setAttribute("back",view("prodotto/update-prod"));
                 validate(CommonValidator.validateId(req));
-                int codiceProd=Integer.parseInt(req.getParameter("id"));
                 validate(prodottoValidator.validateIdRis(req));
-                int codiceRis=Integer.parseInt(req.getParameter("idRis"));
-                ProdottoDAO service=new ProdottoDAO();
-                if(service.doRetrievebyId(codiceProd)!=null) {
-                    Prodotto pr = new Prodotto();
-                    pr.setCodice(codiceProd);
-                    pr.setNome(req.getParameter("nome"));
-                    pr.setPrezzo(Float.parseFloat(req.getParameter("prezzo")));
-                    pr.setSconto(Integer.parseInt(req.getParameter("sconto")));
-                    TipologiaDAO serviceTip=new TipologiaDAO();
-                    Tipologia t = serviceTip.doRetrieveByNome(req.getParameter("tipologia"));
-                    if(t==null)
-                        notFound();
-                    pr.setTipologia(t);
-                    pr.setInfo(req.getParameter("info"));
-                    pr.setIngredienti(req.getParameter("ingredienti"));
-                    Part filePart = req.getPart("urlImmagine");
-                    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                    if (!fileName.isBlank()) {
-                        pr.setUrlImmagine(fileName);
-                        if(service.doUpdateWithUrl(pr)){
-                            resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id="+codiceRis);
-                            String uploadRoot = getUploadPath();
-                            try (InputStream fileStream = filePart.getInputStream()) {
-                                File file = new File(uploadRoot + fileName);
-                                Files.copy(fileStream, file.toPath());
-                            }
-                        }
-                        else {
-                            InternalError();
-                        }
-                    }
-                    else {
-                        if (service.doUpdate(pr))
-                            resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id=" + codiceRis);
-                        else
-                            InternalError();
-                    }
-                }
-                else
+                //setup alert
+                int codiceProd = Integer.parseInt(req.getParameter("id"));
+                int codiceRis = Integer.parseInt(req.getParameter("idRis"));
+                RistoranteDAO serviceRis = new RistoranteDAO();
+                ProdottoDAO serviceProd = new ProdottoDAO();
+                Prodotto p=serviceProd.doRetrievebyId(codiceProd);
+                Ristorante r=serviceRis.doRetrieveById(codiceRis,true);
+                if(p==null || r==null)
                     notFound();
+                req.setAttribute("ristorante",r);
+                req.setAttribute("prodotto",p);
+                validate(prodottoValidator.validateForm(req));
+
+                Prodotto pr = new Prodotto();
+                pr.setCodice(codiceProd);
+                pr.setNome(req.getParameter("nome"));
+                pr.setPrezzo(Float.parseFloat(req.getParameter("prezzo")));
+                pr.setSconto(Integer.parseInt(req.getParameter("sconto")));
+                TipologiaDAO serviceTip = new TipologiaDAO();
+                Tipologia t = serviceTip.doRetrieveByNome(req.getParameter("tipologia"));
+                if (t == null)
+                    notFound();
+                pr.setTipologia(t);
+                pr.setInfo(req.getParameter("info"));
+                pr.setIngredienti(req.getParameter("ingredienti"));
+                Part filePart = req.getPart("urlImmagine");
+                String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                if (!fileName.isBlank()) {
+                    pr.setUrlImmagine(fileName);
+                    if (serviceProd.doUpdateWithUrl(pr)) {
+                        resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id=" + codiceRis);
+                        String uploadRoot = getUploadPath();
+                        try (InputStream fileStream = filePart.getInputStream()) {
+                            File file = new File(uploadRoot + fileName);
+                            Files.copy(fileStream, file.toPath());
+                        }
+                    } else {
+                        InternalError();
+                    }
+                } else {
+                    if (serviceProd.doUpdate(pr))
+                        resp.sendRedirect("/FoodOut/ristorante/show-menu-admin?id=" + codiceRis);
+                    else
+                        InternalError();
+                }
                 break;
             }
             case "/update-validita": {

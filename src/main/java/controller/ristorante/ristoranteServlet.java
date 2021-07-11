@@ -64,8 +64,7 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     req.getRequestDispatcher(view("ristorante/show-all")).forward(req, resp);
                     break;
                 }
-                case "/zona": {//controllare se i parametri sono null per capire se è per l'admin o un utente
-                    //req.getRequestDispatcher(view("ristorante/zona")).forward(req,resp);
+                case "/zona": {
                     RistoranteDAO serviceRis = new RistoranteDAO();
                     TipologiaDAO serviceTip = new TipologiaDAO();
                     UtenteDAO serviceUtente = new UtenteDAO();
@@ -343,12 +342,17 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                 case "/update": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
+                    req.setAttribute("back",view("ristorante/info-admin"));
                     validate(CommonValidator.validateId(req));
-                    validate(ristoranteValidator.validateForm(req));
                     int codRis = Integer.parseInt(req.getParameter("id"));
-                    RistoranteDAO service = new RistoranteDAO();
-                    if (service.doRetrieveById(codRis, true) == null)
+                    RistoranteDAO ristoranteDAO = new RistoranteDAO();
+                    Ristorante rreq = ristoranteDAO.doRetrieveById(codRis, true);
+                    if (rreq == null)
                         notFound();
+                    req.setAttribute("ristorante", rreq);
+                    validate(ristoranteValidator.validateForm(req));
+
+                    RistoranteDAO service = new RistoranteDAO();
                     Ristorante r = new Ristorante();
                     r.setCodice(codRis);
                     r.setNome(req.getParameter("nome"));

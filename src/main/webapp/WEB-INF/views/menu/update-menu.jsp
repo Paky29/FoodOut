@@ -3,10 +3,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Modifica menu"/>
     </jsp:include>
-
     <style>
         .app {
             background: linear-gradient(var(--primary), white);
@@ -46,6 +46,9 @@
 </head>
 <body>
 <div class="app grid-x justify-center align-center">
+    <c:if test="${not empty alert}">
+        <%@ include file="../partials/alert.jsp"%>
+    </c:if>
     <form id="prodotto " class="grid-x justify-center" action="${pageContext.request.contextPath}/menu/update"
           method="post">
         <fieldset class="grid-x cell w90 add-ris justify-center">

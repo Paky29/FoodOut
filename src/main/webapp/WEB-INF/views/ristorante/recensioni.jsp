@@ -50,12 +50,24 @@
         <nav class="grid-y navbar align-center cell">
             <img onclick="goBack()" src="/FoodOut/images/logo.png" class="fluid-image" id="logo" title="Torna indietro">
             <div class="links">
-                <a href="${pageContext.request.contextPath}/ristorante/show-info?id=${id}">
-                    Info </a>
-                <a href="${pageContext.request.contextPath}/ristorante/show-menu?id=${id}"/>
-                Menu </a>
-                <a href="${pageContext.request.contextPath}/ristorante/show-recensioni?id=${id}">
-                    Recensioni </a>
+                <c:choose>
+                <c:when test="${utenteSession.admin==true}">
+                    <a href="${pageContext.request.contextPath}/ristorante/show-info-admin?id=${id}">
+                        Info </a>
+                    <a href="${pageContext.request.contextPath}/ristorante/show-menu-admin?id=${id}"/>
+                    Menu </a>
+                    <a href="${pageContext.request.contextPath}/ristorante/show-recensioni?id=${id}">
+                        Recensioni </a>
+                </c:when>
+                <c:otherwise>
+                    <a href="${pageContext.request.contextPath}/ristorante/show-info?id=${id}">
+                        Info </a>
+                    <a href="${pageContext.request.contextPath}/ristorante/show-menu?id=${id}"/>
+                    Menu </a>
+                    <a href="${pageContext.request.contextPath}/ristorante/show-recensioni?id=${id}">
+                        Recensioni </a>
+                </c:otherwise>
+                </c:choose>
             </div>
         </nav>
         <section class="cell w100 justify-center grid-x container">

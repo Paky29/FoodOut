@@ -139,6 +139,9 @@
             <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo" onclick="goBack()">
         </nav>
         <form class="grid-x justify-center align-center info-ord cell" action="${pageContext.request.contextPath}/ordine/update" method="post">
+            <c:if test="${not empty alert}">
+                <%@ include file="../partials/alert.jsp"%>
+            </c:if>
             <fieldset class="grid-x cell w63 index">
                 <h2 class="cell"> Dettagli </h2>
                 <label for="id" class="field cell w80" >

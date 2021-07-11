@@ -269,9 +269,13 @@ public class utenteServlet extends controller {
                     break;
                 }
                 case "/update": {
-                    req.setAttribute("back",view("crm/show"));
                     HttpSession session = req.getSession();
                     authenticateUtente(session);
+                    UtenteSession us=(UtenteSession)session.getAttribute("utenteSession");
+                    if(us.isAdmin())
+                        req.setAttribute("back",view("crm/show"));
+                    else
+                        req.setAttribute("back",view("customer/profile"));
                     validate(utenteValidator.validateUpdate(req));
                     validate(CommonValidator.validateId(req));
                     int codice=Integer.parseInt(req.getParameter("id"));
@@ -300,9 +304,9 @@ public class utenteServlet extends controller {
                     break;
                 }
                 case "/update-pw": {
-                    req.setAttribute("back",view("site/update-pw"));
                     HttpSession session = req.getSession();
                     authenticateUtente(session);
+                    req.setAttribute("back",view("site/update-pw"));
                     validate(utenteValidator.validateUpdatePassword(req));
                     String old_pw = req.getParameter("old_pw");
                     String new_pw = req.getParameter("new_pw");

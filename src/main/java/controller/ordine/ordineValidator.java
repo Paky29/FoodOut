@@ -13,12 +13,13 @@ public class ordineValidator {
         if(request.getParameter("nota")!=null)
             if(!request.getParameter("nota").isBlank())
                 validator.assertMatch("nota", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|,|\\.){1,150}$"), "nota compreso tra 1 e 30 caratteri");
-        if(request.getParameter("giudizio")!=null)
-            if(!request.getParameter("giudizio").isBlank())
-                validator.assertMatch("giudizio", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|,|\\.){1,150}$"), "giudizio compreso tra 1 e 50 caratteri");
-        if(request.getParameter("voto")!=null)
-            if(!request.getParameter("voto").isBlank() )
-                validator.assertMatch("voto",Pattern.compile("^[1-5]$"),"voto deve essere un numero tra 1 e 5");
+        return validator;
+    }
+
+    static RequestValidator validateRecensione(HttpServletRequest request){
+        RequestValidator validator=new RequestValidator(request);
+        validator.assertMatch("giudizio", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|,|\\.){1,150}$"), "giudizio compreso tra 1 e 50 caratteri");
+        validator.assertMatch("voto",Pattern.compile("^[1-5]$"),"voto deve essere un numero tra 1 e 5");
         return validator;
     }
 
