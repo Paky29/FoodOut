@@ -6,8 +6,6 @@ const citta=document.getElementById('citta');
 const via=document.getElementById('via');
 const civico=document.getElementById('civico');
 const email = document.getElementById('email');
-const pw = document.getElementById('pw');
-
 
 nome.addEventListener('input', function (event) {
 
@@ -77,14 +75,6 @@ email.addEventListener('input', function (event) {
     }
 });
 
-pw.addEventListener('input', function (event) {
-
-    if (pw.validity.valid) {
-        pw.nextElementSibling.textContent = '';
-    } else {
-        showError();
-    }
-});
 
 form.addEventListener('submit', function (event) {
     if(!nome.validity.valid) {
@@ -118,10 +108,6 @@ form.addEventListener('submit', function (event) {
     }
 
     if(!email.validity.valid) {
-        showError();
-        event.preventDefault();
-    }
-    if(!pw.validity.valid) {
         showError();
         event.preventDefault();
     }
@@ -196,13 +182,4 @@ function showError() {
     } else if(email.validity.tooLong) {
         email.nextElementSibling.textContent = 'email deve essere al massimo di 50 caratteri';
     }
-
-    if(pw.validity.valueMissing) {
-        pw.nextElementSibling.textContent = 'campo obbligatorio';
-    } else if(pw.validity.patternMismatch) {
-        pw.nextElementSibling.textContent = 'la password deve essere di almeno 8 caratteri e contenere una maiuscola, una minuscola, un numero';
-    } else if(pw.validity.tooShort) {
-        pw.nextElementSibling.textContent = 'la password deve essere al minimo di 8 characters';
-    }
-
 }

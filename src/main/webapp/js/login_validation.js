@@ -47,9 +47,9 @@ function showError() {
     if(pw.validity.valueMissing) {
         pw.nextElementSibling.textContent = 'campo obbligatorio';
     } else if(pw.validity.patternMismatch) {
-        pw.nextElementSibling.textContent = 'la password deve essere di almeno 8 caratteri e contenere una maiuscola, una minuscola, un numero ed un carattere speciale';
+        pw.nextElementSibling.textContent = 'la password deve essere di almeno 8 caratteri e contenere una maiuscola, una minuscola, un numero';
     } else if(pw.validity.tooShort) {
-        pw.nextElementSibling.textContent = 'la password deve essere al minimo di 8 characters';
+        pw.nextElementSibling.textContent = 'la password deve essere almeno di 8 caratteri';
     }
 
 }

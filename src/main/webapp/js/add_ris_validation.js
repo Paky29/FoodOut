@@ -1,13 +1,13 @@
 const form=document.getElementsByTagName("form")[0];
 const nome=document.getElementById('nome');
-const cognome=document.getElementById('cognome');
 const provincia=document.getElementById('provincia');
 const citta=document.getElementById('citta');
 const via=document.getElementById('via');
 const civico=document.getElementById('civico');
-const email = document.getElementById('email');
-const pw = document.getElementById('pw');
-
+const sm=document.getElementById("spesaMinima");
+const tc=document.getElementById("tassoConsegna");
+const url=document.getElementById("urlImmagine");
+const info=document.getElementById("info")
 
 nome.addEventListener('input', function (event) {
 
@@ -18,15 +18,6 @@ nome.addEventListener('input', function (event) {
     }
 });
 
-
-cognome.addEventListener('input', function (event) {
-
-    if (cognome.validity.valid) {
-        cognome.nextElementSibling.textContent = '';
-    } else {
-        showError();
-    }
-});
 
 provincia.addEventListener('input', function (event) {
 
@@ -67,20 +58,38 @@ civico.addEventListener('input', function (event) {
     }
 });
 
+sm.addEventListener('input', function (event) {
 
-email.addEventListener('input', function (event) {
-
-    if (email.validity.valid) {
-        email.nextElementSibling.textContent = '';
+    if (sm.validity.valid) {
+        sm.nextElementSibling.textContent = '';
     } else {
         showError();
     }
 });
 
-pw.addEventListener('input', function (event) {
+tc.addEventListener('input', function (event) {
 
-    if (pw.validity.valid) {
-        pw.nextElementSibling.textContent = '';
+    if (tc.validity.valid) {
+        tc.nextElementSibling.textContent = '';
+    } else {
+        showError();
+    }
+});
+
+
+url.addEventListener('input', function (event) {
+
+    if (url.validity.valid) {
+        url.nextElementSibling.textContent = '';
+    } else {
+        showError();
+    }
+});
+
+info.addEventListener('input', function (event) {
+
+    if (info.validity.valid) {
+        info.nextElementSibling.textContent = '';
     } else {
         showError();
     }
@@ -88,11 +97,6 @@ pw.addEventListener('input', function (event) {
 
 form.addEventListener('submit', function (event) {
     if(!nome.validity.valid) {
-        showError();
-        event.preventDefault();
-    }
-
-    if(!cognome.validity.valid) {
         showError();
         event.preventDefault();
     }
@@ -117,14 +121,27 @@ form.addEventListener('submit', function (event) {
         event.preventDefault();
     }
 
-    if(!email.validity.valid) {
+    if(!sm.validity.valid) {
         showError();
         event.preventDefault();
     }
-    if(!pw.validity.valid) {
+
+    if(!tc.validity.valid) {
         showError();
         event.preventDefault();
     }
+
+    if(!url.validity.valid) {
+        showError();
+        event.preventDefault();
+    }
+
+    if(!info.validity.valid) {
+        showError();
+        event.preventDefault();
+    }
+
+
 });
 
 function showError() {
@@ -136,16 +153,6 @@ function showError() {
         nome.nextElementSibling.textContent = 'nome deve essere al massimo di 30 caratteri';
     } else if(nome.validity.patternMismatch) {
         nome.nextElementSibling.textContent = 'il nome non deve contenere numeri o caratteri speciali ';
-    }
-
-    if(cognome.validity.valueMissing) {
-        cognome.nextElementSibling.textContent = 'campo obbligatorio';
-    } else if(cognome.validity.typeMismatch) {
-        cognome.nextElementSibling.textContent = 'è necessario inserire una stringa';
-    } else if(cognome.validity.tooLong) {
-        nome.nextElementSibling.textContent = 'cognome deve essere al massimo di 30 caratteri';
-    } else if(cognome.validity.patternMismatch) {
-        cognome.nextElementSibling.textContent = 'cognome non deve contenere numeri o caratteri speciali ';
     }
 
     if(provincia.validity.valueMissing) {
@@ -187,22 +194,41 @@ function showError() {
         civico.nextElementSibling.textContent = 'civico deve essere un numero maggiore di 0';
     }
 
-    if(email.validity.valueMissing) {
-        email.nextElementSibling.textContent = 'campo obbligatorio';
-    } else if(email.validity.typeMismatch) {
-        email.nextElementSibling.textContent = 'è necessario inserire un indirizzo email';
-    } else if(email.validity.patternMismatch){
-        email.nextElementSibling.textContent = 'email deve rispettare il pattern adeguato';
-    } else if(email.validity.tooLong) {
-        email.nextElementSibling.textContent = 'email deve essere al massimo di 50 caratteri';
+    if(sm.validity.valueMissing) {
+        sm.nextElementSibling.textContent = 'campo obbligatorio';
+    } else if(sm.validity.typeMismatch) {
+        sm.nextElementSibling.textContent = 'è necessario inserire un numero intero';
+    } else if(sm.validity.rangeUnderflow) {
+        sm.nextElementSibling.textContent = 'spesa minima deve essere un numero maggiore o uguale a 0';
+    } else if(sm.validity.patternMismatch){
+        sm.nextElementSibling.textContent = 'spesa minima deve essere un numero intero o decimale positivo';
     }
 
-    if(pw.validity.valueMissing) {
-        pw.nextElementSibling.textContent = 'campo obbligatorio';
-    } else if(pw.validity.patternMismatch) {
-        pw.nextElementSibling.textContent = 'la password deve essere di almeno 8 caratteri e contenere una maiuscola, una minuscola, un numero';
-    } else if(pw.validity.tooShort) {
-        pw.nextElementSibling.textContent = 'la password deve essere al minimo di 8 characters';
+    if(tc.validity.valueMissing) {
+        tc.nextElementSibling.textContent = 'campo obbligatorio';
+    } else if(tc.validity.typeMismatch) {
+        tc.nextElementSibling.textContent = 'è necessario inserire un numero intero';
+    } else if(tc.validity.rangeUnderflow) {
+        tc.nextElementSibling.textContent = 'tasso consegna deve essere un numero maggiore o uguale a 0';
+    } else if(tc.validity.patternMismatch){
+        tc.nextElementSibling.textContent = 'tasso consegna deve essere un numero intero o decimale positivo';
     }
+
+    if(url.validity.valueMissing) {
+        url.nextElementSibling.textContent = 'campo obbligatorio';
+    } else if(url.validity.typeMismatch) {
+        info.nextElementSibling.textContent = "è necessario inserire un'immagine";
+    }
+
+    if(info.validity.valueMissing) {
+        info.nextElementSibling.textContent = 'campo obbligatorio';
+    } else if(info.validity.typeMismatch) {
+        info.nextElementSibling.textContent = 'è necessario inserire una stringa';
+    } else if(info.validity.tooLong) {
+        info.nextElementSibling.textContent = 'info deve essere al massimo di 200 caratteri';
+    } else if(info.validity.patternMismatch) {
+        info.nextElementSibling.textContent = 'info non deve contenere caratteri speciali ';
+    }
+
 
 }

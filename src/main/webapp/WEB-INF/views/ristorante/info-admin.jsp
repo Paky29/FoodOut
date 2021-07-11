@@ -11,7 +11,7 @@
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Info"/>
         <jsp:param name="styles" value="info_ris_crm"/>
-        <jsp:param name="scripts" value="info_ris_crm"/>
+        <jsp:param name="scripts" value="info_ris_crm,update_ris_validation"/>
     </jsp:include>
 
     <style>
@@ -141,7 +141,7 @@
                 <a href="${pageContext.request.contextPath}/ristorante/show-recensioni?id=${ristorante.codice}"> Recensioni </a>
             </div>
         </nav>
-        <form class="grid-x justify-center align-center info-ris cell" action="${pageContext.request.contextPath}/ristorante/update" method="post" enctype="multipart/form-data">
+        <form class="grid-x justify-center align-center info-ris cell" action="${pageContext.request.contextPath}/ristorante/update" method="post" enctype="multipart/form-data" novalidate>
             <c:if test="${not empty alert}">
                 <%@ include file="../partials/alert.jsp"%>
             </c:if>
@@ -149,25 +149,25 @@
                 <h2 class="cell"> Info </h2>
                 <label for="nome" class="field cell w80" >
                     <span style="font-weight: bold"> Nome: </span>
-                    <input type="text" name="nome" id="nome" value="${ristorante.nome}">
+                    <input class="cell" type="text" name="nome" id="nome" value="${ristorante.nome}" maxlength="30" pattern="^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>
+                    </span>
                 </label>
                 <label class="field cell w40 grid-x">
                     <span style="font-weight: bold" class="field cell w40"> Provincia: </span>
-                    <input type="text" name="provincia" id="provincia" value="${ristorante.provincia}">
+                    <input class="cell" type="text" name="provincia" id="provincia" value="${ristorante.provincia}" maxlength="30" pattern="^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>
                     <span style="font-weight: bold" class="field cell w40"> Citta: </span>
-                    <input type="text" name="citta" id="citta" value="${ristorante.citta}">
-                </label>
+                    <input class="cell" type="text" name="citta" id="citta" value="${ristorante.citta}" maxlength="30" pattern="^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>                </label>
                 <label class="field cell w40 grid-x">
                     <span style="font-weight: bold" class="field cell w75"> Via: </span>
-                    <input type="text" name="via" id="via" value="${ristorante.via}">
+                    <input class="cell" type="text" name="via" id="via" value="${ristorante.via}" maxlength="50" pattern="^(\w|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\.){1,50}$" required>
                     <span style="font-weight: bold" class="field cell w25"> Civico: </span>
-                    <input type="text" name="civico" id="civico" value="${ristorante.civico}">
+                    <input class="cell" type="text" name="civico" id="civico" value="${ristorante.civico}" min="1" required>
                 </label>
                 <label class="field cell w40 grid-x">
                     <span style="font-weight: bold" class="field cell w40"> Spesa minima: </span>
-                    <input type="text" name="spesaMinima" id="spesaMinima" value="${ristorante.spesaMinima}">
+                    <input class="cell" type="text" name="spesaMinima" id="spesaMinima" value="${ristorante.spesaMinima}" step="0.01" min="0" pattern="^[0-9]\\d{0,9}(\\.\\d{1,3})?$" required>
                     <span style="font-weight: bold" class="field cell w40"> Tasso consegna:</span>
-                    <input type="text" name="tassoConsegna" id="tassoConsegna" value="${ristorante.tassoConsegna}">
+                    <input class="cell" type="text" name="tassoConsegna" id="tassoConsegna" value="${ristorante.tassoConsegna}" step="0.01" min="0" pattern="^[0-9]\\d{0,9}(\\.\\d{1,3})?$" required>
                 </label>
                 <label class="field cell w40 grid-x">
                     <span style="font-weight: bold"> Rating: </span>
@@ -176,25 +176,25 @@
                     <input type="text" name="id" id="id" value="${ristorante.codice}" style="visibility: hidden" readonly >
                 </label>
                 <label for="urlImmagine" class="field w80 cell">
-                    <input type="file" name="urlImmagine" id="urlImmagine" placeholder="Immagine del tuo ristorante" style="">
+                    <input class="cell" type="file" name="urlImmagine" id="urlImmagine" value="${ristorante.urlImmagine}" accept="image/*">
                 </label>
                 <label for="tipologie" class="field cell w80">
                     <span style="font-weight: bold"> Tipologie: </span>
                     <textarea name="tipologie" id="tipologie" rows="4" cols="100" readonly><%Ristorante r= (Ristorante) request.getAttribute("ristorante");
-                            if(!r.getTipologie().isEmpty()){
-                                StringJoiner sj=new StringJoiner(",");
-                                for(Tipologia t: r.getTipologie()){
-                                  sj.add(t.getNome());
-                                }
-                        %><%=sj.toString()%>
+                        if(!r.getTipologie().isEmpty()){
+                            StringJoiner sj=new StringJoiner(",");
+                            for(Tipologia t: r.getTipologie()){
+                                sj.add(t.getNome());
+                            }
+                    %><%=sj.toString()%>
                         <%}else{
-                                String str="Non ci sono prodotti, quindi tipologie per il ristorante";
+                            String str="Non ci sono prodotti, quindi tipologie per il ristorante";
                         %><%=str%>
                         <%}%></textarea>
                 </label>
                 <label for="info" class="field cell w80">
                     <span style="font-weight: bold"> Info:</span>
-                    <textarea rows="4" cols="100" type="text" name="info" id="info" maxlength="200"> ${ristorante.info}</textarea>
+                    <textarea rows="4" cols="100" type="text" name="info" id="info" maxlength="200" pattern="^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\\.){1,200}$" required> ${ristorante.info}</textarea>
                 </label>
                 <span class="grid-x cell justify-center">
                 <button type="submit" class="btn primary"> Modifica info</button>
@@ -205,18 +205,18 @@
             <section class="grid-y cell w63">
                 <table class="table">
                     <tbody>
-                        <c:forEach items="${ristorante.giorni}" var="disp">
-                            <tr>
-                                <c:choose>
-                                    <c:when test="${disp.oraApertura==disp.oraChiusura}">
-                                        <td data-head="${disp.giorno}">CHIUSO </td>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <td data-head="${disp.giorno}">${disp.oraApertura} - ${disp.oraChiusura} </td>
-                                    </c:otherwise>
-                                </c:choose>
-                            </tr>
-                        </c:forEach>
+                    <c:forEach items="${ristorante.giorni}" var="disp">
+                        <tr>
+                            <c:choose>
+                                <c:when test="${disp.oraApertura==disp.oraChiusura}">
+                                    <td data-head="${disp.giorno}">CHIUSO </td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td data-head="${disp.giorno}">${disp.oraApertura} - ${disp.oraChiusura} </td>
+                                </c:otherwise>
+                            </c:choose>
+                        </tr>
+                    </c:forEach>
                     <tr>
                         <td style="border-bottom: none"><a href="/FoodOut/ristorante/update-disponibilita?id=${ristorante.codice}">Modifica orario</a></td>
                     </tr>
@@ -229,3 +229,4 @@
 
 </body>
 </html>
+

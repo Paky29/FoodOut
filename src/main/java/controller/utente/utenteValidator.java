@@ -25,10 +25,10 @@ public class utenteValidator {
         RequestValidator validator = new RequestValidator(request);
         validator.checkLength("email", 50, "email deve essere al massimo di 50 caratteri");
         validator.assertEmail("email", "email non valida");
-        validator.assertMatch("nome", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]){1,30}$"), "nome compreso tra 1 e 30 caratteri");
-        validator.assertMatch("cognome", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "cognome compreso tra 1 e 30 caratteri");
-        validator.assertMatch("provincia", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "provincia compreso tra 1 e 30 caratteri");
-        validator.assertMatch("citta", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "citta compreso tra 1 e 30 caratteri");
+        validator.assertMatch("nome", Pattern.compile("^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "nome compreso tra 1 e 30 caratteri");
+        validator.assertMatch("cognome", Pattern.compile("^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "cognome compreso tra 1 e 30 caratteri");
+        validator.assertMatch("provincia", Pattern.compile("^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "provincia compreso tra 1 e 30 caratteri");
+        validator.assertMatch("citta", Pattern.compile("^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "citta compreso tra 1 e 30 caratteri");
         validator.assertMatch("via", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\\.){1,50}$"), "via compreso tra 1 e 50 caratteri");
         validator.assertInt("civico", "via compreso tra 1 e 50 caratteri");
         return validator;

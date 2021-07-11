@@ -9,7 +9,7 @@
     <jsp:include page="WEB-INF/views/partials/head.jsp">
         <jsp:param name="title" value="Home"/>
         <jsp:param name="styles" value="header"/>
-        <jsp:param name="scripts" value="home"/>
+        <jsp:param name="scripts" value="home,home_validation"/>
     </jsp:include>
 </head>
 <body>
