@@ -12,6 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Recensione"/>
+        <jsp:param name="scripts" value="recensione_validation"/>
     </jsp:include>
     <style>
         .app {
@@ -46,17 +47,19 @@
 </head>
 
 <body>
-<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ordine/add-recensione" method="post">
+<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ordine/add-recensione" method="post" novalidate>
     <c:if test="${not empty alert}">
         <%@ include file="../partials/alert.jsp"%>
     </c:if>
     <fieldset class="grid-y cell w50 recensione">
         <h2> Aggiungi Recensione </h2>
-        <label for="voto" class="field cell w80">
-            <input type="number" name="voto" id="voto" min="1" max="5" placeholder="Voto">
+        <label for="voto" class="field cell w80 grid-x">
+            <input class="cell" type="number" name="voto" id="voto" min="1" max="5" placeholder="Voto" required>
+            <small class="errMsg cell"> </small>
         </label>
-        <label for="giudizio" class="field cell w80">
-            <textarea rows="4" cols="100" type="text" name="giudizio" id="giudizio" maxlength="150" placeholder="Giudizio"></textarea>
+        <label for="giudizio" class="field cell w80 grid-x">
+            <textarea rows="4" cols="100" type="text" name="giudizio" id="giudizio" maxlength="150" placeholder="Giudizio" pattern="^(\w|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\.){1,50}$" required></textarea>
+            <small class="errMsg cell"> </small>
         </label>
         <input  style="display:none;" type="number" name="id" value="${id}">
         <button type="submit" class="btn primary"> Aggiungi </button>

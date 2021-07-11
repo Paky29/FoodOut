@@ -18,7 +18,7 @@ public class ordineValidator {
 
     static RequestValidator validateRecensione(HttpServletRequest request){
         RequestValidator validator=new RequestValidator(request);
-        validator.assertMatch("giudizio", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|,|\\.){1,150}$"), "giudizio compreso tra 1 e 50 caratteri");
+        validator.assertMatch("giudizio", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\\.){1,150}$"), "giudizio compreso tra 1 e 50 caratteri");
         validator.assertMatch("voto",Pattern.compile("^[1-5]$"),"voto deve essere un numero tra 1 e 5");
         return validator;
     }

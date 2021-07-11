@@ -62,11 +62,11 @@
             <small class="errMsg cell"> </small>
         </label>
         <label for="spesaMinima" class="field w40 cell grid-x">
-            <input class="cell" type="number" name="spesaMinima" id="spesaMinima" placeholder="Spesa minima (€)" step="0.01" min="0" pattern="^[0-9]\\d{0,9}(\\.\\d{1,3})?$" required>
+            <input class="cell" type="number" name="spesaMinima" id="spesaMinima" placeholder="Spesa minima (€)" step="0.01" min="0" pattern="^[0-9]\d{0,9}(\.\d{1,3})?$" required>
             <small class="errMsg cell"> </small>
         </label>
         <label for="tassoConsegna" class="field w40 cell grid-x">
-            <input class="cell" type="number" name="tassoConsegna" id="tassoConsegna" placeholder="Tasso Consegna (€)" step="0.01" min="0" pattern="^[0-9]\\d{0,9}(\\.\\d{1,3})?$" required>
+            <input class="cell" type="number" name="tassoConsegna" id="tassoConsegna" placeholder="Tasso Consegna (€)" step="0.01" min="0" pattern="^[0-9]\d{0,9}(\.\d{1,3})?$" required>
             <small class="errMsg cell"> </small>
         </label>
         <label for="urlImmagine" class="field w80 cell grid-x">

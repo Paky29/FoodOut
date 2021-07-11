@@ -5,7 +5,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Profilo"/>
-        <jsp:param name="scripts" value="crm"/>
+        <jsp:param name="scripts" value="crm,update_validation"/>
         <jsp:param name="styles" value="crm"/>
     </jsp:include>
     <style>
@@ -24,33 +24,51 @@
             <c:if test="${not empty alert}">
                 <%@ include file="../partials/alert.jsp"%>
             </c:if>
-            <form class="grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/update" method="post">
+            <form class="grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/update" method="post" novalidate>
                 <fieldset
                         class="grid-x cell justify-center">
                     <legend> Profilo</legend>
                     <label for="nome" class="field cell w40">
                         <span style="font-weight: bold"> Nome: </span>
-                        <input type="text" name="nome" id="nome" value="${profilo.nome}" required maxlength="30">
+                        <span class="grid-x cell">
+                            <input class="cell" type="text" name="nome" id="nome" value="${profilo.nome}" maxlength="30" pattern="^([a-zA-Z]|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>
+                            <small class="errMsg cell">  </small>
+                        </span>
                     </label>
                     <label for="cognome" class="field cell w40">
                         <span style="font-weight: bold"> Cognome: </span>
-                        <input type="text" name="cognome" id="cognome" value="${profilo.cognome}" required maxlength="30">
+                        <span class="grid-x cell">
+                            <input class="cell" type="text" name="cognome" id="cognome" value="${profilo.cognome}" maxlength="30" pattern="^([a-zA-Z]|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>
+                            <small class="errMsg cell">  </small>
+                        </span>
                     </label>
                     <label for="provincia" class="field cell w40">
                         <span style="font-weight: bold"> Provincia: </span>
-                        <input type="text" name="provincia" id="provincia" value="${profilo.provincia}" required maxlength="30">
+                        <span class="grid-x cell">
+                            <input class="cell" type="text" name="provincia" id="provincia" value="${profilo.provincia}" maxlength="30" pattern="^([a-zA-Z]|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>
+                            <small class="errMsg cell">  </small>
+                        </span>
                     </label>
                     <label for="citta" class="field cell w40">
-                        <span style="font-weight: bold"> Citt&agrave: </span>
-                        <input type="text" name="citta" id="citta" value="${profilo.citta}" required maxlength="30">
+                        <span style="font-weight: bold"> Citt&agrave;: </span>
+                        <span class="grid-x cell">
+                            <input class="cell" type="text" name="citta" id="citta" value="${profilo.citta}" maxlength="30" pattern="^([a-zA-Z]|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>
+                            <small class="errMsg cell">  </small>
+                        </span></label>
                     </label>
                     <label for="via" class="field cell w40">
                         <span style="font-weight: bold"> Via: </span>
-                        <input type="text" name="via" id="via" value="${profilo.via}" required maxlength="50">
+                        <span class="grid-x cell">
+                            <input class="cell" type="text" name="via" id="via" value="${profilo.via}" maxlength="50" pattern="^(\w|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\.){1,50}$" required>
+                            <small class="errMsg cell">  </small>
+                        </span>
                     </label>
                     <label for="civico" class="field cell w40">
                         <span style="font-weight: bold"> Civico: </span>
-                        <input type="number" name="civico" id="civico" value="${profilo.civico}" required>
+                        <span class="grid-x cell">
+                            <input class="cell" type="number" name="civico" id="civico" value="${profilo.civico}" min="1" required>
+                            <small class="errMsg cell">  </small>
+                        </span>
                     </label>
                     <label for="email" class="field cell w50">
                         <span style="font-weight: bold"> Email: </span>

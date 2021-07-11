@@ -98,8 +98,6 @@ function showError() {
         alert('è necessario inserire una stringa');
     } else if(info.validity.tooLong) {
         alert('info deve essere al massimo di 200 caratteri');
-    } else if(info.validity.patternMismatch) {
-        alert('info non deve contenere caratteri speciali ');
     }
 
 

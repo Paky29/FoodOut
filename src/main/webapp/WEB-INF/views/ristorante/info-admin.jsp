@@ -165,9 +165,9 @@
                 </label>
                 <label class="field cell w40 grid-x">
                     <span style="font-weight: bold" class="field cell w40"> Spesa minima: </span>
-                    <input class="cell" type="text" name="spesaMinima" id="spesaMinima" value="${ristorante.spesaMinima}" step="0.01" min="0" pattern="^[0-9]\\d{0,9}(\\.\\d{1,3})?$" required>
+                    <input class="cell" type="text" name="spesaMinima" id="spesaMinima" value="${ristorante.spesaMinima}" step="0.01" min="0" pattern="^[0-9]\d{0,9}(\.\d{1,3})?$" required>
                     <span style="font-weight: bold" class="field cell w40"> Tasso consegna:</span>
-                    <input class="cell" type="text" name="tassoConsegna" id="tassoConsegna" value="${ristorante.tassoConsegna}" step="0.01" min="0" pattern="^[0-9]\\d{0,9}(\\.\\d{1,3})?$" required>
+                    <input class="cell" type="text" name="tassoConsegna" id="tassoConsegna" value="${ristorante.tassoConsegna}" step="0.01" min="0" pattern="^[0-9]\d{0,9}(\.\d{1,3})?$" required>
                 </label>
                 <label class="field cell w40 grid-x">
                     <span style="font-weight: bold"> Rating: </span>

@@ -52,7 +52,7 @@
             <small class="errMsg cell"> </small>
         </label>
         <label for="via" class="field w50 cell grid-x" >
-            <input class="cell" type="text" name="via" id="via" placeholder="Via" maxlength="50" required pattern="^(\w|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\.){1,50}$">
+            <input class="cell" type="text" name="via" id="via" placeholder="Via" maxlength="50" required pattern="^(\w|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\.){1,50}$" required>
             <small class="errMsg cell"> </small>
         </label>
         <label for="civico" class="field w30 cell grid-x">

@@ -5,9 +5,9 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
-        <jsp:param name="title" value="Aggiungi Disponibilita"/>
+        <jsp:param name="title" value="Modifica Disponibilita"/>
         <jsp:param name="styles" value="crm"/>
-        <jsp:param name="scripts" value="add_disponibilita"/>
+        <jsp:param name="scripts" value="add_disponibilita,dis_validation"/>
     </jsp:include>
     <style>
         .app {

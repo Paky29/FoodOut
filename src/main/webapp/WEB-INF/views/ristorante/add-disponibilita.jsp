@@ -6,7 +6,7 @@
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Aggiungi Disponibilita"/>
         <jsp:param name="styles" value="crm"/>
-        <jsp:param name="scripts" value="add_disponibilita"/>
+        <jsp:param name="scripts" value="add_disponibilita,dis_validation"/>
     </jsp:include>
     <style>
         .app {

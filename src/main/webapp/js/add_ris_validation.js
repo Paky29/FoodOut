@@ -226,9 +226,6 @@ function showError() {
         info.nextElementSibling.textContent = 'è necessario inserire una stringa';
     } else if(info.validity.tooLong) {
         info.nextElementSibling.textContent = 'info deve essere al massimo di 200 caratteri';
-    } else if(info.validity.patternMismatch) {
-        info.nextElementSibling.textContent = 'info non deve contenere caratteri speciali ';
     }
-
 
 }

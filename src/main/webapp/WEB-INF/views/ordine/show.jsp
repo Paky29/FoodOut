@@ -10,6 +10,7 @@
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Dettagli ordine"/>
         <jsp:param name="styles" value="info_ord_crm"/>
+        <jsp:param name="scripts" value="ord_admin_validation"/>
     </jsp:include>
     <script>
         $(document).ready(function(){
