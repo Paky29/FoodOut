@@ -6,6 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Modifica menu"/>
+        <jsp:param name="scripts" value="update_menu_validation"/>
     </jsp:include>
     <style>
         .app {
@@ -49,23 +50,29 @@
     <c:if test="${not empty alert}">
         <%@ include file="../partials/alert.jsp"%>
     </c:if>
-    <form id="prodotto " class="grid-x justify-center" action="${pageContext.request.contextPath}/menu/update"
-          method="post">
+    <form id="prodotto " class="grid-x justify-center" action="${pageContext.request.contextPath}/menu/update" method="post" novalidate>
         <fieldset class="grid-x cell w90 add-ris justify-center">
             <h2 class="cell"> Modifica menu</h2>
             <label for="nome" class="grid-x field cell w82">
                 <span style="font-weight: bold" class="field cell w20"> Nome: </span>
-                <input class="cell w80" type="text" name="nome" id="nome" value="${menu.nome}" placeholder="Nome">
+                <span class="cell grid-x">
+                <input class="cell" type="text" name="nome" id="nome" value="${menu.nome}" placeholder="Nome" pattern="^(\w|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>
+                <small class="cell errMsg">  </small>
+                </span>
             </label>
             <label for="prezzo" class="grid-x field w40 cell">
                 <span class="field cell" style="font-weight: bold;margin-bottom: 3px;">Prezzo: </span>
-                <input type="number" name="prezzo" id="prezzo" value="${menu.prezzo}" placeholder="Prezzo (€)" min="0"
-                       step="0.01">
+                <span class="cell grid-x">
+                <input class="cell" type="number" name="prezzo" id="prezzo" value="${menu.prezzo}" placeholder="Prezzo (€)" min="0.01" step="0.01" required>
+                    <small class="cell errMsg"></small>
+                </span>
             </label>
             <label for="sconto" class="grid-x field w40 cell">
                 <span class="field cell" style="font-weight: bold;margin-bottom: 3px;">Sconto: </span>
-                <input type="number" name="sconto" id="sconto" value="${menu.sconto}" placeholder="Sconto (%)" max="100"
-                       min="0">
+                <span class="cell grid-x">
+                <input class="cell" type="number" name="sconto" id="sconto" value="${menu.sconto}" placeholder="Sconto (%)" max="100" min="0" required>
+                    <small class="cell errMsg"></small>
+                </span>
             </label>
             <label for="prodotti" class="field w70 cell">
             <span style="margin-right: 10px; font-weight: bold;">

@@ -11,7 +11,7 @@
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Menu"/>
         <jsp:param name="styles" value="menu"/>
-        <jsp:param name="scripts" value="menu"/>
+        <jsp:param name="scripts" value="menu,amount_validation"/>
     </jsp:include>
 </head>
 <body>
@@ -120,7 +120,7 @@
                                                             </span>
                                                             <form class=" grid-x justify-center align-center"
                                                                   action="${pageContext.request.contextPath}/ordineItem/add-prodotto-item"
-                                                                  method="post">
+                                                                  method="post" novalidate>
                                                                 <fieldset class="grid-y cell w100 show-amount">
                                                                     <h2 id="nome" class="w100"
                                                                         style="text-align: center"> ${prodotto.nome} </h2>
@@ -158,8 +158,11 @@
                                                                     <div id="amount"
                                                                          class="grid-x cell w100 align-center">
                                                                         <span> Quantità: </span>
-                                                                        <input type="number" name="quantita"
-                                                                               id="quantita" value="1" max="99" min="1">
+                                                                        <span class="grid-x">
+                                                                        <input class="" type="number" name="quantita"
+                                                                               id="quantitaProd" value="1" max="99" min="1">
+                                                                            <small class="errMsg cell"> </small>
+                                                                        </span>
                                                                     </div>
                                                                     <input style="display: none" type="number" name="id"
                                                                            id="id" value="${prodotto.codice}">
@@ -242,8 +245,11 @@
                                                     </ul>
                                                     <div id="amount" class="grid-x cell w100 align-center">
                                                         <span> Quantità: </span>
-                                                        <input type="number" name="quantita" id="quantita" value="1"
+                                                        <span class="grid-x">
+                                                        <input class="cell" type="number" name="quantita" id="quantitaMenu" value="1"
                                                                max="99" min="1">
+                                                            <small class="errMsg cell"> </small>
+                                                        </span>
                                                     </div>
                                                     <input style="display: none" type="number" name="id" id="id"
                                                            value="${menu.codice}">

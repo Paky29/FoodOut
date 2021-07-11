@@ -5,7 +5,8 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
-        <jsp:param name="title" value="Aggiungi Disponibilita"/>
+        <jsp:param name="title" value="Modifica prodotto"/>
+        <jsp:param name="scripts" value="update_prod_validation"/>
     </jsp:include>
     <style>
         .app {
@@ -48,35 +49,46 @@
     <c:if test="${not empty alert}">
         <%@ include file="../partials/alert.jsp"%>
     </c:if>
-    <form id="prodotto " class="grid-x justify-center" action="${pageContext.request.contextPath}/prodotto/update" method="post" enctype="multipart/form-data">
+    <form id="prodotto " class="grid-x justify-center" action="${pageContext.request.contextPath}/prodotto/update" method="post" enctype="multipart/form-data" novalidate>
         <fieldset class="grid-x cell w90 add-ris justify-center">
             <h2 class="cell"> Modifica prodotto</h2>
             <label for="nome" class="grid-x field cell w82">
                 <span style="font-weight: bold" class="field cell w20"> Nome: </span>
-                <input class="cell w80" type="text" name="nome" id="nome" value="${prodotto.nome}" placeholder="Nome">
+                <span class="grid-x cell">
+                <input class="cell " type="text" name="nome" id="nome" value="${prodotto.nome}" placeholder="Nome" pattern="^(\w|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>
+                <small class="errMsg cell"> </small>
+                </span>
             </label>
             <label for="prezzo" class="grid-x field w40 cell">
                 <span class="field cell" style="font-weight: bold;margin-bottom: 3px;">Prezzo: </span>
-                <input type="number" name="prezzo" id="prezzo" value="${prodotto.prezzo}" placeholder="Prezzo (€)" min="0" step="0.01">
+                <span class="grid-x cell">
+                <input class="cell" type="number" name="prezzo" id="prezzo" value="${prodotto.prezzo}" placeholder="Prezzo (€)" min="0.01" step="0.01" required>
+                <small class="errMsg cell"></small>
+                </span>
             </label>
             <label for="sconto" class="grid-x field w40 cell">
                 <span class="field cell" style="font-weight: bold;margin-bottom: 3px;">Sconto: </span>
-                <input type="number" name="sconto" id="sconto" value="${prodotto.sconto}" placeholder="Sconto (%)" max="100" min="0">
+                <span class="grid-x cell">
+                <input class="cell" type="number" name="sconto" id="sconto" value="${prodotto.sconto}" placeholder="Sconto (%)" max="100" min="0" required>
+                <small class="errMsg cell"> </small>
+                </span>
             </label>
             <label for="tipologia" class="grid-x field w82 cell">
                 <span class="field cell w20" style="font-weight: bold;"> Tipologia: </span>
                 <input class="cell w80" name="tipologia" id="tipologia" value="${prodotto.tipologia.nome}" readonly>
             </label>
             <label for="urlImmagine" class="field w80 cell">
-                <input type="file" name="urlImmagine" id="urlImmagine" placeholder="Immagine del tuo ristorante" value="${prodotto.urlImmagine}">
+                <input type="file" name="urlImmagine" id="urlImmagine" placeholder="Immagine del tuo ristorante" value="${prodotto.urlImmagine}" accept="image/jpeg">
             </label>
             <label for="ingredienti" class="grid-x field cell w82">
                 <span class="field cell" style="font-weight: bold;margin-bottom: 3px;">Ingredienti: </span>
                 <textarea rows="4" cols="100" type="text" name="ingredienti" id="ingredienti" maxlength="100" placeholder="Ingredienti del prodotto, separati da ','"> ${prodotto.ingredienti} </textarea>
+                <small class="errMsg cell"> </small>
             </label>
             <label for="info" class="grid-x field cell w82">
                 <span class="field cell" style="font-weight: bold;margin-bottom: 3px;">Info extra: </span>
                 <textarea rows="4" cols="100" type="text" name="info" id="info" maxlength="100" placeholder="Informazioni extra sul prodotto"> ${prodotto.info} </textarea>
+                <small class="errMsg cell"> </small>
             </label>
             <input style="display: none" name="id" id="id" value="${prodotto.codice}" readonly>
             <input style="display: none" name="idRis" id="idRis" value="${ristorante.codice}" readonly>

@@ -6,6 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Aggiungi prodotto-menu"/>
+        <jsp:param name="scripts" value="add_prodmenu_validation"/>
     </jsp:include>
     <style>
         .app {
@@ -49,19 +50,22 @@
         <%@ include file="../partials/alert.jsp"%>
     </c:if>
     <div class="grid-x justify-center align-center">
-<form id="prodotto" class="grid-x justify-center" action="${pageContext.request.contextPath}/prodotto/create" method="post" enctype="multipart/form-data">
+<form id="prodotto" class="grid-x justify-center" action="${pageContext.request.contextPath}/prodotto/create" method="post" enctype="multipart/form-data" novalidate>
     <fieldset class="grid-x cell w90 add-ris justify-center">
         <h2 class="cell"> Aggiungi prodotto</h2>
-        <label for="nome" class="field cell w82">
-            <input type="text" name="nome" id="nome" placeholder="Nome">
+        <label for="nomeProd" class="field cell w82 grid-x">
+            <input class="cell" type="text" name="nome" id="nomeProd" placeholder="Nome" pattern="^(\w|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>
+            <small class="errMsg cell"> </small>
         </label>
-        <label for="prezzo" class="field w40 cell">
-            <input type="number" name="prezzo" id="prezzo" placeholder="Prezzo (€)" min="0" step="0.01">
+        <label for="prezzoProd" class="field w40 cell grid-x">
+            <input class="cell" type="number" name="prezzo" id="prezzoProd" placeholder="Prezzo (€)" min="0.01" step="0.01" required>
+            <small class="errMsg cell"></small>
         </label>
-        <label for="sconto" class="field w40 cell">
-            <input type="number" name="sconto" id="sconto" placeholder="Sconto (%)" max="100" min="0">
+        <label for="scontoProd" class="field w40 cell grid-x">
+            <input class="cell" type="number" name="sconto" id="scontoProd" placeholder="Sconto (%)" max="100" min="0" required>
+            <small class="errMsg cell"></small>
         </label>
-        <label for="tipologia" class="field w65 cell">
+        <label for="tipologia" class="field w65 cell grid-x">
             <span style="margin-right: 10px">
                 Tipologia:
             </span>
@@ -73,17 +77,20 @@
                 </c:forEach>
             </select>
         </label>
-        <label for="urlImmagine" class="field w80 cell">
-            <input type="file" name="urlImmagine" id="urlImmagine" placeholder="Immagine del tuo ristorante">
+        <label for="urlImmagine" class="field w80 cell grid-x">
+            <input class="cell" type="file" name="urlImmagine" id="urlImmagine" placeholder="Immagine del tuo ristorante" accept="image/jpeg">
+            <small class="errMsg cell"></small>
         </label>
-        <label for="ingredienti" class="field cell w80">
-            <textarea rows="4" cols="100" type="text" name="ingredienti" id="ingredienti" maxlength="100" placeholder="Ingredienti del prodotto, separati da ','"></textarea>
+        <label for="ingredienti" class="field cell w80 grid-x">
+            <textarea rows="4" cols="100" type="text" name="ingredienti" id="ingredienti" maxlength="100" placeholder="Ingredienti del prodotto, separati da ','" required></textarea>
+            <small class="errMsg cell"></small>
         </label>
-        <label for="info" class="field cell w80">
-            <textarea rows="4" cols="100" type="text" name="info" id="info" maxlength="100" placeholder="Informazioni extra sul prodotto"></textarea>
+        <label for="info" class="field cell w80 grid-x">
+            <textarea rows="4" cols="100" type="text" name="info" id="info" maxlength="100" placeholder="Informazioni extra sul prodotto" required></textarea>
+            <small class="errMsg cell"></small>
         </label>
-        <input style="display: none" name="id" id="id" value="${ristorante.codice}" readonly>
-        <input style="display: none" name="function" id="function" value="${function}" readonly>
+        <input style="display: none" name="id" id="idProd" value="${ristorante.codice}" readonly>
+        <input style="display: none" name="function" id="functionProd" value="${function}" readonly>
 
         <span class="grid-x cell justify-center">
             <button type="submit" class="btn primary w30" value="again" name="button"> Aggiungi prodotto </button>
@@ -92,17 +99,20 @@
     </fieldset>
 </form>
 
-<form id="menu" class="grid-x justify-center" action="${pageContext.request.contextPath}/menu/create" method="post">
+<form id="menu" class="grid-x justify-center" action="${pageContext.request.contextPath}/menu/create" method="post" novalidate>
     <fieldset class="grid-x cell w90 add-ris justify-center">
         <h2 class="cell"> Aggiungi menu</h2>
-        <label for="nome" class="field cell w80">
-            <input type="text" name="nome" id="nome" placeholder="Nome">
+        <label for="nomeMenu" class="field cell w80 grid-x">
+            <input type="text" name="nome" id="nomeMenu" placeholder="Nome" pattern="^(\w|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>
+            <small class="errMsg cell"></small>
         </label>
-        <label for="prezzo" class="field w40 cell">
-            <input type="number" name="prezzo" id="prezzo" placeholder="Prezzo (€)" step="0.01">
+        <label for="prezzoMenu" class="field w40 cell grid-x">
+            <input type="number" name="prezzo" id="prezzoMenu" placeholder="Prezzo (€)" min="0.01" step="0.01" required>
+            <small class="errMsg cell"></small>
         </label>
-        <label for="sconto" class="field w40 cell">
-            <input type="number" name="sconto" id="sconto" placeholder="Sconto (%)" max="100" min="0">
+        <label for="scontoMenu" class="field w40 cell grid-x">
+            <input type="number" name="sconto" id="scontoMenu" placeholder="Sconto (%)" max="100" min="0" required>
+            <small class="errMsg cell"></small>
         </label>
         <label for="prodotti" class="field w65 cell">
             <span style="margin-right: 10px">
