@@ -304,9 +304,7 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                 case "/remove-pref": {
                     HttpSession ssn = req.getSession();
                     authenticateUtente(ssn);
-                    System.out.println(CommonValidator.validateId(req));
                     validate(CommonValidator.validateId(req));
-                    System.out.println(prodottoValidator.validateIdRis(req));
                     validate(prodottoValidator.validateIdRis(req));
                     int idUtente = Integer.parseInt(req.getParameter("id"));
                     int idRis = Integer.parseInt(req.getParameter("idRis"));
@@ -430,9 +428,20 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                 case "/disponibilita": {
                     HttpSession session = req.getSession();
                     authorizeUtente(session);
-                    req.setAttribute("back",view("ristorante/add-disponibilita"));
+                    validate(CommonValidator.validateFunctionValue(req));
+                    int function=Integer.parseInt(req.getParameter("function"));
+                    System.out.println(function);
+                    if(function==1)
+                        req.setAttribute("back",view("ristorante/update-disponibilita"));
+                    else
+                        req.setAttribute("back",view("ristorante/add-disponibilita"));
                     validate(CommonValidator.validateId(req));
                     int codice = Integer.parseInt(req.getParameter("id"));
+                    if(function==1){
+                        RistoranteDAO service = new RistoranteDAO();
+                        Ristorante r = service.doRetrieveById(codice, true);
+                        req.setAttribute("ristorante",r);
+                    }
                     req.setAttribute("id",codice);
                     validate(disponibilitaValidator.validateForm(req));
                     RistoranteDAO serviceRis = new RistoranteDAO();

@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="it" dir="ltr">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Aggiungi Disponibilita"/>
         <jsp:param name="styles" value="crm"/>
@@ -46,7 +47,10 @@
 
 <body>
 <form class="app grid-x justify-center align-center"
-      action="${pageContext.request.contextPath}/ristorante/disponibilita" method="post">
+      action="${pageContext.request.contextPath}/ristorante/disponibilita?function=1" method="post">
+    <c:if test="${not empty alert}">
+        <%@ include file="../partials/alert.jsp"%>
+    </c:if>
     <fieldset
             class="grid-x cell w90 add-disp justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
         <h1 id="title" class="cell"> Scegli il tuo orario </h1>

@@ -45,7 +45,7 @@
 </head>
 
 <body>
-<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ristorante/disponibilita" method="post">
+<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ristorante/disponibilita?function=0" method="post">
     <c:if test="${not empty alert}">
         <%@ include file="../partials/alert.jsp"%>
     </c:if>
