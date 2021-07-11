@@ -40,18 +40,18 @@
         <h2> Modifica password </h2>
         <span> Attuale password  </span>
         <label for="old_pw" class="field">
-            <input type="password" name="old_pw" id="old_pw">
+            <input type="password" name="old_pw" id="old_pw"  minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$" required>
         </label>
         <span> Nuova password </span>
         <label for="new_pw" class="field">
-            <input type="password" name="new_pw" id="new_pw">
+            <input type="password" name="new_pw" id="new_pw"  minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$" required>
         </label>
         <span> Conferma nuova password </span>
         <label for="conf_pw" class="field">
-            <input type="password" name="conf_pw" id="conf_pw">
+            <input type="password" name="conf_pw" id="conf_pw"  minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$" required>
         </label>
         <label for="email" class="field" style="visibility: hidden">
-            <input type="text" name="email" id="email" value="${profilo.email}">
+            <input type="email" name="email" id="email" value="${profilo.email}" maxlength="50">
         </label>
         <button type="submit" class="btn primary"> Conferma </button>
     </fieldset>

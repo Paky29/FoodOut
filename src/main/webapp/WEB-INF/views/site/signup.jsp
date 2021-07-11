@@ -5,6 +5,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Sign up"/>
+        <jsp:param name="scripts" value="signup_validation"/>
     </jsp:include>
     <style>
         .app {
@@ -28,35 +29,43 @@
 </head>
 
 <body>
-<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/signup" method="post">
+<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/utente/signup" method="post" novalidate>
     <c:if test="${not empty alert}">
         <%@ include file="../partials/alert.jsp"%>
     </c:if>
     <fieldset class="grid-x cell w75 signup justify-center"> <%-- vedere se è meglio  w50 o w75 ,  con justify-center , align-center o meno--%>
         <h1 id="title" class="cell"> Sign up </h1>
-        <label for="nome" class="field w40 cell">
-            <input type="text" name="nome" id="nome" placeholder="Nome">
+        <label for="nome" class="field w40 cell grid-x">
+            <input class="cell" type="text" name="nome" id="nome" placeholder="Nome" maxlength="30" pattern="^([a-zA-Z]|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>
+            <small class="errMsg cell"> </small>
         </label>
-        <label for="cognome" class="field w40 cell">
-            <input type="text" name="cognome" id="cognome" placeholder="Cognome">
+        <label for="cognome" class="field w40 cell grid-x">
+            <input class="cell" type="text" name="cognome" id="cognome" placeholder="Cognome" maxlength="30" pattern="^([a-zA-Z]|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>
+            <small class="errMsg cell"> </small>
         </label>
-        <label for="provincia" class="field w40 cell">
-            <input type="text" name="provincia" id="provincia" placeholder="Provincia">
+        <label for="provincia" class="field w40 cell grid-x">
+            <input class="cell" type="text" name="provincia" id="provincia" placeholder="Provincia" pattern="^([a-zA-Z]|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" maxlength="30" required>
+            <small class="errMsg cell"> </small>
         </label>
-        <label for="citta" class="field w40 cell">
-            <input type="text" name="citta" id="citta" placeholder="Citta">
+        <label for="citta" class="field w40 cell grid-x">
+            <input class="cell" type="text" name="citta" id="citta" placeholder="Citta" maxlength="30" pattern="^([a-zA-Z]|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$" required>
+            <small class="errMsg cell"> </small>
         </label>
-        <label for="via" class="field w50 cell" >
-            <input type="text" name="via" id="via" placeholder="Via">
+        <label for="via" class="field w50 cell grid-x" >
+            <input class="cell" type="text" name="via" id="via" placeholder="Via" maxlength="50" required pattern="^(\w|\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\.){1,50}$">
+            <small class="errMsg cell"> </small>
         </label>
-        <label for="civico" class="field w30 cell">
-            <input type="number" name="civico" id="civico" placeholder="n°">
+        <label for="civico" class="field w30 cell grid-x">
+            <input class="cell" type="number" name="civico" id="civico" placeholder="n°" min="1" required>
+            <small class="errMsg cell"> </small>
         </label>
-        <label for="email" class="field w40 cell">
-            <input type="email" name="email" id="email" placeholder="Email">
+        <label for="email" class="field w40 cell grid-x">
+            <input class="cell" type="email" name="email" id="email" placeholder="Email" maxlength="50" pattern="^([\w\.\-]+)@([\w\-]+)((\.(\w){2,})+)$" required>
+            <small class="errMsg cell"> </small>
         </label>
-        <label for="pw" class="field w40 cell">
-            <input type="password" name="pw" id="pw" placeholder="Password">
+        <label for="pw" class="field w40 cell grid-x">
+            <input class="cell" type="password" name="pw" id="pw" placeholder="Password" minlength="8" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$" required>
+            <small class="errMsg cell"> </small>
         </label>
         <button type="submit" class="btn primary w30"> Registrati </button>
     </fieldset>
