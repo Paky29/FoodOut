@@ -11,7 +11,7 @@ public class utenteValidator {
         RequestValidator validator = new RequestValidator(request);
         validator.checkLength("email", 50, "email deve essere al massimo di 50 caratteri");
         validator.assertEmail("email", "email non valida");
-        validator.assertMatch("pw", Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$"), "password deve essere di minimo otto caratteri con almeno una lettere maiuscola, una lettera minuscola, un numero e un carattere speciale");
+        validator.assertMatch("pw", Pattern.compile("(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"), "password deve essere di minimo otto caratteri con almeno una lettere maiuscola, una lettera minuscola, un numero e un carattere speciale");
         validator.assertMatch("nome", Pattern.compile("^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "nome compreso tra 1 e 30 caratteri");
         validator.assertMatch("cognome", Pattern.compile("^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "cognome compreso tra 1 e 30 caratteri");
         validator.assertMatch("provincia", Pattern.compile("^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "provincia compreso tra 1 e 30 caratteri");
@@ -36,16 +36,16 @@ public class utenteValidator {
 
     static RequestValidator validateUpdatePassword(HttpServletRequest request){
         RequestValidator validator= new RequestValidator(request);
-        validator.assertMatch("old_pw", Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$"), "password deve essere di minimo otto caratteri con almeno una lettere maiuscola, una lettera minuscola, un numero e un carattere speciale");
-        validator.assertMatch("new_pw", Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$"), "password deve essere di minimo otto caratteri con almeno una lettere maiuscola, una lettera minuscola, un numero e un carattere speciale");
-        validator.assertMatch("conf_pw", Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$"), "password deve essere di minimo otto caratteri con almeno una lettere maiuscola, una lettera minuscola, un numero e un carattere speciale");
+        validator.assertMatch("old_pw", Pattern.compile("(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"), "password deve essere di minimo otto caratteri con almeno una lettere maiuscola, una lettera minuscola, un numero e un carattere speciale");
+        validator.assertMatch("new_pw", Pattern.compile("(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"), "password deve essere di minimo otto caratteri con almeno una lettere maiuscola, una lettera minuscola, un numero e un carattere speciale");
+        validator.assertMatch("conf_pw", Pattern.compile("(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"), "password deve essere di minimo otto caratteri con almeno una lettere maiuscola, una lettera minuscola, un numero e un carattere speciale");
         return validator;
     }
 
     public static RequestValidator validateLogin(HttpServletRequest request){
         RequestValidator validator=new RequestValidator(request);
         validator.assertEmail("email", "Formato email non valido");
-        validator.assertMatch("pw", Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&\\-\\_])[A-Za-z\\d@$!%*?&\\-\\_]{8,}$"), "Formato password non valido");
+        validator.assertMatch("pw", Pattern.compile("(?=^.{8,}$)((?=.*\\d)|(?=.*\\W+))(?![.\\n])(?=.*[A-Z])(?=.*[a-z]).*$"), "Formato password non valido");
         return validator;
     }
 

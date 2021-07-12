@@ -19,7 +19,7 @@
     </script>--%>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Login"/>
-        <jsp:param name="scripts" value="login_validation"/>
+        <jsp:param name="scripts" value=""/>
     </jsp:include>
 <style>
     .app {

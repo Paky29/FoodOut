@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 public class tipologiaValidator {
     static RequestValidator validateForm(HttpServletRequest request){
         RequestValidator validator=new RequestValidator(request);
-        validator.assertMatch("nome", Pattern.compile("^[a-zA-Zàèìòù',. ]{1,30}$"), "nome compreso tra 1 e 30 caratteri");
-        validator.assertMatch("descrizione", Pattern.compile("^(\\D|\\s|'){1,100}$"), "descrizione compreso tra 1 e 100 caratteri");
+        validator.assertMatch("nome", Pattern.compile("^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"), "nome compreso tra 1 e 30 caratteri");
+        validator.assertMatch("descrizione", Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\\.){1,200}$"), "descrizione compreso tra 1 e 100 caratteri");
         boolean check=request.getParameter("nome").equalsIgnoreCase("Menu");
         validator.gatherError(!check,"La tipologia non può essere 'menu'");
         return validator;

@@ -120,7 +120,7 @@
                                                             </span>
                                                             <form class=" grid-x justify-center align-center"
                                                                   action="${pageContext.request.contextPath}/ordineItem/add-prodotto-item"
-                                                                  method="post" novalidate>
+                                                                  method="post">
                                                                 <fieldset class="grid-y cell w100 show-amount">
                                                                     <h2 id="nome" class="w100"
                                                                         style="text-align: center"> ${prodotto.nome} </h2>

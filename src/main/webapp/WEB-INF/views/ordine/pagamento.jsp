@@ -12,6 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Pagamento"/>
+        <jsp:param name="scripts" value="pagamento_validation"/>
     </jsp:include>
     <style>
         .app {
@@ -38,11 +39,15 @@
             height: auto;
             line-height: unset;
         }
+
+        a{
+            text-decoration: none;
+        }
     </style>
 </head>
 
 <body>
-<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ordine/pagamento" method="post">
+<form class="app grid-x justify-center align-center" action="${pageContext.request.contextPath}/ordine/pagamento" method="post" novalidate>
     <c:if test="${not empty alert}">
         <%@ include file="../partials/alert.jsp"%>
     </c:if>
@@ -60,8 +65,9 @@
                 </c:otherwise>
             </c:choose>
         </label>
-        <label for="nota" class="field cell w80">
+        <label for="nota" class="field cell w80 grid-x">
             <textarea rows="4" cols="100" type="text" name="nota" id="nota" maxlength="150" placeholder="Note extra"></textarea>
+            <small class="errMsg cell"> </small>
         </label>
         <button type="submit" class="btn primary"> Conferma acquisto </button>
     </fieldset>
