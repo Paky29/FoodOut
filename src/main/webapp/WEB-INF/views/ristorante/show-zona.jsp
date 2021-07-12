@@ -91,9 +91,13 @@
                 <section class="grid-x cell w100">
                     <h3 class="cell w100 title" style="color:white"> Tipologie: </h3>
                     <c:if test="${not empty tipologie}">
+                        <div class="cell grid-x align-center filtro">
+                            <input type="radio" id="tipologie" name="filtro" value="tipologie" onchange="changeStatus(this)">
+                            <label for="tipologie"> Tipologie </label>
+                        </div>
                         <c:forEach items="${tipologie}" var="tipologia">
                             <div class="cell grid-x align-center filtro">
-                                <input type="checkbox" id="tipologia" name="tipologia" value="${tipologia.nome}">
+                                <input type="checkbox" class="tip-check" id="tipologia" name="tipologia" value="${tipologia.nome}">
                                 <label for="tipologia"> ${tipologia.nome} </label>
                             </div>
                         </c:forEach>
@@ -101,11 +105,11 @@
 
                     <h3 class="cell w100 title" style="color:white"> Filtri: </h3>
                     <div class="cell grid-x align-center filtro">
-                        <input type="radio" id="sconto" name="filtro" value="sconto">
+                        <input type="radio" id="sconto" name="filtro" value="sconto" onchange="changeStatus(this)">
                         <label for="sconto"> Sconto </label>
                     </div>
                     <div class="cell grid-x align-center filtro">
-                        <input type="radio" id="gratis" name="filtro" value="gratis">
+                        <input type="radio" id="gratis" name="filtro" value="gratis" onchange="changeStatus(this)">
                         <label style="font-size: 15px;" for="gratis"> Consegna gratis </label>
                     </div>
                     <div class=" grid-x justify-center align-center cell">
@@ -177,6 +181,25 @@
             window.location.href="/FoodOut/ristorante/zona-nome?nome=" + nome + "&citta=" + citta;
         }
     });
+
+    function changeStatus(elem){
+        /*var radioTip=document.getElementsByClassName("tipologie")*/
+        var tips=document.getElementsByClassName("tip-check");
+        if(elem.checked && elem.getAttribute("id")!='tipologie'){
+            for(let i=0; i<tips.length; i++){
+                tips[i].parentElement.style.display="none";
+                tips[i].disabled=true;
+
+
+             }
+        }
+        else{
+            for(let i=0; i<tips.length; i++){
+                tips[i].parentElement.style.display="revert";
+                tips[i].disabled=false;
+            }
+        }
+    }
 </script>
 </body>
 </html>

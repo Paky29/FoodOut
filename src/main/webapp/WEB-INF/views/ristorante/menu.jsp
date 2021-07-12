@@ -355,15 +355,11 @@
 </div>
 <script>
     $(".prodotto > #scontoP").each(function (){
-        alert(this.getAttribute("value"));
-        alert(this.getAttribute("value")>0);
         if(this.getAttribute("value")>0)
             this.parentElement.classList.add("sale");
     });
 
     $(".menu > #scontoM").each(function (){
-        alert(this.getAttribute("value"));
-        alert(this.getAttribute("value")>0);
         if(this.getAttribute("value")>0)
             this.parentElement.classList.add("sale");
     });
