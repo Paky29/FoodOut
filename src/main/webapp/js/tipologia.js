@@ -1,5 +1,5 @@
 function search(){
-    var x=document.getElementById("nomeRis").value;
+    var x=document.getElementById("nomeTip").value;
     var xhr= new XMLHttpRequest();
     xhr.onreadystatechange= function() {
         if (this.readyState==4 && this.status==200){
@@ -12,7 +12,7 @@ function search(){
 
 function searchDB(xhr){
     var result=JSON.parse(xhr.responseText);
-    $('#nomeRis').autocomplete({
+    $('#nomeTip').autocomplete({
         source:result
     }, {
         autoFocus:false,

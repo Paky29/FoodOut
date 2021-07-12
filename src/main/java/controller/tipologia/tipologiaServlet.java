@@ -8,7 +8,10 @@ import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
 import model.tipologia.Tipologia;
 import model.tipologia.TipologiaDAO;
+import model.utente.Utente;
+import model.utente.UtenteDAO;
 import model.utility.Paginator;
+import model.utility.UtenteSession;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -80,7 +83,23 @@ public class tipologiaServlet extends controller {
                     break;
                 }
                 case "/api":{
-
+                    String data=req.getParameter("data");
+                    TipologiaDAO tipologiaDAO=new TipologiaDAO();
+                    ArrayList<Tipologia> tip=tipologiaDAO.doRetrieveByNomeLike(data,new Paginator(1,10));
+                    resp.setContentType("text/plain;charset=UTF-8");
+                    if(tip!=null) {
+                        resp.getWriter().append("[");
+                        String nome;
+                        long id;
+                        for (int i = 0; i < tip.size(); i++) {
+                            nome = tip.get(i).getNome();
+                            resp.getWriter().append("\"").append(nome).append("\"");
+                            if (i != tip.size() - 1)
+                                resp.getWriter().append(",");
+                        }
+                        resp.getWriter().append("]");
+                    }
+                    break;
                 }
                 default:
                     notFound();
@@ -91,7 +110,7 @@ public class tipologiaServlet extends controller {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (InvalidRequestException e) {
             log(e.getMessage());
-            System.out.println(e.getMessage());
+            System.out.println(e.getErrors());
             e.handle(req, resp);
         }
 

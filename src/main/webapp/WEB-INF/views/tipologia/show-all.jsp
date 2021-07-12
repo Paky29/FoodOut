@@ -6,9 +6,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Tipologie"/>
-        <jsp:param name="scripts" value="crm,crm_tipologie"/>
+        <jsp:param name="scripts" value="crm,crm_tipologie,tipologia"/>
         <jsp:param name="styles" value="crm,crm_tipologie"/>
     </jsp:include>
     <style>
@@ -34,7 +37,7 @@
                     <%@include file="../../../icons/plus.svg" %>
                 </span>
                 <label class="field command w75">
-                    <input type="text" placeholder="Cerca Tipologie">
+                    <input type="text" placeholder="Cerca Tipologie" id="nomeTip" onkeydown="search()">
                 </label>
                 <label class="field command w25" id="totale">
                     <span> Totale tipologie:</span>

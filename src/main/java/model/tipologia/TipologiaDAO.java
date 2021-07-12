@@ -27,6 +27,27 @@ public class TipologiaDAO {
         }
     }
 
+    public ArrayList<Tipologia> doRetrieveByNomeLike(String nome,Paginator paginator) throws SQLException {
+        try(Connection conn= ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT nome, descrizione FROM Tipologia WHERE nome LIKE ? LIMIT ?,?");
+            ps.setString(1, "%" + nome + "%");
+            ps.setInt(2, paginator.getOffset());
+            ps.setInt(3, paginator.getLimit());
+            ResultSet rs=ps.executeQuery();
+            ArrayList<Tipologia> tipologie=new ArrayList<>();
+            while(rs.next()) {
+                Tipologia t = new Tipologia();
+                t.setNome(rs.getString("nome"));
+                t.setDescrizione(rs.getString("descrizione"));
+                tipologie.add(t);
+            }
+            if(tipologie.isEmpty())
+                return null;
+            else
+                return tipologie;
+        }
+    }
+
     public ArrayList<Tipologia> doRetrieveAll() throws SQLException {
         try(Connection conn= ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("SELECT nome, descrizione FROM Tipologia t");
