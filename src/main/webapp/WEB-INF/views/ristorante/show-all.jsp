@@ -113,5 +113,15 @@
         <%@include file="../partials/crm/footer.jsp" %>
     </section>
 </main>
+<script>
+
+    var nomeRis=document.getElementById("nomeRis");
+    nomeRis.addEventListener("keydown", event => {
+        if (event.code == "Enter") {
+            var nome=nomeRis.value;
+            window.location.href="/FoodOut/ristorante/all-nome?nome=" + nome ;
+        }
+    });
+</script>
 </body>
 </html>

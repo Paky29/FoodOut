@@ -183,4 +183,17 @@ public class TipologiaDAO {
                 return 0;
         }
     }
+
+    public int countNome(String nome) throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps=conn.prepareStatement("SELECT count(nome) as numTip FROM Tipologia WHERE nome LIKE ?");
+            ps.setString(1, "%" + nome + "%");
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numTip");
+            }
+            else
+                return 0;
+        }
+    }
 }

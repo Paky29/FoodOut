@@ -56,9 +56,27 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     int intPage = parsePage(req);
                     int totRis = service.countAll();
                     Paginator paginator = new Paginator(intPage, 6);
-                    int size = service.countAll();
-                    req.setAttribute("pages", paginator.getPages(size));
+                    req.setAttribute("pages", paginator.getPages(totRis));
                     ArrayList<Ristorante> ristoranti = service.doRetrieveAll(paginator);
+                    req.setAttribute("ristoranti", ristoranti);
+                    req.setAttribute("totRis", totRis);
+                    req.getRequestDispatcher(view("ristorante/show-all")).forward(req, resp);
+                    break;
+                }
+
+                case "/all-nome": {
+                    authorizeUtente(req.getSession());
+                    RistoranteDAO service = new RistoranteDAO();
+                    validate(ristoranteValidator.validateNome(req));
+                    if (req.getParameter("page") != null) {
+                        validate(CommonValidator.validatePage(req));
+                    }
+                    String nome=req.getParameter("nome");
+                    int intPage = parsePage(req);
+                    int totRis = service.countNome(nome);
+                    Paginator paginator = new Paginator(intPage, 6);
+                    req.setAttribute("pages", paginator.getPages(totRis));
+                    ArrayList<Ristorante> ristoranti = service.doRetrieveByNome(nome, paginator, true);
                     req.setAttribute("ristoranti", ristoranti);
                     req.setAttribute("totRis", totRis);
                     req.getRequestDispatcher(view("ristorante/show-all")).forward(req, resp);
@@ -114,6 +132,8 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     RistoranteDAO serviceRis = new RistoranteDAO();
                     TipologiaDAO serviceTip = new TipologiaDAO();
                     UtenteDAO serviceUtente = new UtenteDAO();
+                    validate(ristoranteValidator.validateCitta(req));
+                    validate(ristoranteValidator.validateNome(req));
                     String citta = req.getParameter("citta");
                     String nome = req.getParameter("nome");
                     HttpSession session = req.getSession(true);
@@ -135,8 +155,8 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     if (cart != null) {
                         session.removeAttribute("cart");
                     }
-                    ArrayList<Ristorante> ristoranti = serviceRis.doRetrieveByCitta(citta, paginator, false);
-                    ArrayList<Tipologia> tipologie = serviceTip.doRetriveByCitta(citta);
+                    ArrayList<Ristorante> ristoranti = serviceRis.doRetrieveByNomeAndCitta(citta, nome, paginator, false);
+                    ArrayList<Tipologia> tipologie = serviceTip.doRetriveByCittaNome(citta, nome);
                     req.setAttribute("ristoranti", ristoranti);
                     req.setAttribute("tipologie", tipologie);
                     req.getRequestDispatcher(view("ristorante/show-zona")).forward(req, resp);

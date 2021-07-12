@@ -82,12 +82,12 @@
             </label>
             <label for="ingredienti" class="grid-x field cell w82">
                 <span class="field cell" style="font-weight: bold;margin-bottom: 3px;">Ingredienti: </span>
-                <textarea rows="4" cols="100" type="text" name="ingredienti" id="ingredienti" maxlength="100" placeholder="Ingredienti del prodotto, separati da ','"> ${prodotto.ingredienti} </textarea>
+                <textarea rows="4" cols="100" type="text" name="ingredienti" id="ingredienti" maxlength="100" placeholder="Ingredienti del prodotto, separati da ','" required> ${prodotto.ingredienti} </textarea>
                 <small class="errMsg cell"> </small>
             </label>
             <label for="info" class="grid-x field cell w82">
                 <span class="field cell" style="font-weight: bold;margin-bottom: 3px;">Info extra: </span>
-                <textarea rows="4" cols="100" type="text" name="info" id="info" maxlength="100" placeholder="Informazioni extra sul prodotto"> ${prodotto.info} </textarea>
+                <textarea rows="4" cols="100" type="text" name="info" id="info" maxlength="100" placeholder="Informazioni extra sul prodotto" required> ${prodotto.info} </textarea>
                 <small class="errMsg cell"> </small>
             </label>
             <input style="display: none" name="id" id="id" value="${prodotto.codice}" readonly>

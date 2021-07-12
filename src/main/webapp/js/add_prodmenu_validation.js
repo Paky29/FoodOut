@@ -41,7 +41,7 @@ scontoProd.addEventListener('input', function (event) {
     }
 });
 
-url.addEventListener('submit', function (event) {
+url.addEventListener('input', function (event) {
     if (url.validity.valid) {
         url.nextElementSibling.textContent = '';
     } else {
@@ -49,7 +49,7 @@ url.addEventListener('submit', function (event) {
     }
 });
 
-ingredienti.addEventListener('submit', function (event) {
+ingredienti.addEventListener('input', function (event) {
     if (ingredienti.validity.valid) {
         ingredienti.nextElementSibling.textContent = '';
     } else {
@@ -57,7 +57,7 @@ ingredienti.addEventListener('submit', function (event) {
     }
 });
 
-info.addEventListener('submit', function (event) {
+info.addEventListener('input', function (event) {
     if (info.validity.valid) {
         info.nextElementSibling.textContent = '';
     } else {
@@ -190,7 +190,7 @@ function showErrorProd() {
     if(url.validity.valueMissing) {
         url.nextElementSibling.textContent = 'campo obbligatorio';
     } else if(url.validity.typeMismatch) {
-        info.nextElementSibling.textContent = "è necessario inserire un'immagine";
+        url.nextElementSibling.textContent = "è necessario inserire un'immagine";
     }
 
     if(ingredienti.validity.valueMissing) {

@@ -76,5 +76,15 @@
         <%@include file="../partials/crm/footer.jsp" %>
     </section>
 </main>
+<script>
+
+    var nomeTip=document.getElementById("nomeTip");
+    nomeTip.addEventListener("keydown", event => {
+        if (event.code == "Enter") {
+            var nome=nomeTip.value;
+            window.location.href="/FoodOut/tipologia/nome?nome=" + nome;
+        }
+    });
+</script>
 </body>
 </html>

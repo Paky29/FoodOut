@@ -29,7 +29,13 @@ public class ristoranteValidator {
 
     static RequestValidator validateCitta(HttpServletRequest request) {
         RequestValidator validator=new RequestValidator(request);
-        validator.assertMatch("citta",Pattern.compile("^(\\w|\\s|[èàòùìÀÒÈÙÌ]|\'){1,30}$"),"la citta deve essere inserita");
+        validator.assertMatch("citta",Pattern.compile("^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"),"la citta deve essere inserita");
+        return validator;
+    }
+
+    static public RequestValidator validateNome(HttpServletRequest request) {
+        RequestValidator validator=new RequestValidator(request);
+        validator.assertMatch("nome",Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\\.){1,30}$"),"il nome deve essere inserito");
         return validator;
     }
 }

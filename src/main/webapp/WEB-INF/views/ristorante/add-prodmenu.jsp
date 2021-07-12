@@ -78,7 +78,7 @@
             </select>
         </label>
         <label for="urlImmagine" class="field w80 cell grid-x">
-            <input class="cell" type="file" name="urlImmagine" id="urlImmagine" placeholder="Immagine del tuo ristorante" accept="image/jpeg">
+            <input class="cell" type="file" name="urlImmagine" id="urlImmagine" placeholder="Immagine del tuo ristorante" accept="image/*">
             <small class="errMsg cell"></small>
         </label>
         <label for="ingredienti" class="field cell w80 grid-x">

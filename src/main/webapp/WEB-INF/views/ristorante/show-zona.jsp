@@ -171,7 +171,7 @@
         var citta=document.getElementsByClassName("city")[0].textContent;
         if (event.code == "Enter") {
             var nome=nomeRis.value;
-            window.location.href="/Foodout/ristorante/zona-nome?nome=" + nome + "&citta=" + citta;
+            window.location.href="/FoodOut/ristorante/zona-nome?nome=" + nome + "&citta=" + citta;
         }
     });
 </script>

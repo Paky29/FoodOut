@@ -82,6 +82,25 @@ public class tipologiaServlet extends controller {
                     req.getRequestDispatcher(view("tipologia/show-all")).forward(req, resp);
                     break;
                 }
+
+                case "/nome": {
+                    authorizeUtente(req.getSession(false));
+                    TipologiaDAO service = new TipologiaDAO();
+                    validate(tipologiaValidator.validateName(req, "nome"));
+                    if (req.getParameter("page") != null) {
+                        validate(CommonValidator.validatePage(req));
+                    }
+                    String nome=req.getParameter("nome");
+                    int intPage = parsePage(req);
+                    int totTip = service.countNome(nome);
+                    Paginator paginator = new Paginator(intPage, 6);
+                    req.setAttribute("pages", paginator.getPages(totTip));
+                    ArrayList<Tipologia> tipologie = service.doRetrieveByNomeLike(nome, paginator);
+                    req.setAttribute("tipologie", tipologie);
+                    req.setAttribute("totTip", totTip);
+                    req.getRequestDispatcher(view("tipologia/show-all")).forward(req, resp);
+                    break;
+                }
                 case "/api":{
                     String data=req.getParameter("data");
                     TipologiaDAO tipologiaDAO=new TipologiaDAO();

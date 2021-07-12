@@ -16,6 +16,7 @@ import java.util.List;
 import controller.http.CommonValidator;
 import controller.http.InvalidRequestException;
 import controller.http.controller;
+import controller.ristorante.ristoranteValidator;
 import controller.utente.utenteValidator;
 import model.ordine.Ordine;
 import model.ordine.OrdineDAO;
@@ -84,6 +85,30 @@ public class ordineServlet extends controller {
                     int size = service.countAll();
                     req.setAttribute("pages", paginator.getPages(size));
                     ArrayList<Ordine> ordini = service.doRetrieveAll(paginator);
+
+
+                    req.setAttribute("ordini", ordini);
+                    req.setAttribute("totOrd", totOrd);
+                    req.setAttribute("incasso", incasso);
+                    req.getRequestDispatcher(view("ordine/show-all")).forward(req, resp);
+                    break;
+                }
+                case "/all-nome": {//possibile inviare date come parametri per filtrare gli ordini
+                    authorizeUtente(req.getSession());
+                    OrdineDAO service = new OrdineDAO();
+                    validate(ristoranteValidator.validateNome(req));
+                    if (req.getParameter("page") != null) {
+                        validate(CommonValidator.validatePage(req));
+                    }
+                    String nome=req.getParameter("nome");
+                    int intPage = parsePage(req);
+                    int totOrd = service.countNomeRis(nome);
+                    float incasso=service.getIncassoNome(nome);
+                    if(incasso==-1)
+                        InternalError();
+                    Paginator paginator = new Paginator(intPage, 6);
+                    req.setAttribute("pages", paginator.getPages(totOrd));
+                    ArrayList<Ordine> ordini = service.doRetrieveByNomeRis(nome, paginator);
 
 
                     req.setAttribute("ordini", ordini);
@@ -197,11 +222,23 @@ public class ordineServlet extends controller {
                         notFound();
                     }
                     else {
-                        UtenteSession utenteSession = new UtenteSession(u);
                         HttpSession session = req.getSession();
+                        UtenteSession utenteSession = new UtenteSession(u);
                         synchronized (session) {
                             session.setAttribute("utenteSession", utenteSession);
                         }
+                        String citta=(String) session.getAttribute("citta");
+                        if(u.getCitta()!=citta) {
+                            if(utenteSession.isAdmin())
+                                req.setAttribute("back", view("crm/show"));
+                            else {
+                                req.setAttribute("back", view("customer/profile"));
+                            }
+
+                            req.setAttribute("profilo", u);
+                            throw new InvalidRequestException("Mismatch error", List.of("Ordine non andato a buon fine, città discordanti"), HttpServletResponse.SC_BAD_REQUEST);
+                        }
+
                         if (email.contains("@foodout.com"))
                             resp.sendRedirect("/FoodOut/utente/show");
                         else
