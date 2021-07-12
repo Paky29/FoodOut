@@ -13,7 +13,7 @@ form.addEventListener('submit', function (event) {
             event.preventDefault();
         }
 
-        if(ap>=ch){
+        if(chiuso==false && ap>=ch){
             alert(giorni[i] + ": ora Apertura deve essere precedente ad ora Chiusura");
             event.preventDefault();
         }
