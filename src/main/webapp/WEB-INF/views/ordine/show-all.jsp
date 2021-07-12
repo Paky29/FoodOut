@@ -7,9 +7,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Ordini"/>
-        <jsp:param name="scripts" value="crm,crm_ordini"/>
+        <jsp:param name="scripts" value="crm,crm_ordini,ristorante"/>
         <jsp:param name="styles" value="crm,crm_ordini"/>
     </jsp:include>
     <style>
@@ -31,7 +34,7 @@
         <div class="body grid-x justify-center">
             <div class="searchbar grid-x align-center cell">
                 <label class="field command w75">
-                    <input type="text" placeholder="Cerca ordine per ristorante">
+                    <input type="text" placeholder="Cerca ordine per ristorante" id="nomeRis" onkeydown="search()">
                 </label>
                 <label class="field command w20" id="totaleOrd">
                     <span> Totale ordini:</span>

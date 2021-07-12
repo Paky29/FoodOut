@@ -16,7 +16,7 @@ function searchDB(xhr){
         source:result
     }, {
         autoFocus:false,
-        delay:200,
+        delay:100,
         minLength:2
     })
 }

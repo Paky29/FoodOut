@@ -363,24 +363,27 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     else{
                         UtenteDAO utenteDAO=new UtenteDAO();
                         if(us.isAdmin()){
-                            ris=ristoranteDAO.doRetrieveByNome(data,new Paginator(1,5),true);
+                            ris=ristoranteDAO.doRetrieveByNomeDistinct(data,new Paginator(1,5),true);
                         }else{
                             Utente u=utenteDAO.doRetrieveById(us.getId());
                             citta=u.getCitta();
                             ris=ristoranteDAO.doRetrieveByNomeAndCittaDistinct(citta,data,new Paginator(1,5),false);
                         }
                     }
+
                     resp.setContentType("text/plain;charset=UTF-8");
-                    resp.getWriter().append("[");
-                    String nome;
-                    long id;
-                    for (int i=0; i<ris.size(); i++){
-                        nome = ris.get(i).getNome();
-                        resp.getWriter().append("\"").append(nome).append("\"");
-                        if (i!=ris.size()-1)
-                            resp.getWriter().append(",");
+                    if(ris!=null) {
+                        resp.getWriter().append("[");
+                        String nome;
+                        long id;
+                        for (int i = 0; i < ris.size(); i++) {
+                            nome = ris.get(i).getNome();
+                            resp.getWriter().append("\"").append(nome).append("\"");
+                            if (i != ris.size() - 1)
+                                resp.getWriter().append(",");
+                        }
+                        resp.getWriter().append("]");
                     }
-                    resp.getWriter().append("]");
                     break;
                 }
                 default:
