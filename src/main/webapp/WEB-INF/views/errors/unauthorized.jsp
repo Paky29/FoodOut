@@ -27,10 +27,10 @@
         <p>Non disponi dell'autorizzazione necessaria a questa azione </p>
         <c:choose>
             <c:when test="${utenteSession==null}">
-                <p> </p><a href="/FoodOut/utente/login" class="cell"> Vai alla pagina di login</a> </p> <%--da vedere--%>
+                <p> </p><a href="/FoodOut/utente/login" class="cell"> Vai alla pagina di login</a> </p>
             </c:when>
             <c:otherwise>
-                <p> </p><a href="/FoodOut/ristorante/zona" class="cell"> Torna alla pagina principale</a> </p> <%--da vedere--%>
+                <p> </p><a href="/FoodOut/ristorante/zona" class="cell"> Torna alla pagina principale</a> </p>
             </c:otherwise>
         </c:choose>
     </div>

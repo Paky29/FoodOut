@@ -18,7 +18,7 @@
         opacity: 0.3;
     }
     .login{
-        padding: 1rem; <%--dimensione relativa al root--%>
+        padding: 1rem;
         background-color:white;
         border-radius: 10px;
         opacity: revert;

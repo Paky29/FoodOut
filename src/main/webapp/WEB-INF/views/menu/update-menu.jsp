@@ -11,12 +11,10 @@
     <style>
         .app {
             background: linear-gradient(var(--primary), white);
-        <%--background-image: url("http://localhost:8080/images/image.jpg");--%>
         }
 
         .add-ris {
             padding: 1rem;
-        <%--dimensione relativa al root--%> background-color: white;
             border-radius: 10px;
         }
 

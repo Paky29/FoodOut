@@ -91,14 +91,6 @@ public class Ordine {
         this.oraArrivo = oraArrivo;
     }
 
-   /* public Rider getRider() {
-        return rider;
-    }
-
-    public void setRider(Rider rider) {
-        this.rider = rider;
-    }*/
-
     public boolean isConsegnato() {
         return consegnato;
     }
@@ -143,7 +135,6 @@ public class Ordine {
     private float totale;
     private String nota,metodoPagamento,giudizio;
     private LocalTime oraPartenza, oraArrivo;
-    //private Rider rider;
     private Utente utente;
     private boolean consegnato;
     private ArrayList<OrdineItem> ordineItems;

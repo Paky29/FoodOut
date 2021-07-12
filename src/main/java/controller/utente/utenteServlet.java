@@ -235,20 +235,6 @@ public class utenteServlet extends controller {
                     validate(utenteValidator.validateLogin(req));
                     String email = req.getParameter("email");
                     String pw = req.getParameter("pw");
-                    /*if (email.contains("@foodout.rider.com")) {
-                        RiderDAO service = new RiderDAO();
-                        Rider rd = service.doRetrievebyEmailAndPassword(email, pw);
-                        if (rd == null)
-                            notFound();//cambiare con pagina di errore
-                        else {
-                            RiderSession riderSession = new RiderSession(rd);
-                            HttpSession session = req.getSession();
-                            synchronized (session) {
-                                session.setAttribute("riderSession", riderSession);
-                            }
-                            resp.sendRedirect("/FoodOut/ristorante/zona");//cambiare in /rider/profile
-                        }
-                    } else {*/
                         UtenteDAO service = new UtenteDAO();
                         Utente u = service.doRetrieveByEmailAndPassword(email, pw);
                         if (u == null) {

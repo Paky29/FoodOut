@@ -1,11 +1,5 @@
 <%@ page import="model.tipologia.Tipologia" %>
-<%@ page import="model.ristorante.Ristorante" %><%--
-  Created by IntelliJ IDEA.
-  User: User01
-  Date: 12/05/2021
-  Time: 17:10
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="model.ristorante.Ristorante" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>

@@ -14,12 +14,6 @@ public interface ErrorHandler {
         }
     }
 
-    default void authenticateRider(HttpSession session) throws InvalidRequestException{
-        if(session == null || session.getAttribute("riderSession")==null){
-            throw new InvalidRequestException("Errore autenticazione", List.of("Non sei autenticata"), HttpServletResponse.SC_UNAUTHORIZED);
-        }
-    }
-
     default void authorizeUtente(HttpSession session) throws InvalidRequestException{
         authenticateUtente(session);
         UtenteSession utenteSession=(UtenteSession) session.getAttribute("utenteSession");

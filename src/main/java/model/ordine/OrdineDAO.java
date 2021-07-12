@@ -21,14 +21,12 @@ public class OrdineDAO {
 
     public Ordine doRetrieveById(int codiceOrdine) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.valido,r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE o.codiceOrdine=?"); //LEFT JOIN Rider rd ON o.codRider_fk= rd.codiceRider
+            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.valido,r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE o.codiceOrdine=?");
             ps.setInt(1, codiceOrdine);
             ResultSet rs = ps.executeQuery();
             Ordine o = null;
             if (rs.next()) {
                 o = OrdineExtractor.extract(rs);
-                /*Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);*/
                 Utente u = UtenteExtractor.extract(rs);
                 o.setUtente(u);
                 Ristorante r = RistoranteExtractor.extract(rs);
@@ -73,8 +71,6 @@ public class OrdineDAO {
                 o.setUtente(u);
                 Ristorante r = RistoranteExtractor.extract(rs);
                 o.setRistorante(r);
-                /*Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);*/
                 ordini.put(codiceOrdine, o);
             }
 
@@ -116,8 +112,6 @@ public class OrdineDAO {
                     o.setUtente(u);
                     Ristorante r = RistoranteExtractor.extract(rs);
                     o.setRistorante(r);
-                    /*Rider rd = RiderExtractor.extract(rs);
-                    o.setRider(rd);*/
                     ordini.put(codiceOrdine, o);
                 }
                 Tipologia t = new Tipologia();
@@ -165,8 +159,6 @@ public class OrdineDAO {
                 o.setUtente(u);
                 Ristorante r = RistoranteExtractor.extract(rs);
                 o.setRistorante(r);
-                /*Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);*/
                 ordini.put(codiceOrdine, o);
             }
 
@@ -210,8 +202,6 @@ public class OrdineDAO {
                 o.setUtente(u);
                 Ristorante r = RistoranteExtractor.extract(rs);
                 o.setRistorante(r);
-                /*Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);*/
                 ordini.put(codiceOrdine, o);
             }
 
@@ -366,8 +356,6 @@ public class OrdineDAO {
                 o.setUtente(u);
                 Ristorante r = RistoranteExtractor.extract(rs);
                 o.setRistorante(r);
-                /*Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);*/
                 ordini.put(codiceOrdine, o);
             }
 
@@ -427,8 +415,6 @@ public class OrdineDAO {
                 o.setUtente(u);
                 Ristorante r = RistoranteExtractor.extract(rs);
                 o.setRistorante(r);
-                /*Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);*/
                 ordini.put(codiceOrdine, o);
             }
 
@@ -474,8 +460,6 @@ public class OrdineDAO {
                 o.setUtente(u);
                 Ristorante r = RistoranteExtractor.extract(rs);
                 o.setRistorante(r);
-                /*Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);*/
                 ordini.put(codiceOrdine, o);
             }
 
@@ -618,19 +602,6 @@ public class OrdineDAO {
         }
     }
 
-    /*public boolean updateRider(int codiceOrdine, int codiceRider) throws SQLException {
-        try(Connection conn=ConPool.getConnection()){
-            PreparedStatement ps=conn.prepareStatement("UPDATE Ordine SET codRider_fk=? WHERE codiceOrdine=?");
-            ps.setInt(1,codiceRider);
-            ps.setInt(2,codiceOrdine);
-
-            if(ps.executeUpdate()!=1)
-                return false;
-            else
-                return true;
-        }
-    }*/
-
     public boolean doDelete(int codiceOrdine) throws SQLException{
         try(Connection conn=ConPool.getConnection()) {
             PreparedStatement ps=conn.prepareStatement("DELETE FROM ORDINE WHERE codiceOrdine=?");
@@ -751,19 +722,6 @@ public class OrdineDAO {
                 return 0;
         }
     }
-
-    /*public int countRider(Rider rd) throws SQLException {
-        try(Connection conn=ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT count(*) as numOrdini FROM Ordine o WHERE o.codRider_fk=?");
-            ps.setInt(1, rd.getCodice());
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                return rs.getInt("numOrdini");
-            }
-            else
-                return 0;
-        }
-    }*/
 
     public int countBeetwenData(LocalDate ldInizio, LocalDate ldFine) throws SQLException {
         try(Connection conn=ConPool.getConnection()) {
