@@ -11,8 +11,9 @@
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Menu"/>
         <jsp:param name="styles" value="menu"/>
-        <jsp:param name="scripts" value="menu,amount_validation"/>
+        <jsp:param name="scripts" value="menu"/>
     </jsp:include>
+
 </head>
 <body>
 <style>
@@ -76,11 +77,6 @@
                             <a class="field cell w100 tipologia" href="#Menu"><span
                                     style="font-style: italic">Menu</span></a>
                         </c:if>
-                    </div>
-                    <h3 class="cell w100 title"> Filtri: </h3>
-                    <div class="cell grid-x align-center fitro">
-                        <input type="checkbox" id="sconto" name="sconto" value="1">
-                        <label for="sconto"> Sconto </label>
                     </div>
                 </section>
             </form>
@@ -197,6 +193,8 @@
                                                         </c:if>
                                                         <input style="display: none" id="id" name="id"
                                                                value="${prodotto.codice}"/>
+                                                        <input style="display: none" id="scontoP" name="scontoP"
+                                                               value="${prodotto.sconto}"/>
 
                                                     </label>
                                                 </c:if>
@@ -269,6 +267,7 @@
                                            onclick="showProdMenuDetails(this)" title="Clicca per acquistare">
                                         <span> ${menu.nome} </span>
                                         <input style="display: none" id="id" name="id" value="${menu.codice}"/>
+                                        <input style="display: none" id="scontoM" name="scontoM" value="${menu.sconto}"/>
                                     </label>
                                 </c:if>
                             </c:forEach>
@@ -354,6 +353,20 @@
         </section>
     </div>
 </div>
+<script>
+    $(".prodotto > #scontoP").each(function (){
+        alert(this.getAttribute("value"));
+        alert(this.getAttribute("value")>0);
+        if(this.getAttribute("value")>0)
+            this.parentElement.classList.add("sale");
+    });
 
+    $(".menu > #scontoM").each(function (){
+        alert(this.getAttribute("value"));
+        alert(this.getAttribute("value")>0);
+        if(this.getAttribute("value")>0)
+            this.parentElement.classList.add("sale");
+    });
+</script>
 </body>
 </html>

@@ -238,6 +238,13 @@ fieldset {
     display: none;
 }
 
+.sale{
+    background-image: url("/FoodOut/images/sconto_bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
 @media screen and (max-width:769px) {
     .show-menu{
         height: unset;

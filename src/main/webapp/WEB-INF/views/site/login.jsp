@@ -1,30 +1,15 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: User01
-  Date: 22/06/2021
-  Time: 11:21
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="it" dir="ltr">
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <%--<script>
-        $(document).ready(function (){
-            $('#log').on('submit', function() {
-               validateForm(this);
-            });
-        })
-    </script>--%>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Login"/>
-        <jsp:param name="scripts" value=""/>
+        <jsp:param name="scripts" value="login_validation"/>
     </jsp:include>
 <style>
     .app {
     background: linear-gradient(var(--primary), white);
-  <%--background-image: url("/FoodOut/images/sfondo.jpg");--%>
     }
 
     img {
