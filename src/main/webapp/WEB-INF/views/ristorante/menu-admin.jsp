@@ -244,11 +244,6 @@
                             <a class="field cell tipologia" href="#Menu"><span style="font-style: italic">Menu</span></a>
                         </c:if>
                     </div>
-                    <h3 class="cell w100 title"> Filtri: </h3>
-                    <div class="cell grid-x align-center fitro">
-                        <input type="checkbox" id="sconto" name="sconto" value="1">
-                        <label for="sconto"> Sconto </label>
-                    </div>
                 </section>
             </form>
             <div class="cell w75 grid-x justify-center show-menu">

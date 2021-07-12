@@ -36,6 +36,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 @WebServlet(name = "ristoranteServlet", value = "/ristorante/*")
@@ -518,7 +519,6 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     authorizeUtente(session);
                     validate(CommonValidator.validateFunctionValue(req));
                     int function=Integer.parseInt(req.getParameter("function"));
-                    System.out.println(function);
                     if(function==1)
                         req.setAttribute("back",view("ristorante/update-disponibilita"));
                     else
@@ -553,6 +553,44 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                         resp.sendRedirect("/FoodOut/ristorante/add-prodmenu?id=" + codice + "&function=0");
                     } else
                         resp.sendRedirect("/FoodOut/ristorante/show-info-admin?id=" + codice);
+                    break;
+                }
+
+                case "/filters":{
+                    TipologiaDAO serviceTip = new TipologiaDAO();
+                    HttpSession session = req.getSession();
+                    UtenteSession us = (UtenteSession) session.getAttribute("utenteSession");
+                    String citta;
+                    if (us != null) {
+                        UtenteDAO utenteDAO = new UtenteDAO();
+                        Utente u = utenteDAO.doRetrieveById(us.getId());
+                        citta = u.getCitta();
+                    } else {
+                        citta = (String) session.getAttribute("citta");
+                    }
+                    ArrayList<Tipologia> tipologies = serviceTip.doRetriveByCitta(citta);
+                    if(req.getParameterValues("tipologia")!=null) {
+                        validate(ristoranteValidator.validateFilters(req));
+                        String[] tips = req.getParameterValues("tipologia");
+
+                        RistoranteDAO serviceRis = new RistoranteDAO();
+
+                        ArrayList<String> tipologie = new ArrayList<>(Arrays.asList(tips));
+                        int totRis = serviceRis.countTipologieCitta(tipologie, citta, false);
+
+                        if (req.getParameter("page") != null) {
+                            validate(CommonValidator.validatePage(req));
+                        }
+                        int intPage = parsePage(req);
+                        Paginator paginator = new Paginator(intPage, 6);
+                        req.setAttribute("pages", paginator.getPages(totRis));
+
+                        ArrayList<Ristorante> ristoranti = serviceRis.doRetrieveByTipologieCitta(tipologie, citta, paginator, false);
+                    }
+                    String filtro=req.getParameter("filtro");
+                    if(filtro!=null){
+
+                    }
                     break;
                 }
                 default:

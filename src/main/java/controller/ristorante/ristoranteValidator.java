@@ -3,6 +3,7 @@ package controller.ristorante;
 import controller.http.RequestValidator;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public class ristoranteValidator {
@@ -36,6 +37,15 @@ public class ristoranteValidator {
     static public RequestValidator validateNome(HttpServletRequest request) {
         RequestValidator validator=new RequestValidator(request);
         validator.assertMatch("nome",Pattern.compile("^(\\w|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'|\\.){1,30}$"),"il nome deve essere inserito");
+        return validator;
+    }
+
+    static public RequestValidator validateFilters(HttpServletRequest request) {
+        String[] tips=request.getParameterValues("tipologia");
+        RequestValidator validator=new RequestValidator(request);
+        Pattern tipPattern = Pattern.compile("^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$");
+        boolean allValid = Arrays.stream(tips).allMatch(tip -> tipPattern.matcher(tip).matches());
+        validator.gatherError(allValid, "Presente tipologia non valida");
         return validator;
     }
 }

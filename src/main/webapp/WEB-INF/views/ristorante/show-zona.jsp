@@ -87,7 +87,7 @@
             </label>
         </nav>
         <section class="cell w100 grid-x container">
-            <form class="cell grid-x search w20">
+            <form class="cell grid-x search w20" action="/FoodOut/ristorante/filters" method="post">
                 <section class="grid-x cell w100">
                     <h3 class="cell w100 title" style="color:white"> Tipologie: </h3>
                     <c:if test="${not empty tipologie}">
@@ -101,12 +101,15 @@
 
                     <h3 class="cell w100 title" style="color:white"> Filtri: </h3>
                     <div class="cell grid-x align-center filtro">
-                        <input type="checkbox" id="sconto" name="sconto" value="1">
+                        <input type="radio" id="sconto" name="filtro" value="sconto">
                         <label for="sconto"> Sconto </label>
                     </div>
                     <div class="cell grid-x align-center filtro">
-                        <input type="checkbox" id="gratis" name="gratis" value="1">
+                        <input type="radio" id="gratis" name="filtro" value="gratis">
                         <label style="font-size: 15px;" for="gratis"> Consegna gratis </label>
+                    </div>
+                    <div class=" grid-x justify-center align-center cell">
+                        <button class="btn primary" type="submit"> Filtra </button>
                     </div>
                 </section>
             </form>
