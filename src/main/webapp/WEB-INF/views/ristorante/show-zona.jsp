@@ -72,13 +72,13 @@
             <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo">
             <c:choose>
                 <c:when test="${utenteSession==null}">
-                    <div id="guest" style="color: white" onclick="goToIndex()" title="Clicca per cambiare citta">
-                        <span id="back">${citta}</span>
+                    <div  id="guest" style="color: white" onclick="goToIndex()" title="Clicca per cambiare citta">
+                        <span class="city" id="back">${citta}</span>
                     </div>
                 </c:when>
                 <c:otherwise>
                     <div id="citta" style="color: white">
-                        <span>${utente.citta}</span>
+                        <span class="city">${utente.citta}</span>
                     </div>
                 </c:otherwise>
             </c:choose>
@@ -164,5 +164,16 @@
 
     </div>
 </div>
+<script>
+
+    var nomeRis=document.getElementById("nomeRis");
+    nomeRis.addEventListener("keydown", event => {
+        var citta=document.getElementsByClassName("city")[0].textContent;
+        if (event.code == "Enter") {
+            var nome=nomeRis.value;
+            window.location.href="/Foodout/ristorante/zona-nome?nome=" + nome + "&citta=" + citta;
+        }
+    });
+</script>
 </body>
 </html>

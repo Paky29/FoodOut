@@ -109,6 +109,39 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     req.getRequestDispatcher(view("ristorante/show-zona")).forward(req, resp);
                     break;
                 }
+
+                case "/zona-nome": {
+                    RistoranteDAO serviceRis = new RistoranteDAO();
+                    TipologiaDAO serviceTip = new TipologiaDAO();
+                    UtenteDAO serviceUtente = new UtenteDAO();
+                    String citta = req.getParameter("citta");
+                    String nome = req.getParameter("nome");
+                    HttpSession session = req.getSession(true);
+                    UtenteSession us = (UtenteSession) session.getAttribute("utenteSession");
+                    if (us != null) {
+                        Utente u = serviceUtente.doRetrieveById(us.getId());
+                        citta = u.getCitta();
+                        session.setAttribute("citta",citta);
+                    }
+                    if (req.getParameter("page") != null) {
+                        validate(CommonValidator.validatePage(req));
+                    }
+                    int intPage = parsePage(req);
+                    Paginator paginator = new Paginator(intPage, 6);
+                    int size = serviceRis.countNomeCitta(citta,nome,false);
+                    req.setAttribute("pages", paginator.getPages(size));
+
+                    Ordine cart = (Ordine) session.getAttribute("cart");
+                    if (cart != null) {
+                        session.removeAttribute("cart");
+                    }
+                    ArrayList<Ristorante> ristoranti = serviceRis.doRetrieveByCitta(citta, paginator, false);
+                    ArrayList<Tipologia> tipologie = serviceTip.doRetriveByCitta(citta);
+                    req.setAttribute("ristoranti", ristoranti);
+                    req.setAttribute("tipologie", tipologie);
+                    req.getRequestDispatcher(view("ristorante/show-zona")).forward(req, resp);
+                    break;
+                }
                 case "/show-menu": {//possibilità di aggiungere al carrello i prodotti
                     validate(CommonValidator.validateId(req));
                     int id = Integer.parseInt(req.getParameter("id"));

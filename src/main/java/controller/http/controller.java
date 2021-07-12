@@ -1,7 +1,6 @@
 package controller.http;
 
 import model.utility.UtenteSession;
-import org.json.JSONObject;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
