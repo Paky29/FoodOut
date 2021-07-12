@@ -11,6 +11,8 @@ import model.utility.Paginator;
 
 import javax.sql.rowset.serial.SerialArray;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -134,7 +136,6 @@ public class RistoranteDAO {
             ps.setString(1, citta);
             ps.setInt(2, paginator.getOffset());
             ps.setInt(3, paginator.getLimit());
-            System.out.println(ps.toString());
             Map<Integer, Ristorante> ristoranti = new LinkedHashMap<>();
             ResultSet rs = ps.executeQuery();
 
@@ -284,7 +285,55 @@ public class RistoranteDAO {
         }
     }
 
-    // restituisce i ristoranti con un tasso di consegna inferiore o uguale a quello inserito
+    public ArrayList<Ristorante> doRetrieveCittaRating(String citta, Paginator paginator, boolean isAdmin) throws SQLException {
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps;
+            if (isAdmin)
+                ps = conn.prepareStatement("SELECT r.codiceRistorante, r.valido, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ristorante r LEFT JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk LEFT JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE r.citta=? AND r.rating>=4 LIMIT ?,?");
+            else
+                ps = conn.prepareStatement("SELECT r.codiceRistorante, r.valido, r.nome, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE r.valido=true AND r.citta=? AND r.rating>=4 LIMIT ?,?");
+            ps.setString(1, citta);
+            ps.setInt(2, paginator.getOffset());
+            ps.setInt(3, paginator.getLimit());
+            Map<Integer, Ristorante> ristoranti = new LinkedHashMap<>();
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int codiceRistorante = rs.getInt("r.codiceRistorante");
+                if (!ristoranti.containsKey(codiceRistorante)) {
+                    Ristorante r = RistoranteExtractor.extract(rs);
+                    ristoranti.put(codiceRistorante, r);
+                }
+                Tipologia t = new Tipologia();
+                t.setNome(rs.getString("t.nome"));
+                t.setDescrizione(rs.getString("t.descrizione"));
+                ristoranti.get(codiceRistorante).getTipologie().add(t);
+            }
+
+            if (ristoranti.isEmpty())
+                return null;
+
+            StringJoiner sj = new StringJoiner(",", "(", ")");
+            for (int key : ristoranti.keySet()) {
+                sj.add(Integer.toString(key));
+            }
+
+            PreparedStatement disp = conn.prepareStatement("SELECT d.codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN " + sj.toString());
+            ResultSet setDisp = disp.executeQuery();
+
+            while (setDisp.next()) {
+                int codiceRistorante = setDisp.getInt("codRis_fk");
+                Disponibilita d = DisponibilitaExtractor.extract(setDisp);
+                ristoranti.get(codiceRistorante).getGiorni().add(d);
+            }
+
+            if (ristoranti.isEmpty())
+                return null;
+            else
+                return new ArrayList<Ristorante>(ristoranti.values());
+        }
+    }
+
     public ArrayList<Ristorante> doRetrieveByTassoConsegna(float tasso, String citta, Paginator paginator, boolean isAdmin) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps;
@@ -675,6 +724,22 @@ public class RistoranteDAO {
                 ps = conn.prepareStatement("SELECT count(*) as numRist FROM Ristorante r WHERE r.citta=?");
             else
                 ps = conn.prepareStatement("SELECT count(*) as numRist FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE r.citta=? AND r.valido=true");
+            ps.setString(1, citta);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("numRist");
+            } else
+                return 0;
+        }
+    }
+
+    public int countCittaRating(String citta, boolean isAdmin) throws SQLException {
+        try (Connection conn = ConPool.getConnection()) {
+            PreparedStatement ps;
+            if (isAdmin)
+                ps = conn.prepareStatement("SELECT count(*) as numRist FROM Ristorante r WHERE r.citta=? AND r.rating>4");
+            else
+                ps = conn.prepareStatement("SELECT count(*) as numRist FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE r.citta=? AND r.valido=true ANd r.rating>4");
             ps.setString(1, citta);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

@@ -48,4 +48,11 @@ public class ristoranteValidator {
         validator.gatherError(allValid, "Presente tipologia non valida");
         return validator;
     }
+
+    static public RequestValidator validateFilter(HttpServletRequest request) {
+        RequestValidator validator=new RequestValidator(request);
+        validator.assertMatch("tipologia",Pattern.compile("^([a-zA-Z]|\\s|[è,à,ò,ù,ì,À, Ò, È, Ù, Ì]|'){1,30}$"),"Presente tipologia non valida");
+        return validator;
+    }
+
 }

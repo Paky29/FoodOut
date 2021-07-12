@@ -22,7 +22,7 @@ public class disponibilitaValidator {
                     LocalTime ap = LocalTime.parse(apertura);
                     LocalTime ch = LocalTime.parse(chiusura);
                     boolean vincolo = ap.isBefore(ch);
-                    validator.gatherError(vincolo, "Orario apertura deve essere precedente ad orario chiusura" + Disponibilita.giorni[i]);
+                    validator.gatherError(vincolo, "Orario apertura deve essere precedente ad orario chiusura per " + Disponibilita.giorni[i]);
                 }
             }
 

@@ -2,13 +2,11 @@ package controller.ristorante;
 
 import controller.http.*;
 import controller.prodotto.prodottoValidator;
-import controller.tipologia.tipologiaValidator;
 import model.disponibilita.Disponibilita;
 import model.disponibilita.DisponibilitaDAO;
 import model.menu.MenuDAO;
 import model.ordine.Ordine;
 import model.ordine.OrdineDAO;
-import model.ordine.OrdineItem;
 import model.prodotto.ProdottoDAO;
 import model.ristorante.Ristorante;
 import model.ristorante.RistoranteDAO;
@@ -407,6 +405,49 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     }
                     break;
                 }
+                case "/filter":{
+                    HttpSession session = req.getSession();
+                    UtenteSession us = (UtenteSession) session.getAttribute("utenteSession");
+                    TipologiaDAO serviceTip = new TipologiaDAO();
+                    RistoranteDAO serviceRis = new RistoranteDAO();
+                    String citta;
+                    if (us != null) {
+                        UtenteDAO utenteDAO = new UtenteDAO();
+                        Utente u = utenteDAO.doRetrieveById(us.getId());
+                        citta = u.getCitta();
+                    } else {
+                        if(req.getParameter("citta")!=null)
+                        {
+                            citta=req.getParameter("citta");
+                            synchronized (session){
+                                session.setAttribute("citta",citta);
+                            }
+                        }
+                        else
+                            citta = (String) session.getAttribute("citta");
+                    }
+                    ArrayList<Tipologia> tipologie = serviceTip.doRetriveByCitta(citta);
+                    ArrayList<Ristorante> ristoranti=new ArrayList<>();
+                    req.setAttribute("tipologie",tipologie);
+                    String filtro=req.getParameter("filtro");
+                    if(filtro.equals("tipologie")) {
+                        validate(ristoranteValidator.validateFilter(req));
+                        String tip=req.getParameter("tipologia");
+                        int totRis = serviceRis.countTipologiaCitta(tip, citta, false);
+                        if (req.getParameter("page") != null) {
+                            validate(CommonValidator.validatePage(req));
+                        }
+                        int intPage = parsePage(req);
+                        Paginator paginator = new Paginator(intPage, 6);
+                        req.setAttribute("pages", paginator.getPages(totRis));
+
+                        ristoranti = serviceRis.doRetrieveByTipologiaCitta(tip, citta, paginator, false);
+                        if(ristoranti!=null)
+                            req.setAttribute("ristoranti",ristoranti);
+                        req.getRequestDispatcher(view("ristorante/show-zona")).forward(req,resp);
+                    }
+                    break;
+                }
                 default:
                     notFound();
             }
@@ -555,41 +596,94 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                         resp.sendRedirect("/FoodOut/ristorante/show-info-admin?id=" + codice);
                     break;
                 }
-
                 case "/filters":{
-                    TipologiaDAO serviceTip = new TipologiaDAO();
                     HttpSession session = req.getSession();
                     UtenteSession us = (UtenteSession) session.getAttribute("utenteSession");
+                    TipologiaDAO serviceTip = new TipologiaDAO();
+                    RistoranteDAO serviceRis = new RistoranteDAO();
                     String citta;
                     if (us != null) {
                         UtenteDAO utenteDAO = new UtenteDAO();
                         Utente u = utenteDAO.doRetrieveById(us.getId());
                         citta = u.getCitta();
                     } else {
-                        citta = (String) session.getAttribute("citta");
-                    }
-                    ArrayList<Tipologia> tipologies = serviceTip.doRetriveByCitta(citta);
-                    if(req.getParameterValues("tipologia")!=null) {
-                        validate(ristoranteValidator.validateFilters(req));
-                        String[] tips = req.getParameterValues("tipologia");
-
-                        RistoranteDAO serviceRis = new RistoranteDAO();
-
-                        ArrayList<String> tipologie = new ArrayList<>(Arrays.asList(tips));
-                        int totRis = serviceRis.countTipologieCitta(tipologie, citta, false);
-
-                        if (req.getParameter("page") != null) {
-                            validate(CommonValidator.validatePage(req));
+                        if(req.getParameter("citta")!=null)
+                        {
+                            citta=req.getParameter("citta");
+                            synchronized (session){
+                                session.setAttribute("citta",citta);
+                            }
                         }
-                        int intPage = parsePage(req);
-                        Paginator paginator = new Paginator(intPage, 6);
-                        req.setAttribute("pages", paginator.getPages(totRis));
-
-                        ArrayList<Ristorante> ristoranti = serviceRis.doRetrieveByTipologieCitta(tipologie, citta, paginator, false);
+                        else
+                            citta = (String) session.getAttribute("citta");
                     }
+                    ArrayList<Tipologia> tipologie = serviceTip.doRetriveByCitta(citta);
+                    ArrayList<Ristorante> ristoranti=new ArrayList<>();
+                    req.setAttribute("tipologie",tipologie);
                     String filtro=req.getParameter("filtro");
-                    if(filtro!=null){
+                    switch(filtro){
+                        case "tipologie": {
+                            validate(ristoranteValidator.validateFilters(req));
+                            String[] tips = req.getParameterValues("tipologia");
+                            ArrayList<String> tipologieForm = new ArrayList<>(Arrays.asList(tips));
+                            int totRis = serviceRis.countTipologieCitta(tipologieForm, citta, false);
+                            if (req.getParameter("page") != null) {
+                                validate(CommonValidator.validatePage(req));
+                            }
+                            int intPage = parsePage(req);
+                            Paginator paginator = new Paginator(intPage, 6);
+                            req.setAttribute("pages", paginator.getPages(totRis));
 
+                            ristoranti = serviceRis.doRetrieveByTipologieCitta(tipologieForm, citta, paginator, false);
+                            if(ristoranti!=null)
+                                req.setAttribute("ristoranti",ristoranti);
+                            req.getRequestDispatcher(view("ristorante/show-zona")).forward(req,resp);
+                            break;
+                        }
+                        case "sconto": {
+                            int totRis = serviceRis.countScontoCitta(citta,false);
+                            if (req.getParameter("page") != null) {
+                                validate(CommonValidator.validatePage(req));
+                            }
+                            int intPage = parsePage(req);
+                            Paginator paginator = new Paginator(intPage, 6);
+                            req.setAttribute("pages", paginator.getPages(totRis));
+                            ristoranti = serviceRis.doRetrieveByScontoDisp(citta, paginator,false);
+                            if(ristoranti!=null)
+                                req.setAttribute("ristoranti",ristoranti);
+                            req.getRequestDispatcher(view("ristorante/show-zona")).forward(req,resp);
+                            break;
+                        }
+                        case "gratis": {
+                            int totRis = serviceRis.countTassoConsegna(0,citta,false);
+                            if (req.getParameter("page") != null) {
+                                validate(CommonValidator.validatePage(req));
+                            }
+                            int intPage = parsePage(req);
+                            Paginator paginator = new Paginator(intPage, 6);
+                            req.setAttribute("pages", paginator.getPages(totRis));
+                            ristoranti = serviceRis.doRetrieveByTassoConsegna(0,citta,paginator,false);
+                            if(ristoranti!=null)
+                                req.setAttribute("ristoranti",ristoranti);
+                            req.getRequestDispatcher(view("ristorante/show-zona")).forward(req,resp);
+                            break;
+                        }
+                        case "rating": {
+                            int totRis = serviceRis.countCittaRating(citta,false);
+                            if (req.getParameter("page") != null) {
+                                validate(CommonValidator.validatePage(req));
+                            }
+                            int intPage = parsePage(req);
+                            Paginator paginator = new Paginator(intPage, 6);
+                            req.setAttribute("pages", paginator.getPages(totRis));
+                            ristoranti = serviceRis.doRetrieveCittaRating(citta,paginator,false);
+                            if(ristoranti!=null)
+                                req.setAttribute("ristoranti",ristoranti);
+                            req.getRequestDispatcher(view("ristorante/show-zona")).forward(req,resp);
+                            break;
+                        }
+                        default:
+                            resp.sendRedirect("/FoodOut/ristorante/zona");
                     }
                     break;
                 }

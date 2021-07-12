@@ -89,20 +89,19 @@
         <section class="cell w100 grid-x container">
             <form class="cell grid-x search w20" action="/FoodOut/ristorante/filters" method="post">
                 <section class="grid-x cell w100">
-                    <h3 class="cell w100 title" style="color:white"> Tipologie: </h3>
+                    <h3 class="cell w100 title" style="color:white">Tipologie: </h3>
                     <c:if test="${not empty tipologie}">
                         <div class="cell grid-x align-center filtro">
                             <input type="radio" id="tipologie" name="filtro" value="tipologie" onchange="changeStatus(this)">
                             <label for="tipologie"> Tipologie </label>
                         </div>
                         <c:forEach items="${tipologie}" var="tipologia">
-                            <div class="cell grid-x align-center filtro">
-                                <input type="checkbox" class="tip-check" id="tipologia" name="tipologia" value="${tipologia.nome}">
+                            <div class="cell grid-x align-center filtro" style="display: none">
+                                <input type="checkbox" class="tip-check" id="tipologia" name="tipologia" value="${tipologia.nome}" disabled>
                                 <label for="tipologia"> ${tipologia.nome} </label>
                             </div>
                         </c:forEach>
                     </c:if>
-
                     <h3 class="cell w100 title" style="color:white"> Filtri: </h3>
                     <div class="cell grid-x align-center filtro">
                         <input type="radio" id="sconto" name="filtro" value="sconto" onchange="changeStatus(this)">
@@ -111,6 +110,10 @@
                     <div class="cell grid-x align-center filtro">
                         <input type="radio" id="gratis" name="filtro" value="gratis" onchange="changeStatus(this)">
                         <label style="font-size: 15px;" for="gratis"> Consegna gratis </label>
+                    </div>
+                    <div class="cell grid-x align-center filtro">
+                        <input type="radio" id="rating" name="filtro" value="rating">
+                        <label style="font-size: 15px;" for="rating"> Rating 4+ </label>
                     </div>
                     <div class=" grid-x justify-center align-center cell">
                         <button class="btn primary" type="submit"> Filtra </button>
