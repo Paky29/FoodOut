@@ -95,7 +95,7 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                     }
                     int intPage = parsePage(req);
                     Paginator paginator = new Paginator(intPage, 6);
-                    int size = serviceRis.countCitta(citta);
+                    int size = serviceRis.countCitta(citta,false);
                     req.setAttribute("pages", paginator.getPages(size));
 
                     Ordine cart = (Ordine) session.getAttribute("cart");
@@ -316,17 +316,49 @@ public class ristoranteServlet extends controller implements ErrorHandler{
                         resp.sendRedirect("/FoodOut/ristorante/show-menu?id=" + idRis);
                     break;
                 }
+                case "/api":{
+                    String data=req.getParameter("data");
+                    RistoranteDAO ristoranteDAO=new RistoranteDAO();
+                    HttpSession session=req.getSession(false);
+                    String citta;
+                    ArrayList<Ristorante> ris;
+                    UtenteSession us=(UtenteSession) session.getAttribute("utenteSession");
+                    if(us==null){
+                        citta=(String)session.getAttribute("citta");
+                        ris=ristoranteDAO.doRetrieveByNomeAndCittaDistinct(citta,data,new Paginator(1,5),false);
+                    }
+                    else{
+                        UtenteDAO utenteDAO=new UtenteDAO();
+                        if(us.isAdmin()){
+                            ris=ristoranteDAO.doRetrieveByNome(data,new Paginator(1,5),true);
+                        }else{
+                            Utente u=utenteDAO.doRetrieveById(us.getId());
+                            citta=u.getCitta();
+                            ris=ristoranteDAO.doRetrieveByNomeAndCittaDistinct(citta,data,new Paginator(1,5),false);
+                        }
+                    }
+                    resp.setContentType("text/plain;charset=UTF-8");
+                    resp.getWriter().append("[");
+                    String nome;
+                    long id;
+                    for (int i=0; i<ris.size(); i++){
+                        nome = ris.get(i).getNome();
+                        resp.getWriter().append("\"").append(nome).append("\"");
+                        if (i!=ris.size()-1)
+                            resp.getWriter().append(",");
+                    }
+                    resp.getWriter().append("]");
+                    break;
+                }
                 default:
                     notFound();
             }
         } catch (SQLException e) {
             log(e.getMessage());
-            System.out.println(e.getMessage());
             e.printStackTrace();
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (InvalidRequestException e) {
             log(e.getMessage());
-            System.out.println(e.getMessage());
             e.handle(req, resp);
         }
     }

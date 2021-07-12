@@ -3,14 +3,12 @@ package model.ristorante;
 import model.disponibilita.Disponibilita;
 import model.prodotto.Prodotto;
 import model.tipologia.Tipologia;
-
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class Ristorante {
+public class Ristorante{
 
     public Ristorante(){
         prodotti=new ArrayList<>();

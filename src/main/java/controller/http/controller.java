@@ -1,12 +1,14 @@
 package controller.http;
 
 import model.utility.UtenteSession;
-
+import org.json.JSONObject;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class controller extends HttpServlet implements ErrorHandler {
     protected String getPath(HttpServletRequest req){
@@ -16,7 +18,6 @@ public class controller extends HttpServlet implements ErrorHandler {
     protected String view(String viewPath){
         String basePath=getServletContext().getInitParameter("basePath");
         String engine=getServletContext().getInitParameter("engine");
-        System.out.println(basePath + viewPath + engine);
         return basePath + viewPath + engine;
     }
 
@@ -39,8 +40,4 @@ public class controller extends HttpServlet implements ErrorHandler {
     protected UtenteSession getUtenteSession(HttpSession session){
         return (UtenteSession) session.getAttribute("utenteSession");
     }
-
-    /*protected RiderSession getRiderSession(HttpSession session){
-        return (RiderSession) session.getAttribute("riderSession");
-    }*/
 }

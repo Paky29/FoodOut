@@ -151,7 +151,7 @@ public class RistoranteDAO {
                 sj.add(Integer.toString(key));
             }
 
-            PreparedStatement disp=conn.prepareStatement("SELECT d,codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN "+sj.toString());
+            PreparedStatement disp=conn.prepareStatement("SELECT d.codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN "+sj.toString());
             ResultSet setDisp=disp.executeQuery();
 
             while(setDisp.next()){
@@ -206,7 +206,7 @@ public class RistoranteDAO {
                 sj.add(Integer.toString(key));
             }
 
-            PreparedStatement disp=conn.prepareStatement("SELECT d,codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN "+sj.toString());
+            PreparedStatement disp=conn.prepareStatement("SELECT d.codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN "+sj.toString());
             ResultSet setDisp=disp.executeQuery();
 
             while(setDisp.next()){
@@ -318,7 +318,7 @@ public class RistoranteDAO {
                 sj.add(Integer.toString(key));
             }
 
-            PreparedStatement disp=conn.prepareStatement("SELECT d,codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN "+sj.toString());
+            PreparedStatement disp=conn.prepareStatement("SELECT d.codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN "+sj.toString());
             ResultSet setDisp=disp.executeQuery();
 
             while(setDisp.next()){
@@ -334,7 +334,6 @@ public class RistoranteDAO {
         }
     }
 
-    //in base alla città dell'utente e al nome del ristorante inserito
     public ArrayList<Ristorante> doRetrieveByNomeAndCitta(String citta, String nome, Paginator paginator,boolean isAdmin) throws SQLException{
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps;
@@ -369,7 +368,7 @@ public class RistoranteDAO {
                 sj.add(Integer.toString(key));
             }
 
-            PreparedStatement disp=conn.prepareStatement("SELECT d,codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN "+sj.toString());
+            PreparedStatement disp=conn.prepareStatement("SELECT d.codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN "+sj.toString());
             ResultSet setDisp=disp.executeQuery();
 
             while(setDisp.next()){
@@ -382,6 +381,33 @@ public class RistoranteDAO {
                 return null;
             else
                 return new ArrayList<Ristorante>(ristoranti.values());
+        }
+    }
+
+    public ArrayList<Ristorante> doRetrieveByNomeAndCittaDistinct(String citta, String nome, Paginator paginator,boolean isAdmin) throws SQLException{
+        try(Connection conn=ConPool.getConnection()){
+            PreparedStatement ps;
+            if(isAdmin)
+                ps=conn.prepareStatement("SELECT distinct r.nome FROM Ristorante r WHERE r.nome LIKE ? AND r.citta=? LIMIT ?,?");
+            else
+                ps=conn.prepareStatement("SELECT distinct r.nome FROM Ristorante r  WHERE r.valido=true AND  r.nome LIKE ? AND r.citta=? LIMIT ?,?");
+            ps.setString(1, "%"+nome+"%");
+            ps.setString(2,citta);
+            ps.setInt(3,paginator.getOffset());
+            ps.setInt(4,paginator.getLimit());
+            ArrayList<Ristorante> ristoranti=new ArrayList<>();
+            ResultSet rs=ps.executeQuery();
+
+            while(rs.next()){
+                    Ristorante r = new Ristorante();
+                    r.setNome(rs.getString("r.nome"));
+                    ristoranti.add(r);
+                }
+
+            if(ristoranti.isEmpty())
+                return null;
+            else
+                return ristoranti;
         }
     }
 
@@ -418,7 +444,7 @@ public class RistoranteDAO {
                 sj.add(Integer.toString(key));
             }
 
-            PreparedStatement disp=conn.prepareStatement("SELECT d,codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN "+sj.toString());
+            PreparedStatement disp=conn.prepareStatement("SELECT d.codRis_fk, d.giorno, d.oraApertura, d.oraChiusura FROM Disponibilita d WHERE d.codRis_fk IN "+sj.toString());
             ResultSet setDisp=disp.executeQuery();
 
             while(setDisp.next()){
@@ -640,9 +666,13 @@ public class RistoranteDAO {
         }
     }
 
-    public int countCitta(String citta) throws SQLException {
+    public int countCitta(String citta, boolean isAdmin) throws SQLException {
         try(Connection conn=ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT count(*) as numRist FROM Ristorante r WHERE r.citta=?");
+            PreparedStatement ps;
+            if(isAdmin)
+                ps = conn.prepareStatement("SELECT count(*) as numRist FROM Ristorante r WHERE r.citta=?");
+            else
+                ps = conn.prepareStatement("SELECT count(*) as numRist FROM Ristorante r INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk WHERE r.citta=? AND r.valido=true");
             ps.setString(1,citta);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){

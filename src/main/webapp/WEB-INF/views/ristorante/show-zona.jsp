@@ -6,10 +6,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <jsp:include page="../partials/head.jsp">
         <jsp:param name="title" value="Scegli ristorante"/>
         <jsp:param name="styles" value="show_zona"/>
-        <jsp:param name="scripts" value="show_zona"/>
+        <jsp:param name="scripts" value="show_zona,ristorante"/>
     </jsp:include>
     <style>
         #welcome, #back {
@@ -80,7 +83,7 @@
                 </c:otherwise>
             </c:choose>
             <label class="field command w100 justify-center">
-                <input type="text" placeholder="Cerca Ristoranti">
+                <input type="text" placeholder="Cerca Ristoranti" id="nomeRis" onkeyup="search()">
             </label>
         </nav>
         <section class="cell w100 grid-x container">
