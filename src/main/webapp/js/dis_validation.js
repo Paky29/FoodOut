@@ -14,7 +14,7 @@ form.addEventListener('submit', function (event) {
         }
 
         if(chiuso==false && ap>=ch){
-            alert(giorni[i] + ": ora Apertura deve essere precedente ad ora Chiusura");
+            alert(giorni[i]  + ": ora Apertura deve essere precedente ad ora Chiusura");
             event.preventDefault();
         }
 

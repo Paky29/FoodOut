@@ -41,8 +41,8 @@
         <nav class="grid-y navbar align-center cell">
             <img src="/FoodOut/images/logo.png" class="fluid-image" id="logo" onclick="goBack()">
         </nav>
-        <form class="grid-x justify-center align-center info-ord cell" action="${pageContext.request.contextPath}/ordine/update" method="post">
-            <fieldset class="grid-x cell w63 index">
+        <div class="grid-x justify-center align-center info-ord cell">
+            <div class="grid-x cell w63 index">
                 <h2 class="cell"> Dettagli </h2>
                 <label for="codice" class="field cell w80" >
                     <span style="font-weight: bold"> Codice: </span>
@@ -113,13 +113,8 @@
                     <span style="font-weight: bold"> Nota:</span>
                     <textarea rows="4" cols="100" type="text" id="nota" maxlength="200" readonly>${ordine.nota}</textarea>
                 </label>
-                <c:if test="${ordine.consegnato==false}">
-                    <span class="grid-x cell justify-center">
-                    <button type="submit" class="btn primary"> Modifica </button>
-                    </span>
-                </c:if>
-            </fieldset>
-        </form>
+            </div>
+        </div>
         <div class="disponibilita grid-x justify-center align-center cell">
             <section class="grid-y cell w63">
                 <div class="cell justify-center" id="mock-button">

@@ -51,6 +51,7 @@
                                 <td data-head="Nome">${ristorante.nome} </td>
                                 <td data-head="Provincia">${ristorante.provincia} </td>
                                 <td data-head="Citt&agrave;">${ristorante.citta} </td>
+                                <td data-head="Via">${ristorante.via} </td>
                                 <td data-head="Civico">${ristorante.civico} </td>
                                 <td data-head="Rating">
                                     <c:forEach var="counter" begin="1" end="${ristorante.rating}">
