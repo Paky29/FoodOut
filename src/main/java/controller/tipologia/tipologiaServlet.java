@@ -79,6 +79,9 @@ public class tipologiaServlet extends controller {
                     req.getRequestDispatcher(view("tipologia/show-all")).forward(req, resp);
                     break;
                 }
+                case "/api":{
+
+                }
                 default:
                     notFound();
             }

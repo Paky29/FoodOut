@@ -253,8 +253,6 @@ public class OrdineDAO {
                 o.setRistorante(r);
                 Utente u = UtenteExtractor.extract(rs);
                 o.setUtente(u);
-                /*Rider rd = RiderExtractor.extract(rs);
-                o.setRider(rd);*/
                 ordini.add(o);
             }
 
@@ -296,99 +294,62 @@ public class OrdineDAO {
         }
     }
 
-    /*public ArrayList<Ordine> doRetrieveByRider(Rider rd) throws SQLException {
+    public ArrayList<Ordine> doRetrieveByNomeRis(String nome, Paginator paginator) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating, t.nome, t.descrizione FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente LEFT JOIN Rider rd On o.codRider_fk=rd.codiceRider INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN AppartenenzaRT art ON r.codiceRistorante=art.codRis_fk INNER JOIN Tipologia t ON art.nomeTip_fk=t.nome WHERE o.codRider_fk=?");
-            ps.setInt(1, rd.getCodice());
-            ResultSet rs = ps.executeQuery();
-            Map<Integer, Ordine> ordini = new LinkedHashMap<>();
-            while (rs.next()) {
-                int codiceOrdine = rs.getInt("o.codiceOrdine");
-                if (!ordini.containsKey(codiceOrdine)) {
-                    Ordine o = OrdineExtractor.extract(rs);
-                    o.setRider(rd);
-                    Ristorante r = RistoranteExtractor.extract(rs);
-                    o.setRistorante(r);
-                    Utente u = UtenteExtractor.extract(rs);
-                    o.setUtente(u);
-                    ordini.put(codiceOrdine, o);
-                }
-                Tipologia t = new Tipologia();
-                t.setNome(rs.getString("t.nome"));
-                t.setDescrizione(rs.getString("t.descrizione"));
-                ordini.get(codiceOrdine).getRistorante().getTipologie().add(t);
-            }
-
-            if(ordini.isEmpty())
-                return null;
-
-            StringJoiner sj=new StringJoiner(",", "(", ")");
-            for(int key: ordini.keySet()){
-                sj.add(Integer.toString(key));
-            }
-
-            Map<Integer, Map<Integer, OrdineItem>> menus = OrdineDAO.composizioneOM(conn, sj);
-            Map<Integer, ArrayList<OrdineItem>> prodotti = OrdineDAO.composizioneOP(conn, sj);
-
-            if(!prodotti.isEmpty()) {
-                for (int key : prodotti.keySet())
-                    ordini.get(key).setOrdineItems(prodotti.get(key));
-            }
-
-            if(!menus.isEmpty()){
-                for(int key: menus.keySet())
-                    ordini.get(key).getOrdineItems().addAll(menus.get(key).values());
-            }
-
-            return new ArrayList<>(ordini.values());
-        }
-    }
-
-
-    public ArrayList<Ordine> doRetrieveByRiderPaginated(Rider rd, Paginator paginator) throws SQLException {
-        try (Connection conn = ConPool.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, o.codRider_fk, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente LEFT JOIN Rider rd On o.codRider_fk=rd.codiceRider INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante WHERE o.codRider_fk=? LIMIT ?,?");
-            ps.setInt(1, rd.getCodice());
+            PreparedStatement ps = conn.prepareStatement("SELECT o.codRis_fk, o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore FROM Ordine o INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente WHERE r.nome LIKE ? LIMIT ?,?");
+            ps.setString(1, "%" + nome + "%");
             ps.setInt(2, paginator.getOffset());
             ps.setInt(3, paginator.getLimit());
             ResultSet rs = ps.executeQuery();
-            Map<Integer, Ordine> ordini = new LinkedHashMap<>();
+            ArrayList<Ordine> ordini = new ArrayList<>();
             while (rs.next()) {
-                int codiceOrdine = rs.getInt("o.codiceOrdine");
                 Ordine o = OrdineExtractor.extract(rs);
-                o.setRider(rd);
-                Ristorante r = RistoranteExtractor.extract(rs);
+                Ristorante r=new Ristorante();
+                r.setCodice(Integer.parseInt(rs.getString("o.codRis_fk")));
                 o.setRistorante(r);
                 Utente u = UtenteExtractor.extract(rs);
                 o.setUtente(u);
-                ordini.put(codiceOrdine, o);
+                ordini.add(o);
             }
 
             if(ordini.isEmpty())
                 return null;
 
             StringJoiner sj=new StringJoiner(",", "(", ")");
-            for(int key: ordini.keySet()){
-                sj.add(Integer.toString(key));
+            for(Ordine o: ordini){
+                sj.add(Integer.toString(o.getCodice()));
             }
 
             Map<Integer, Map<Integer, OrdineItem>> menus = OrdineDAO.composizioneOM(conn, sj);
             Map<Integer, ArrayList<OrdineItem>> prodotti = OrdineDAO.composizioneOP(conn, sj);
 
-            if(!prodotti.isEmpty()) {
-                for (int key : prodotti.keySet())
-                    ordini.get(key).setOrdineItems(prodotti.get(key));
+            boolean trovato;
+            if(!prodotti.isEmpty()){
+                for(int key: prodotti.keySet()) {
+                    trovato=false;
+                    for (int i = 0; i < ordini.size() && !trovato; ++i)
+                        if (ordini.get(i).getCodice() == key) {
+                            ordini.get(i).setOrdineItems(prodotti.get(key));
+                            trovato = true;
+                        }
+                }
             }
 
-            if(!menus.isEmpty()){
-                for(int key: menus.keySet())
-                    ordini.get(key).getOrdineItems().addAll(menus.get(key).values());
+            if(!menus.isEmpty()) {
+                for (int key : menus.keySet()) {
+                    trovato = false;
+                    for (int i = 0; i < ordini.size() && !trovato; ++i)
+                        if (ordini.get(i).getCodice() == key) {
+                            ordini.get(i).getOrdineItems().addAll(menus.get(key).values());
+                            trovato = true;
+                        }
+                }
             }
 
-            return new ArrayList<>(ordini.values());
+            return ordini;
         }
     }
-*/
+
     public ArrayList<Ordine> doRetrieveByCittaPaginated(String citta, boolean consegnato, Paginator paginator) throws SQLException {
         try (Connection conn = ConPool.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT o.codiceOrdine, o.dataOrdine, o.totale, o.nota, o.oraPartenza, o.oraArrivo, o.metodoPagamento, o.giudizio, o.voto, o.consegnato, u.codiceUtente, u.nome, u.cognome, u.email, u.saldo, u.provincia, u.citta, u.via, u.civico, u.interesse, u.amministratore, r.codiceRistorante, r.nome, r.valido, r.provincia, r.citta, r.via, r.civico, r.info, r.spesaMinima, r.tassoConsegna, r.urlImmagine, r.rating FROM Ordine o INNER JOIN Utente u ON o.codUtente_fk=u.codiceUtente INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante WHERE r.citta=? AND o.consegnato=? LIMIT ?,?  ");
@@ -880,6 +841,32 @@ public class OrdineDAO {
             }
             else
                 return -1;
+        }
+    }
+
+    public float getIncassoNome(String nome) throws SQLException{
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT sum(o.totale) as incasso FROM Ordine o INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante WHERE r.nome LIKE ?");
+            ps.setString(1, "%" + nome + "%");
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getFloat("incasso");
+            }
+            else
+                return -1;
+        }
+    }
+
+    public int countNomeRis(String nome) throws SQLException {
+        try(Connection conn=ConPool.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count(*) as numOrdini FROM Ordine o INNER JOIN Ristorante r ON o.codRis_fk=r.codiceRistorante WHERE r.nome LIKE ?");
+            ps.setString(1,"%" + nome + "%");
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numOrdini");
+            }
+            else
+                return 0;
         }
     }
 }
