@@ -78,6 +78,26 @@ public class TipologiaDAO {
         }
     }
 
+    public ArrayList<Tipologia> doRetriveByCittaNome(String citta, String nome) throws SQLException {
+        try(Connection conn= ConPool.getConnection()){
+            PreparedStatement ps=conn.prepareStatement("SELECT distinct t.nome, t.descrizione FROM Tipologia t INNER JOIN AppartenenzaRT art ON art.nomeTip_fk=t.nome INNER JOIN Ristorante r ON art.codRis_fk=r.codiceRistorante WHERE r.citta=? AND r.nome LIKE ?");
+            ps.setString(1,citta);
+            ps.setString(2, "%" + nome + "%");
+            ResultSet rs=ps.executeQuery();
+            ArrayList<Tipologia> tipologie=new ArrayList<>();
+            while(rs.next()){
+                Tipologia t=new Tipologia();
+                t.setNome(rs.getString("t.nome"));
+                t.setDescrizione(rs.getString("t.descrizione"));
+                tipologie.add(t);
+            }
+            if(tipologie.isEmpty())
+                return null;
+            else
+                return tipologie;
+        }
+    }
+
     public boolean doSave(Tipologia t) throws SQLException {
         try(Connection conn=ConPool.getConnection()){
             PreparedStatement ps=conn.prepareStatement("INSERT INTO Tipologia (nome, descrizione) VALUES (?,?)");
