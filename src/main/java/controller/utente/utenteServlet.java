@@ -200,8 +200,6 @@ public class utenteServlet extends controller {
         String path = getPath(req);
         try {
             switch (path) {
-                case "/":
-                    break;
                 case "/signup": {
                     req.setAttribute("back",view("site/signup"));
                     validate(utenteValidator.validateForm(req));
