@@ -56,25 +56,27 @@
                     <span style="font-weight: normal" id="data"> ${ordine.dataOrdine} </span>
                     </span>
                 </label>
-                <label class="field cell w40 grid-x">
-                    <span style="font-weight: bold" class="field cell w40"> Ora partenza: </span>
+                <label class="field cell w50 grid-x">
+                    <span style="font-weight: bold" class="field cell w50"> Ora partenza:
                     <c:choose>
                         <c:when test="${not empty ordine.oraPartenza}">
-                            <span id="oraPartenza">${ordine.oraPartenza}</span>
+                            <span id="oraPartenza" style="font-weight: normal;margin-right:5px; ">${ordine.oraPartenza}</span>
                         </c:when>
                         <c:otherwise>
-                            <span id="oraPartenza">Non partito</span>
+                            <span id="oraPartenza" style="font-weight: normal;margin-right:5px; ">Non partito</span>
                         </c:otherwise>
                     </c:choose>
-                    <span style="font-weight: bold" class="field cell w40"> Ora arrivo: </span>
+                    </span>
+                    <span style="font-weight: bold" class="field cell w50"> Ora arrivo:
                     <c:choose>
                         <c:when test="${not empty ordine.oraArrivo}">
-                            <span id="oraArrivo">${ordine.oraArrivo}</span>
+                            <span id="oraArrivo" style="font-weight: normal;margin-right:5px; ">${ordine.oraArrivo}</span>
                         </c:when>
                         <c:otherwise>
-                            <span id="oraPartenza">Non arrivato</span>
+                            <span id="oraPartenza" style="font-weight: normal;margin-right:5px; ">Non arrivato</span>
                         </c:otherwise>
                     </c:choose>
+                    </span>
                 </label>
                 <label class="field cell grid-x">
                     <span class="field cell w50"> <span style="font-weight: bold">Totale:</span>
